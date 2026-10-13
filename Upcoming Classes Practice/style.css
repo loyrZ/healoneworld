@@ -34,6 +34,7 @@ nav ul li a {
 }
 section .eyebrow {
     font-size: 18px;
+    font-family: DM Sans;
     font-weight: bold;
     color: #8AD324;
     margin-top: 40px;
@@ -42,6 +43,7 @@ section .eyebrow {
 }
 section .title {
     font-size: 45px;
+    font-family: Hedvig Letters Serif;
     font-weight: bold;
     color: #062F49;
     margin-left: 180px;
@@ -49,6 +51,7 @@ section .title {
 }
 section .subtitle {
     font-size: 14px;
+    font-family: DM Sans;
     color: #29404A;
     margin-left: 180px;
 }
