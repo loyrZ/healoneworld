@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Classes & Events | Heal One World</title>
+  <meta name="description"
+        content="Explore wellness classes and upcoming events at Heal One World.">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <a class="logo" href="#" aria-label="Heal One World home">
+      <span class="logo-art">HOW</span>
+      <span class="logo-caption">HEAL ONE WORLD</span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle"
+            aria-label="Toggle navigation"
+            aria-expanded="false">
+      ☰
+    </button>
+
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <a href="#classes">Classes</a>
+      <a href="#programs">Programs</a>
+      <a href="#volunteer">Volunteer</a>
+      <a href="#rent">Rent Our Space</a>
+      <a href="#about">About</a>
+      <a href="#blog">Blog</a>
+      <span class="nav-divider"></span>
+      <a href="#signin">Sign In</a>
+      <a class="donate-button" href="#donate">Donate</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <p class="eyebrow">CLASSES &amp; EVENTS</p>
+
+      <h1>Find your next wellness experience.</h1>
+
+      <p class="hero-description">
+        Browse upcoming classes and events, then filter by format
+        or search for what interests you.
+      </p>
+    </section>
+
+    <!-- CLASS SEARCH AND FILTERS -->
+    <section class="events-section" id="classes">
+      <div class="filters" aria-label="Filter classes">
+        <label class="visually-hidden" for="searchInput">
+          Search classes
+        </label>
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search classes..."
+        >
+
+        <label class="visually-hidden" for="formatFilter">
+          Filter by format
+        </label>
+        <select id="formatFilter">
+          <option value="all">All formats</option>
+          <option value="in-person">In person</option>
+          <option value="online">Online</option>
+        </select>
+
+        <label class="visually-hidden" for="categoryFilter">
+          Filter by category
+        </label>
+        <select id="categoryFilter">
+          <option value="all">All categories</option>
+          <option value="yoga">Yoga</option>
+          <option value="meditation">Meditation</option>
+          <option value="wellness">Wellness</option>
+        </select>
+
+        <label class="visually-hidden" for="dateFilter">
+          Filter by date
+        </label>
+        <select id="dateFilter">
+          <option value="all">All upcoming</option>
+          <option value="week">This week</option>
+        </select>
+      </div>
+
+      <div class="section-heading">
+        <h2>Upcoming classes &amp; events</h2>
+        <p id="resultsCount" aria-live="polite"></p>
+      </div>
+
+      <!-- JavaScript will filter these cards -->
+      <div class="event-grid" id="eventGrid">
+
+        <article class="event-card"
+          data-format="in-person"
+          data-category="yoga"
+          data-date="2026-10-13"
+          data-title="Yoga for All Levels">
+          <p class="event-format">IN PERSON</p>
+          <h3>Yoga for All Levels</h3>
+          <p class="event-time">Tuesday • 6:00 PM</p>
+          <p class="event-location">Heal One World Studio</p>
+          <button class="details-button"
+            data-title="Yoga for All Levels"
+            data-description="A welcoming yoga class for all experience levels. Bring a mat and comfortable clothing.">
+            View details
+          </button>
+        </article>
+
+        <article class="event-card"
+          data-format="in-person"
+          data-category="yoga"
+          data-date="2026-10-14"
+          data-title="Gentle Morning Yoga">
+          <p class="event-format">IN PERSON</p>
+          <h3>Gentle Morning Yoga</h3>
+          <p class="event-time">Wednesday • 9:00 AM</p>
+          <p class="event-location">Heal One World Studio</p>
+          <button class="details-button"
+            data-title="Gentle Morning Yoga"
+            data-description="A gentle, accessible morning practice focusing on movement, breathing, and relaxation.">
+            View details
+          </button>
+        </article>
+
+        <article class="event-card"
+          data-format="online"
+          data-category="meditation"
+          data-date="2026-10-15"
+          data-title="Guided Meditation">
+          <p class="event-format">ONLINE</p>
+          <h3>Guided Meditation</h3>
+          <p class="event-time">Thursday • 6:30 PM</p>
+          <p class="event-location">Online session</p>
+          <button class="details-button"
+            data-title="Guided Meditation"
+            data-description="A guided meditation session to practice mindfulness and relaxation from home.">
+            View details
+          </button>
+        </article>
+
+        <article class="event-card"
+          data-format="in-person"
+          data-category="wellness"
+          data-date="2026-10-16"
+          data-title="Community Wellness Workshop">
+          <p class="event-format">IN PERSON</p>
+          <h3>Community Wellness Workshop</h3>
+          <p class="event-time">Friday • 5:00 PM</p>
+          <p class="event-location">Heal One World Studio</p>
+          <button class="details-button"
+            data-title="Community Wellness Workshop"
+            data-description="Explore practical approaches to everyday wellness in a welcoming community setting.">
+            View details
+          </button>
+        </article>
+
+        <article class="event-card"
+          data-format="online"
+          data-category="yoga"
+          data-date="2026-10-17"
+          data-title="Online Yoga Flow">
+          <p class="event-format">ONLINE</p>
+          <h3>Online Yoga Flow</h3>
+          <p class="event-time">Saturday • 10:00 AM</p>
+          <p class="event-location">Online session</p>
+          <button class="details-button"
+            data-title="Online Yoga Flow"
+            data-description="Follow an instructor-led yoga flow from your own space.">
+            View details
+          </button>
+        </article>
+
+        <article class="event-card"
+          data-format="in-person"
+          data-category="meditation"
+          data-date="2026-10-18"
+          data-title="Mindfulness & Meditation">
+          <p class="event-format">IN PERSON</p>
+          <h3>Mindfulness &amp; Meditation</h3>
+          <p class="event-time">Sunday • 11:00 AM</p>
+          <p class="event-location">Heal One World Studio</p>
+          <button class="details-button"
+            data-title="Mindfulness & Meditation"
+            data-description="Learn simple mindfulness and meditation practices in a supportive group.">
+            View details
+          </button>
+        </article>
+
+      </div>
+
+      <p class="no-results" id="noResults" hidden>
+        No classes match your search. Try changing your filters.
+      </p>
+    </section>
+
+    <!-- ADD THE REST OF YOUR WEBSITE BELOW THIS LINE -->
+
+    <section class="extra-section" id="programs">
+      <h2>Explore our programs</h2>
+      <p>
+        Add the next section of your website here. You can include
+        program descriptions, images, testimonials, or other content.
+      </p>
+    </section>
+  </main>
+
+  <!-- CLASS DETAILS DIALOG -->
+  <dialog id="detailsDialog" class="details-dialog">
+    <button class="dialog-close" id="closeDialog"
+            aria-label="Close details">×</button>
+    <p class="eyebrow">CLASS DETAILS</p>
+    <h2 id="dialogTitle"></h2>
+    <p id="dialogDescription"></p>
+    <button class="details-button" id="dialogDone">Close</button>
+  </dialog>
+
+</body>
+</html>

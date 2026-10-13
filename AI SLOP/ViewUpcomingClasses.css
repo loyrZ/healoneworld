@@ -1,0 +1,915 @@
+
+/* =========================================
+   HEAL ONE WORLD — WEBSITE STYLES
+   Matching the supplied screenshot
+========================================= */
+
+/* 1. COLORS & GLOBAL SETTINGS */
+
+:root {
+  --navy: #082f49;
+  --navy-hover: #104763;
+  --green: #70cf00;
+  --mint: #eff9f7;
+  --text: #304754;
+  --muted: #888888;
+  --border: #dfe5e7;
+  --white: #ffffff;
+  --page-padding: 31px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 110px;
+}
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 4px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 2. HEADER & NAVIGATION */
+
+.site-header {
+  min-height: 107px;
+  padding: 15px 5.7% 15px 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+
+  background: var(--white);
+  border-bottom: 1px solid #edf0f0;
+
+  position: relative;
+  z-index: 10;
+}
+
+/* Temporary logo recreation */
+
+.logo {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  border: 2px solid #111111;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse at 28% 20%,
+      #c6ed6a 0%,
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #85d64d 0%,
+      #44c5a4 48%,
+      #1377a0 100%
+    );
+
+  color: var(--white);
+  transform: rotate(-4deg);
+}
+
+.logo-art {
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 29px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+
+  text-shadow:
+    1px 2px 2px #123c51,
+    -1px 0 1px #123c51;
+}
+
+.logo-caption {
+  margin-top: 4px;
+  color: white;
+  font-size: 5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Navigation links */
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: clamp(20px, 2.4vw, 39px);
+
+  color: var(--navy);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.main-nav > a:not(.donate-button) {
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+
+.main-nav > a:not(.donate-button):hover {
+  color: var(--green);
+}
+
+.nav-divider {
+  width: 1px;
+  height: 27px;
+  flex-shrink: 0;
+
+  background: #d2dadd;
+
+  margin-left: -3px;
+  margin-right: -3px;
+}
+
+/* Donate button */
+
+.donate-button {
+  min-height: 51px;
+  padding: 0 28px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50px;
+
+  background: var(--navy);
+  color: var(--white);
+
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.donate-button:hover {
+  background: var(--navy-hover);
+  transform: translateY(-1px);
+}
+
+/* Mobile menu button */
+
+.menu-toggle {
+  display: none;
+
+  padding: 5px;
+  border: none;
+  background: transparent;
+
+  color: var(--navy);
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* 3. HERO SECTION */
+
+.hero {
+  min-height: 282px;
+  padding: 69px 31px 49px;
+
+  background: var(--mint);
+}
+
+/* Green eyebrow heading */
+
+.eyebrow {
+  margin: 0 0 22px;
+
+  color: var(--green);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.1px;
+}
+
+/* Main headline */
+
+.hero h1 {
+  margin: 0 0 20px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 3.5vw, 56px);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -1.5px;
+}
+
+/* Introductory description */
+
+.hero-description {
+  max-width: 1000px;
+  margin: 0;
+
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* 4. EVENTS SECTION */
+
+.events-section {
+  padding: 35px 31px 80px;
+  background: var(--white);
+}
+
+/* 5. SEARCH AND FILTER CONTROLS */
+
+.filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Search input */
+
+.filters input {
+  width: 163px;
+  height: 51px;
+
+  padding: 0 18px;
+
+  border: 1px solid #cbd3d7;
+  border-radius: 9px;
+
+  background: var(--white);
+  color: var(--text);
+
+  font-size: 16px;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.filters input::placeholder {
+  color: #858585;
+  opacity: 1;
+}
+
+.filters input:focus {
+  border-color: var(--navy);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(8, 47, 73, 0.08);
+}
+
+/* Dropdown controls */
+
+.filters select {
+  min-width: 121px;
+  max-width: 100%;
+  height: 51px;
+
+  padding: 0 18px;
+
+  border: 1px solid #cbd3d7;
+  border-radius: 9px;
+
+  background-color: var(--white);
+  color: var(--text);
+
+  font-size: 16px;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.filters select:nth-of-type(2) {
+  min-width: 142px;
+}
+
+.filters select:focus {
+  border-color: var(--navy);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(8, 47, 73, 0.08);
+}
+
+/* 6. SECTION HEADING */
+
+.section-heading {
+  margin: 68px 0 32px;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -1.1px;
+}
+
+.section-heading p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* 7. CLASS CARD GRID */
+
+.event-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 26px;
+
+  align-items: stretch;
+}
+
+/* Individual class card */
+
+.event-card {
+  min-width: 0;
+  min-height: 329px;
+
+  padding: 25px 27px 28px;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--white);
+
+  box-shadow: 0 1px 2px rgba(7, 48, 74, 0.025);
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.event-card:hover {
+  border-color: #cfdcde;
+  box-shadow: 0 8px 22px rgba(7, 48, 74, 0.055);
+}
+
+/* In-person / online label */
+
+.event-format {
+  margin: 0 0 17px;
+
+  color: var(--green);
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Class title */
+
+.event-card h3 {
+  margin: 0 0 14px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(25px, 2.1vw, 33px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -1px;
+}
+
+/* Class time */
+
+.event-time {
+  margin: 0 0 13px;
+
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* Class location */
+
+.event-location {
+  margin: 0 0 14px;
+
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* View details button */
+
+.details-button {
+  min-height: 55px;
+  padding: 0 27px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 12px;
+
+  background: var(--navy);
+  color: var(--white);
+
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.details-button:hover {
+  background: var(--navy-hover);
+}
+
+.details-button:active {
+  transform: scale(0.98);
+}
+
+/* No matching search results */
+
+.no-results {
+  margin: 0;
+  padding: 35px 0;
+
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* 8. ADDITIONAL PAGE SECTIONS */
+
+.extra-section {
+  padding: 65px 31px 75px;
+
+  background: #fafcfb;
+  border-top: 1px solid #edf0f0;
+}
+
+.extra-section h2 {
+  margin: 0 0 16px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -1px;
+}
+
+.extra-section p {
+  max-width: 700px;
+  margin: 0;
+
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* 9. CLASS DETAILS DIALOG */
+
+.details-dialog {
+  position: fixed;
+
+  width: min(500px, calc(100% - 32px));
+  max-height: min(80vh, 700px);
+  overflow-y: auto;
+
+  padding: 36px;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--white);
+  color: var(--text);
+
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.16);
+}
+
+.details-dialog::backdrop {
+  background: rgba(4, 28, 43, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.details-dialog .eyebrow {
+  margin: 0 0 12px;
+}
+
+.details-dialog h2 {
+  margin: 0 0 18px;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+.details-dialog p:not(.eyebrow) {
+  margin: 0 0 24px;
+
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* Dialog close icon */
+
+.dialog-close {
+  float: right;
+
+  margin: -10px -8px 12px 15px;
+  padding: 2px 5px;
+
+  border: none;
+  background: transparent;
+
+  color: var(--navy);
+  font-size: 30px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.dialog-close:hover {
+  color: var(--green);
+}
+
+/* 10. ACCESSIBILITY HELPERS */
+
+.visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 11. TABLET RESPONSIVENESS */
+
+@media (max-width: 1100px) {
+  .site-header {
+    padding-right: 3%;
+    gap: 20px;
+  }
+
+  .main-nav {
+    gap: 17px;
+    font-size: 15px;
+  }
+
+  .donate-button {
+    padding: 0 21px;
+  }
+
+  .event-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 4.6vw, 52px);
+  }
+
+  .events-section {
+    padding-right: 3%;
+    padding-left: 3%;
+  }
+}
+
+/* 12. SMALLER TABLETS */
+
+@media (max-width: 850px) {
+  .site-header {
+    min-height: 90px;
+    padding: 12px 25px;
+  }
+
+  .logo {
+    width: 65px;
+    height: 65px;
+  }
+
+  .logo-art {
+    font-size: 25px;
+  }
+
+  .main-nav {
+    gap: 13px;
+    font-size: 14px;
+  }
+
+  .donate-button {
+    min-height: 45px;
+    padding: 0 17px;
+    font-size: 14px;
+  }
+
+  .nav-divider {
+    margin: 0;
+  }
+
+  .hero {
+    padding: 54px 25px 43px;
+  }
+
+  .section-heading {
+    margin-top: 52px;
+  }
+
+  .section-heading h2 {
+    font-size: 37px;
+  }
+
+  .event-card {
+    padding: 24px;
+  }
+}
+
+/* 13. MOBILE NAVIGATION & LAYOUT */
+
+@media (max-width: 700px) {
+  :root {
+    --page-padding: 20px;
+  }
+
+  .site-header {
+    min-height: 82px;
+    padding: 11px 20px;
+  }
+
+  .logo {
+    width: 59px;
+    height: 59px;
+  }
+
+  .logo-art {
+    font-size: 23px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .main-nav {
+    display: none;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    padding: 18px 22px 25px;
+
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.06);
+
+    font-size: 16px;
+  }
+
+  .main-nav.open {
+    display: flex;
+  }
+
+  .main-nav > a:not(.donate-button) {
+    padding: 12px 0;
+  }
+
+  .nav-divider {
+    width: 100%;
+    height: 1px;
+    margin: 9px 0;
+  }
+
+  .donate-button {
+    align-self: flex-start;
+    margin-top: 12px;
+    min-height: 48px;
+    padding: 0 25px;
+    font-size: 15px;
+  }
+
+  /* Hero */
+
+  .hero {
+    min-height: auto;
+    padding: 44px 20px 39px;
+  }
+
+  .eyebrow {
+    margin-bottom: 17px;
+    font-size: 13px;
+  }
+
+  .hero h1 {
+    margin-bottom: 17px;
+
+    font-size: clamp(35px, 9vw, 46px);
+    line-height: 1.15;
+    letter-spacing: -1.2px;
+  }
+
+  .hero-description {
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  /* Filters */
+
+  .events-section {
+    padding: 27px 20px 55px;
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .filters input {
+    grid-column: 1 / -1;
+  }
+
+  .filters input,
+  .filters select,
+  .filters select:nth-of-type(2) {
+    width: 100%;
+    min-width: 0;
+    height: 49px;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+
+  /* Section title */
+
+  .section-heading {
+    margin: 43px 0 23px;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(30px, 7vw, 37px);
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+  }
+
+  /* One card per row */
+
+  .event-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 17px;
+  }
+
+  .event-card {
+    min-height: 0;
+    padding: 23px 22px 25px;
+    border-radius: 16px;
+  }
+
+  .event-format {
+    margin-bottom: 14px;
+    font-size: 12px;
+  }
+
+  .event-card h3 {
+    margin-bottom: 13px;
+    font-size: 29px;
+    line-height: 1.25;
+  }
+
+  .event-time {
+    font-size: 16px;
+  }
+
+  .event-location {
+    font-size: 15px;
+  }
+
+  .details-button {
+    min-height: 51px;
+    padding: 0 23px;
+    font-size: 15px;
+  }
+
+  /* Other sections */
+
+  .extra-section {
+    padding: 43px 20px 50px;
+  }
+
+  .extra-section h2 {
+    font-size: 34px;
+  }
+
+  .extra-section p {
+    font-size: 16px;
+  }
+
+  .details-dialog {
+    padding: 27px;
+  }
+}
+
+/* 14. VERY SMALL PHONES */
+
+@media (max-width: 360px) {
+  .filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filters input {
+    grid-column: auto;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+  }
+
+  .event-card h3 {
+    font-size: 26px;
+  }
+}
+
+/* 15. REDUCED MOTION ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
