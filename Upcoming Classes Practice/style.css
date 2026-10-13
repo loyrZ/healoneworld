@@ -5,7 +5,7 @@
     font-family: Arial, Helvetica, sans-serif
 }
 
-header,footer{
+Header{
     background-color: #ffffff;
     width: 100%;
     height: 50px;
@@ -29,6 +29,30 @@ nav ul li {
 }
 nav ul li a {
     text-decoration: none;
-    color: #000000;
+    color: #062F49;
     font-size: 18px;
+}
+section .eyebrow {
+    font-size: 18px;
+    font-weight: bold;
+    color: #8AD324;
+    margin-top: 40px;
+    margin-left: 180px;
+    padding-bottom: 20px;
+}
+section .title {
+    font-size: 45px;
+    font-weight: bold;
+    color: #062F49;
+    margin-left: 180px;
+    padding-bottom: 20px;
+}
+section .subtitle {
+    font-size: 14px;
+    color: #29404A;
+    margin-left: 180px;
+}
+section {
+    background-color: #EFF9F7;
+    height: 150px;
 }
