@@ -58,4 +58,121 @@ section .subtitle {
 section {
     background-color: #EFF9F7;
     height: 150px;
+    margin-bottom: 20px;
+}
+filter {
+    margin-left: 180px;
+    margin-bottom: 20px;
+}
+filter .type {
+    font-size: 14px;
+    font-family: DM Sans;
+    color: #29404A;
+    margin-left: 180px;
+}
+input[type="text"] {
+    width: 125px;
+    height: 30px;
+    border-radius: 0px;
+    border: 1px solid #062F49;
+    margin-left: 5px;
+}
+button.format-button {
+    width: 80px;
+    height: 30px;
+    background-color: #ffffff;
+    color: #29404A;
+    border: solid 1px #062F49;
+    border-radius: 0px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+button.category-button {
+    width: 100px;
+    height: 30px;
+    background-color: #ffffff;
+    color: #29404A;
+    border: solid 1px #062F49;
+    border-radius: 0px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+button.week-button {
+    width: 80px;
+    height: 30px;
+    background-color: #ffffff;
+    color: #29404A;
+    border: solid 1px #062F49;
+    border-radius: 0px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+upcoming-classes {
+    margin-left: 180px;
+    margin-bottom: 120px;
+}
+upcoming-classes .title {
+    font-size: 30px;
+    font-family: Hedvig Letters Serif;
+    font-weight: bold;
+    color: #062F49;
+    margin-left: 180px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+upcoming-classes .class-category {
+    display:block;
+    font-size: 10px;
+    font-family: DM Sans;
+    color: #8AD324;
+    margin-left: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+upcoming-classes .class-card {
+    display: inline-block;
+    width: 260px;
+    height: 220px;
+    background-color: #ffffff;
+    border: solid 1px #062F49;
+    margin-left: 180px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 0px;
+}
+upcoming-classes .class-title {
+    display: block;
+    font-size: 24px;
+    font-family: DM Sans;
+    color: #062F49;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+upcoming-classes .class-time {
+    display: block;
+    font-size: 14px;
+    font-family: DM Sans;
+    color: #29404A;
+    margin-top: 10px;
+    margin-left: 10px;
+}   
+upcoming-classes .class-studio {
+    display: block;
+    font-size: 14px;
+    font-family: DM Sans;
+    color: #29404A;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+upcoming-classes .class-button { 
+    width: 100px;
+    height: 30px;
+    background-color: #062F49;
+    color: #ffffff;
+    border: solid 1px #062F49;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-top: 10px;
+    cursor: pointer;
 }
