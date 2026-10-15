@@ -1,4 +1,4 @@
-# Heal One World
+# Heal One World - Claude Helped with this read me
 
 Node + Express server with a MySQL database on Railway.
 
