@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign-Up Sheet</title>
+</head>
+<body>
+<form id="SignUp" novalidate>
+    <h1>Create Account!</h1>
+
+    <label for="Name"> Full Name </label>
+    <input type="text" id="Name" name="Name" required>
+    <small id="NameError"></small>
+
+    <label for="Email">Email Address</label>
+    <input type="email" id="Email" name="Email" required>
+    <small id="EmailError"></small>
+
+    <label for="Password">Password</label>
+    <input type="password" id="Password" name="Password" required>
+    <small id="PasswordError"></small>
+
+    <label for="ConfirmPassword">Confirm Password</label>
+    <input type="password" id="ConfirmPassword" required>
+    <small id="ConfirmPasswordError"></small>
+
+    <button type="submit" id="Submit">Submit</button>
+
+    <p id="SuccessMessage"></p>
+
+</form>
+<script src="./UserSignUp.js"></script>
+</body>
+</html>
