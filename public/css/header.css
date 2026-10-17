@@ -1,0 +1,97 @@
+/* Shared responsive navigation */
+
+.site-header {
+  background: var(--color-white);
+  border-bottom: 1px solid #dce3e6;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-block: 16px;
+}
+
+.site-brand {
+  color: var(--color-navy);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-links a:not(.button) {
+  color: var(--color-navy);
+  text-decoration: none;
+}
+
+.nav-links a:not(.button):hover {
+  text-decoration: underline;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 1199px) {
+  .nav-links {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 12px;
+  }
+}
+
+.site-brand {
+  flex-shrink: 0;
+}
+
+.site-brand img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* Desktop spacing from the Figma header. */
+@media (min-width: 1200px) {
+  .site-nav {
+    width: calc(100% - 160px);
+    max-width: 1440px;
+    flex-wrap: nowrap;
+  }
+
+  .nav-links {
+    flex-wrap: nowrap;
+    gap: 32px;
+  }
+
+  .nav-links a {
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Separate account navigation from the public links. */
+  .nav-links li:nth-last-child(2) {
+    border-left: 1px solid #dce3e6;
+    padding-left: 32px;
+  }
+}
