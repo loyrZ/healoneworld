@@ -20,4 +20,20 @@ router.get("/health", async (req, res) => {
     }
 });
 
+/* Temporary destinations for unfinished pages. */
+const placeholderRoutes = [
+    "/programs.html",
+    "/volunteer.html",
+    "/rent.html",
+    "/about.html",
+    "/blog.html",
+    "/signin.html",
+    "/donate.html"
+];
+
+router.get(placeholderRoutes, (req, res) => {
+    res.sendFile(
+        path.join(__dirname, "..", "public", "coming-soon.html")
+    );
+});
 module.exports = router;
