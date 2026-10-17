@@ -1,0 +1,37 @@
+/* HOW-499: Shared colors and UI states */
+
+:root {
+  --color-navy: #062f49;
+  --color-blue: #0075b5;
+  --color-green: #8ad324;
+  --color-background: #f6faf2;
+  --color-text: #29404a;
+  --color-white: #ffffff;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-navy);
+}
+
+a {
+  color: var(--color-blue);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-navy);
+  outline-offset: 4px;
+}
