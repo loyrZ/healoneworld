@@ -1,8 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Header & Sections</title>
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="/css/layout.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
+    <body>
+
+        
+    </body>
     <header>
         <div class="logo">
             <h2>
@@ -22,7 +29,7 @@
             </ul>
         </nav>
     </header>
-    <section>
+    <section class="container">
         <h3 class="eyebrow">Classes and Events</h3>
         <h4 class="title">Find your next wellness experience.</h4>
         <h5 class="subtitle">Browse upcoming classes and events, then filter by format or search for what interests you.</h5>
@@ -33,8 +40,9 @@
         <button class="category-button">All Categories</button>
         <button class="week-button">This Week</button>
     </filter>
-    <upcoming-classes>
+    <section class="container">
         <h6 class="title">Upcoming Classes & Events</h6>
+        <div class="card-grid">
             <article class="class-card">
                 <eyebrow class="class-category">IN PERSON</eyebrow>
                 <text class="class-title">Yoga for All Levels</text>
@@ -77,5 +85,6 @@
                 <studio class="class-studio">Heal One World Studio</studio>
                 <button class="class-button">View Details</button>
             </article>
-    </upcoming-classes>
+        </div>
+    </section>
 </html>
