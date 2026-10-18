@@ -531,3 +531,24 @@
     gap: 80px;
   }
 }
+
+/* Placeholder for unfinished announcements */
+.announcements-section {
+  padding-block: 48px 100px;
+  background: var(--color-white);
+}
+
+.announcements-section h2 {
+  margin: 0 0 24px;
+  font-size: clamp(32px, 4vw, 52px);
+}
+
+.announcements-section .content-status p {
+  margin: 0;
+}
+
+.announcements-section .announcement-label {
+  margin-bottom: 8px;
+  color: var(--color-navy);
+  font-weight: 600;
+}
