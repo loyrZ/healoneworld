@@ -3,7 +3,6 @@ document.querySelectorAll(".class-button").forEach((button) => {
     const card = button.closest(".class-card");
     const detailsUrl = new URL("ClassPage.html", window.location.href);
 
-
     detailsUrl.searchParams.set(
       "title",
       card.querySelector(".class-title").textContent.trim()
