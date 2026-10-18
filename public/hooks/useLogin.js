@@ -11,9 +11,16 @@ export function useLogin({ redirectTo = "/account" } = {}) {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!email || !password) {
-      setError("Email and password are required.");
-      return;
+    const normalizedEmail = email.trim();
+
+    if (!normalizedEmail || !password) {
+        setError("Email and password are required.");
+        return;
+    }
+
+    if (!normalizedEmail.includes("@")) {
+        setError("Enter a valid email address.");
+        return;
     }
 
     if (!isLoaded || isSubmitting) return;
@@ -22,24 +29,28 @@ export function useLogin({ redirectTo = "/account" } = {}) {
     setIsSubmitting(true);
 
     try {
-      const result = await signIn.create({
-        identifier: email,
-        password,
-      });
+        const result = await signIn.create({
+            identifier: normalizedEmail,
+            password,
+        });
 
-      if (result.status !== "complete") {
-        setError("Additional verification is required.");
-        return;
-      }
+        if (result.status !== "complete") {
+            setError("Additional verification is required.");
+            return;
+        }
 
-      await setActive({ session: result.createdSessionId });
-      window.location.assign(redirectTo);
+        await setActive({
+            session: result.createdSessionId,
+        });
+
+        window.location.assign("/account");
     } catch {
-      setError("Invalid email or password.");
+        // Keep this generic so email existence is not revealed.
+        setError("Invalid email or password.");
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
-  }
+}
 
   return {
     email,

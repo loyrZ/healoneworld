@@ -127,65 +127,38 @@ function Login() {
                         Sign in to manage your classes and account.
                     </p>
 
-                    <form onSubmit={handleSubmit} noValidate>
-                        <label htmlFor="email" style={{
-                            display: "block",
-                            marginBottom: "4px",
-                            fontSize: "8px",
-                        }}>
-                            Email address
-                        </label>
+                    <form onSubmit={handleSubmit}>
+                        <label htmlFor="email">Email address</label>
 
                         <input
                             id="email"
+                            name="email"
                             type="email"
-                            placeholder="name@example.com"
+                            autoComplete="email"
+                            required
                             value={email}
                             onChange={(event) => setEmail(event.target.value)}
-                            style={input}
-                            required
                         />
 
-                        <label htmlFor="password" style={{
-                            display: "block",
-                            marginBottom: "4px",
-                            fontSize: "8px",
-                        }}>
-                            Password
-                        </label>
+                        <label htmlFor="password">Password</label>
 
                         <input
                             id="password"
+                            name="password"
                             type="password"
-                            placeholder="********"
+                            autoComplete="current-password"
+                            required
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
-                            style={input}
-                            required
                         />
 
                         {error && (
-                            <p
-                                role="alert"
-                                style={{
-                                    margin: "-3px 0 8px",
-                                    color: "#b42318",
-                                    fontSize: "8px",
-                                }}
-                            >
+                            <p role="alert">
                                 {error}
                             </p>
                         )}
 
-                        <button
-                            type="submit"
-                            disabled={!isLoaded || isSubmitting}
-                            style={{
-                                ...button,
-                                padding: "8px 14px",
-                                opacity: !isLoaded || isSubmitting ? 0.65 : 1,
-                            }}
-                        >
+                        <button type="submit" disabled={!isLoaded || isSubmitting}>
                             {isSubmitting ? "Signing in..." : "Sign in"}
                         </button>
                     </form>
