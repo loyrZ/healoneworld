@@ -1,42 +1,288 @@
+ <!-- NOTE: comments, indentation clean up, and style bugs were performed and fixed with ChatGPT GPT-6.1 Sol -->
 <!DOCTYPE html>
-
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Heal One World</title>
-  <link rel="stylesheet" href="/css/layout.css">
-  <link rel="stylesheet" href="/css/layout.css">
-  <link rel="stylesheet" href="/css/theme.css">
-  <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/header.css">
-  <script src="/js/header.js" defer></script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Hedvig+Letters+Serif:opsz@12..24&display=swap"
     rel="stylesheet"
-    >
+  >
+
+  <!-- Shared styles, then homepage styles -->
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/header.css">
+  <link rel="stylesheet" href="/css/home.css">
+
+  <script src="/js/header.js" defer></script>
 </head>
-/*NOTE TEMP DATA IN HOME PAGE, IMPLEMENTING SOON
-BUTTONS FOR KEYBOARD AND STYLE TESTING*/
+
 <body>
-    <div data-site-header></div>
-    <main class="container">
-    <h1>Heal One World</h1>
-    <p>Free and donation-based wellness classes.</p>
-    <p>
-        <a class="button" href="/index.html">Default button</a>
-    </p>
-    <p>
+  <div data-site-header></div>
+
+  <main class="home-page">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="hero-eyebrow">
+        Online &amp; in person · Los Angeles
+      </p>
+
+      <h1 id="hero-title">
+        Yoga, Reiki, and Tai Chi for everyone.
+      </h1>
+
+      <p class="hero-description">
+        Free and donation-based wellness classes at our
+        Los Angeles studio and online. Give what you can,
+        or nothing at all. No one is ever turned away.
+      </p>
+
+      <div class="hero-actions">
         <a class="button button--primary" href="/index.html">
-            Find a class
+          Find a class
         </a>
-    </p>
-    <p>
-        <a class="button button--outline" href="/index.html">
-            View classes
+        <a class="button button--outline" href="/volunteer.html">
+          Volunteer with us
         </a>
-    </p>
+      </div>
+
+      <section class="calendar-preview" aria-labelledby="calendar-title">
+        <h2 id="calendar-title">Community calendar</h2>
+        <p>Calendar preview — sample class information coming soon.</p>
+        <a href="/index.html">Browse classes and events</a>
+      </section>
+    </section>
+
+    <!-- Weekly classes -->
+    <section class="weekly-section" aria-labelledby="weekly-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="weekly-title">This week</h2>
+          <p>
+            Drop in, sign up, or join online.
+            Every class is free or pay what you can.
+          </p>
+        </div>
+
+        <a href="/index.html">See full calendar →</a>
+      </div>
+
+      <div class="card-grid" id="weekly-classes">
+        <!--
+          HOW-337 will render class cards here.
+          HOW-338 will provide sample entries.
+        -->
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works" aria-labelledby="how-title">
+      <p class="section-eyebrow">How it works</p>
+
+      <h2 id="how-title">
+        Wellness shouldn’t depend on your wallet.
+      </h2>
+
+      <ol class="steps-grid" role="list">
+        <li>
+          <h3>Pick a class</h3>
+          <p>
+            Browse yoga, Reiki, tai chi, and more,
+            at our Pico Blvd studio or online.
+          </p>
+        </li>
+        <li>
+          <h3>Show up as you are</h3>
+          <p>
+            No experience needed. Just bring
+            comfortable clothes and water.
+          </p>
+        </li>
+        <li>
+          <h3>Give what you can</h3>
+          <p>
+            $1, $10, or simply your presence.
+            No one is ever turned away.
+          </p>
+        </li>
+      </ol>
+
+      <dl class="impact-stats">
+        <div>
+          <dt>Serving Los Angeles since</dt>
+          <dd>2009</dd>
+        </div>
+        <div>
+          <dt>Volunteer-powered</dt>
+          <dd>100%</dd>
+        </div>
+        <div>
+          <dt>Minimum to join a class</dt>
+          <dd>$0</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- Programs -->
+    <section class="programs-section" aria-labelledby="programs-title">
+      <div class="programs-heading">
+        <p class="section-eyebrow">Our programs</p>
+        <h2 id="programs-title">Beyond the studio</h2>
+        <p>
+          Heal One World also runs community projects
+          and the Awareness Film Festival.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        <article class="program-card">
+          <img
+            class="program-image"
+            src="/images/joy-dome.png"
+            alt=""
+          >
+          <h3>The Joy Dome</h3>
+          <a href="https://thejoydome.com">thejoydome.com →</a>
+        </article>
+
+        <article class="program-card">
+          <img
+            class="program-image"
+            src="/images/awareness-festival.png"
+            alt=""
+          >
+          <h3>Awareness Film Festival</h3>
+          <a href="https://awarenessfestival.org">
+            awarenessfestival.org →
+          </a>
+        </article>
+
+        <article class="program-card">
+          <img
+            class="program-image"
+            src="/images/maui-resilience.png"
+            alt=""
+          >
+          <h3>Maui Resilience Project</h3>
+          <a href="https://mauiresilience.com">mauiresilience.com →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="about-section" aria-labelledby="about-title">
+      <div class="about-copy">
+        <p class="section-eyebrow">About Heal One World</p>
+
+        <h2 id="about-title">
+          Founded in 2009, powered by volunteers.
+        </h2>
+
+        <p>
+          Heal One World is a Los Angeles 501(c)(3) offering
+          free and donation-based wellness classes. Our volunteer
+          instructors share yoga, Reiki, tai chi, and more, so
+          anyone can explore what supports their body, mind,
+          and spirit.
+        </p>
+
+        <blockquote>
+          “Our greatest tools for healing lie within our own selves.”
+        </blockquote>
+
+        <a href="/about.html">Read our mission →</a>
+      </div>
+
+      <figure class="founder-photo">
+        <img
+          src="/images/skye-kelly.png"
+          alt="Skye Kelly"
+          width="500"
+          height="500"
+          loading="lazy"
+        >
+        <figcaption>
+          Skye Kelly, founder of Heal One World
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- Volunteer -->
+    <section class="volunteer-section" aria-labelledby="volunteer-title">
+      <div class="volunteer-copy">
+        <p class="section-eyebrow">Volunteer</p>
+
+        <h2 id="volunteer-title">Share your time and skills.</h2>
+
+        <p>
+          Heal One World runs entirely on volunteers, from trained
+          instructors to people who simply want to help.
+          Whatever you bring, there’s a place for it.
+        </p>
+
+        <a class="button volunteer-button" href="/volunteer.html">
+          Become a volunteer
+        </a>
+      </div>
+
+      <ul class="volunteer-roles" role="list">
+        <li>
+          <h3>Teach a class</h3>
+          <p>Share yoga, Reiki, tai chi, meditation, or another practice.</p>
+        </li>
+        <li>
+          <h3>Host a workshop</h3>
+          <p>Lead a one-time session on something you know well.</p>
+        </li>
+        <li>
+          <h3>Help at events</h3>
+          <p>Welcome guests, set up, and support the film festival.</p>
+        </li>
+        <li>
+          <h3>Intern</h3>
+          <p>Build real nonprofit experience alongside our team.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Support -->
+    <section class="support-section" aria-labelledby="support-title">
+      <div class="support-copy">
+        <p class="section-eyebrow">Support our work</p>
+
+        <h2 id="support-title">Help keep classes free.</h2>
+
+        <p>
+          Donations of any amount keep our doors open and our
+          classes free for anyone who needs them.
+        </p>
+
+        <p>
+          We're also grateful for supplies like toilet paper
+          and cleaning wipes. Just talk to your teacher after class.
+        </p>
+
+        <a href="/rent.html">Hosting an event? Rent our space →</a>
+      </div>
+
+      <div class="donation-preview">
+        <h3>Make a donation</h3>
+        <p>
+          Online donations are coming soon.
+          This preview does not collect payments.
+        </p>
+        <a class="button" href="/donate.html">
+          Donation information
+        </a>
+      </div>
+    </section>
   </main>
 </body>
 </html>
