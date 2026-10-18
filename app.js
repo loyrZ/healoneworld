@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // --- Routes ---
 app.use("/", require("./routes/index"));
+app.use("/signup", require("./routes/signup"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
 
 // --- 404 ---

@@ -1,7 +1,7 @@
 console.log("Javascript Loaded");
 const form = document.getElementById("SignUp");
 
-form.addEventListener("submit", function (event) {
+form.addEventListener("submit", async function (event) {
     console.log("Event Listener Detetced");
     event.preventDefault();
 
@@ -36,7 +36,37 @@ form.addEventListener("submit", function (event) {
         valid = false;
     }
 
-    if (valid) {
-        document.getElementById("SuccessMessage").textContent = "SignUp Information is Correct";
+    if (!valid) {
+        return;
+    }
+
+    try {
+        const response = await fetch("/users/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            document.getElementById("EmailError").textContent =
+                result.message;
+            return;
+        }
+
+        document.getElementById("SuccessMessage").textContent =
+            result.message;
+
+        form.reset();
+    } catch (error) {
+        document.getElementById("SuccessMessage").textContent =
+            "Unable to create account. Please try again.";
     }
 });

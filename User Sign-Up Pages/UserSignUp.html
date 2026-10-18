@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign-Up Sheet</title>
+    <title>Create Account</title>
+    <link rel="stylesheet" href="./signup.css">
 </head>
-<body>
-<form id="SignUp" novalidate>
-    <h1>Create Account!</h1>
+<body class="signup-page">
+<main  class="signup-card">
+<form id="SignUp" class="signup-form" novalidate>
+    <h1>Create Your Account</h1>
 
     <label for="Name"> Full Name </label>
     <input type="text" id="Name" name="Name" required>
@@ -23,11 +25,12 @@
     <input type="password" id="ConfirmPassword" required>
     <small id="ConfirmPasswordError"></small>
 
-    <button type="submit" id="Submit">Submit</button>
+    <button type="submit" id="Submit">Create Account</button>
 
     <p id="SuccessMessage"></p>
 
 </form>
+</main>
 <script src="./UserSignUp.js"></script>
 </body>
 </html>
