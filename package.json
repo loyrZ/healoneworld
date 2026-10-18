@@ -5,11 +5,13 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
+    "build": "vite build",
     "builddb": "node ./bin/dbloader.js",
     "dropdb": "node ./bin/dropdb.js",
     "enginestart": "npm run builddb && npm run start"
   },
   "dependencies": {
+    "@clerk/express": "^2.1.80",
     "@clerk/react": "^6.17.8",
     "dotenv": "^18.0.8",
     "express": "^5.3.0",
@@ -24,5 +26,11 @@
     "nodemon": "^3.1.14",
     "tailwindcss": "^4.3.3",
     "vite": "^8.3.4"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "public/*",
+      "dist/*"
+    ]
   }
 }
