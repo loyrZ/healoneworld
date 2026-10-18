@@ -45,6 +45,8 @@ async function makeClassesTable(connection) {
         `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`classes\` (
             id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
             class_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            user_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL
+
             PRIMARY KEY (id_pk)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
     );
