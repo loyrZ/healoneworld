@@ -309,7 +309,8 @@
   font-size: 30px;
 }
 
-.program-card a {
+.program-link {
+  color: var(--color-blue);
   font-weight: 600;
   overflow-wrap: anywhere;
 }
@@ -551,4 +552,40 @@
   margin-bottom: 8px;
   color: var(--color-navy);
   font-weight: 600;
+}
+
+/* Animate anchor navigation when reduced motion isn't requested. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* For HOW-339: Entire program cards act as links. */
+.program-card {
+  display: block;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.program-card:hover .program-link,
+.program-card:focus-visible .program-link {
+  text-decoration: underline;
+}
+
+.program-card:hover,
+.program-card:focus-visible {
+  box-shadow: 0 20px 48px -12px rgb(6 47 73 / 20%);
+}
+
+/* Animate only when reduced motion isn't requested. */
+@media (prefers-reduced-motion: no-preference) {
+  .program-card {
+    transition: transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .program-card:hover,
+  .program-card:focus-visible {
+    transform: scale(1.025);
+  }
 }

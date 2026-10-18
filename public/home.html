@@ -27,9 +27,12 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">
+        Skip to main content
+    </a>
   <div data-site-header></div>
 
-  <main class="home-page">
+  <main class="home-page" id="main-content" tabindex="-1">
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-title">
       <p class="hero-eyebrow">
@@ -152,7 +155,11 @@
     </section>
 
     <!-- Programs -->
-    <section class="programs-section" aria-labelledby="programs-title">
+    <section
+    id="programs"
+    class="programs-section"
+    aria-labelledby="programs-title"
+    >
       <div class="programs-heading">
         <p class="section-eyebrow">Our programs</p>
         <h2 id="programs-title">Beyond the studio</h2>
@@ -163,37 +170,35 @@
       </div>
 
       <div class="card-grid">
-        <article class="program-card">
-          <img
+        <a class="program-card" href="https://thejoydome.com">
+            <img
             class="program-image"
             src="/images/joy-dome.png"
             alt=""
-          >
-          <h3>The Joy Dome</h3>
-          <a href="https://thejoydome.com">thejoydome.com →</a>
-        </article>
+            >
+            <h3>The Joy Dome</h3>
+            <span class="program-link">thejoydome.com →</span>
+        </a>
 
-        <article class="program-card">
-          <img
+        <a class="program-card" href="https://awarenessfestival.org">
+            <img
             class="program-image"
             src="/images/awareness-festival.png"
             alt=""
-          >
-          <h3>Awareness Film Festival</h3>
-          <a href="https://awarenessfestival.org">
-            awarenessfestival.org →
-          </a>
-        </article>
+            >
+            <h3>Awareness Film Festival</h3>
+            <span class="program-link">awarenessfestival.org →</span>
+        </a>
 
-        <article class="program-card">
-          <img
+        <a class="program-card" href="https://mauiresilience.com">
+            <img
             class="program-image"
             src="/images/maui-resilience.png"
             alt=""
-          >
-          <h3>Maui Resilience Project</h3>
-          <a href="https://mauiresilience.com">mauiresilience.com →</a>
-        </article>
+            >
+            <h3>Maui Resilience Project</h3>
+            <span class="program-link">mauiresilience.com →</span>
+        </a>
       </div>
     </section>
 

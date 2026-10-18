@@ -33,3 +33,20 @@
   border-color: var(--color-blue);
   color: var(--color-blue);
 }
+
+/* keyboard shortcut past the navigation */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--color-navy);
+  color: var(--color-white);
+  transform: translateY(calc(-100% - 24px));
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
