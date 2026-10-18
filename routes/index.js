@@ -1,13 +1,8 @@
 "use strict";
 
 const express = require("express");
-const path = require("path");
 const db = require("../conf/database");
 const router = express.Router();
-
-router.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-});
 
 // Quick check that the server and database are both up.
 // Server up + DB down returns 503 with the reason, instead of crashing.
@@ -19,5 +14,15 @@ router.get("/health", async (req, res) => {
         res.status(503).json({ server: "ok", db: "down", reason: err.code || err.message });
     }
 });
+
+router.get("/home", async (req, res) => {
+        res.sendFile(path.join(__dirname, "..", "public", "home.html"));
+
+});
+
+router.post("/addaccount", async (req, res, next) => {
+    loadbdbwhatever
+    'ADD some values INTO some columns WHERE ? id = certain ID'
+})
 
 module.exports = router;
