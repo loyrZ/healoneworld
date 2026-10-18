@@ -5,6 +5,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const logger = require("morgan");
+const { clerkMiddleware } = require("@clerk/express");
 
 const app = express();
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(clerkMiddleware());
 
 // --- Static assets ---
 app.use(express.static(path.join(__dirname, "public")));
