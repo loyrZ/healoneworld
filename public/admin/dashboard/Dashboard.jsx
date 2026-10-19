@@ -6,6 +6,7 @@ import { mockDashboard } from "./mockDashboard.js";
 
 // Admin dashboard, shown at /admin/dashboard.
 // Sprint 1: uses mock data from mockDashboard.js.
+// These are mock data only, claude will be holding this page until we have the proper data tables to fill it in. 
 
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
