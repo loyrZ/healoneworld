@@ -22,7 +22,7 @@ router.get("/health", async (req, res) => {
 });
 
 // Preserve the homepage route added by the team.
-router.get("/home", (req, res) => {
+router.get(["/home", "/home.html"], (req, res) => {
   res.sendFile(path.join(publicDirectory, "home.html"));
 });
 
@@ -52,5 +52,33 @@ router.post("/addaccount", (req, res) => {
     error: "Account creation is not implemented on this endpoint."
   });
 });
+// Serve the existing class page and its required assets.
+const classPageFiles = [
+  "/classes/ClassPage.html",
+  "/classes/ClassPageStyle.css",
+  "/classes/ViewClassesButtons.js"
+];
 
+router.get(classPageFiles, (req, res) => {
+  res.sendFile(
+    path.join(
+      __dirname,
+      "..",
+      "Upcoming Classes Practice",
+      path.basename(req.path)
+    )
+  );
+});
+
+// Preserve old links to the deleted duplicate.
+router.get("/classes.html", (req, res) => {
+  res.redirect("/classes/ClassPage.html");
+});
+
+// Serve the shared HTML header used by the homepage.
+router.get("/components/header.html", (req, res) => {
+  res.sendFile(
+    path.join(publicDirectory, "components", "header.html")
+  );
+});
 module.exports = router;
