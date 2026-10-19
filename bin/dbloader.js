@@ -77,6 +77,27 @@ async function makeUsersTable(connection) {
     }
 }
 
+async function makePermissionTable(connection) {
+    const [result] = await connection.query(
+        `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`permission\` (
+            id_fk INT UNSIGNED NOT NULL,
+            instructor boolean not null DEFAULT FALSE,
+            staff boolean not null DEFAULT FALSE,
+            admin boolean not null DEFAULT FALSE,
+            PRIMARY KEY (id_fk),
+            FOREIGN KEY (id_fk) REFERENCES users(id_pk)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+    );
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created User's Permission Table!");
+    }
+}
+
+
 (async function main() {
     let connection = null;
     try {
