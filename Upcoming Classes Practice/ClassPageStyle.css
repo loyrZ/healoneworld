@@ -1,0 +1,244 @@
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #294452;
+    background: #ffffff;
+    line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+    min-height: 82px;
+    padding: 8px 5.6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: #ffffff;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.logo img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 50%;
+    margin: 0;
+}
+
+.site-header nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.site-header nav a {
+    color: #062f49;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.site-header nav a:hover {
+    text-decoration: underline;
+}
+
+/* Pale green main section */
+.class-hero {
+    background: #eff9f7;
+    padding: 60px 5.6%;
+}
+
+.hero-container {
+    max-width: 1170px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+    gap: 52px;
+    align-items: start;
+}
+
+/* Left class information panel */
+.class-information {
+    background: #ffffff;
+    min-height: 309px;
+    padding: 0 0 30px;
+}
+
+.class-category {
+    color: #69c900;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 14px;
+}
+
+.class-information h1 {
+    color: #062f49;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.class-date {
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.class-location {
+    margin-bottom: 14px;
+}
+
+.class-description {
+    max-width: 680px;
+}
+
+/* Reservation card */
+.reservation-card {
+    min-height: 290px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 25px 26px;
+}
+
+.reservation-card h2,
+.class-extra h2 {
+    color: #062f49;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 18px;
+}
+
+.spots {
+    color: #69c900;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.reservation-message {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.register-button {
+    background: #062f49;
+    color: #ffffff;
+    border: none;
+    border-radius: 9px;
+    padding: 13px 23px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.register-button:hover {
+    background: #104765;
+}
+
+/* What to expect and instructor */
+.class-extra {
+    background: #ffffff;
+    padding: 60px 5.6%;
+}
+
+.extra-container {
+    max-width: 1170px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 70px;
+}
+
+.class-extra h2 {
+    font-size: 34px;
+    margin-bottom: 16px;
+}
+
+.expect-section p,
+.instructor-section p {
+    font-size: 15px;
+}
+
+.instructor-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* Share section */
+.share-section {
+    max-width: 1050px;
+    margin: 0 5.6% 20px;
+    padding: 18px 22px;
+    background: #f3faf7;
+    border-radius: 10px;
+    color: #062f49;
+}
+
+/* Responsive layout */
+@media (max-width: 850px) {
+    .site-header {
+        flex-direction: column;
+        padding: 12px 5%;
+    }
+
+    .site-header nav ul {
+        gap: 14px 20px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .class-information {
+        min-height: auto;
+    }
+
+    .reservation-card {
+        min-height: auto;
+    }
+
+    .extra-container {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .class-hero,
+    .class-extra {
+        padding: 35px 6%;
+    }
+
+    .class-information h1 {
+        font-size: 36px;
+    }
+
+    .reservation-card h2,
+    .class-extra h2 {
+        font-size: 28px;
+    }
+
+    .share-section {
+        margin: 0 6% 20px;
+    }
+}
