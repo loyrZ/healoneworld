@@ -1,0 +1,7 @@
+function isLoggedIn(
+
+)
+
+function isAdmin(
+    
+)
