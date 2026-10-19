@@ -21,31 +21,6 @@ module.exports = {
         } catch (err) {
             next(err);
         }
-    },
-
-    getAllStaff: async function (req, res, next) {
-        try {
-            const [rows] = await db.query(
-                `${USER_SELECT} WHERE p.staff = TRUE OR p.admin = TRUE ORDER BY u.name`
-            );
-            res.json(rows);
-        } catch (err) {
-            next(err);
-        }
-    },
-    
-     getAllVolunteer: async function (req, res, next) {
-        try {
-            const [rows] = await db.query(
-                `${USER_SELECT}
-                 WHERE p.id_fk IS NULL
-                    OR (p.staff = FALSE AND p.admin = FALSE AND p.instructor = FALSE)
-                 ORDER BY u.name`
-            );
-            res.json(rows);
-        } catch (err) {
-            next(err);
-        }
-    },
+    }
     
 }
