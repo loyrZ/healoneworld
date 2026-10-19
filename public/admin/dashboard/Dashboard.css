@@ -1,0 +1,59 @@
+/* Admin dashboard. Prototype styling. */
+
+.admin-dashboard {
+    padding-block: 24px 48px;
+}
+
+.admin-dashboard__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.admin-dashboard__card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    border: 1px solid #000;
+    background: var(--color-white);
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.admin-dashboard__value {
+    color: var(--color-navy);
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.admin-dashboard__sections {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+@media (min-width: 900px) {
+    .admin-dashboard__sections {
+        grid-template-columns: 3fr 2fr;
+    }
+}
+
+.admin-dashboard__table {
+    width: 100%;
+    margin-bottom: 8px;
+    border-collapse: collapse;
+}
+
+.admin-dashboard__table th,
+.admin-dashboard__table td {
+    padding: 8px;
+    border: 1px solid #000;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.admin-dashboard__table th {
+    background: #eee;
+}
