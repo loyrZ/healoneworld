@@ -1,0 +1,43 @@
+/* Admin > Users & Staff page. Prototype styling. */
+
+.admin-users {
+    max-width: 900px;
+    padding: 24px 16px;
+}
+
+.admin-users__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.admin-users__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.admin-users__field input,
+.admin-users__field select {
+    padding: 6px 8px;
+    border: 1px solid #000;
+    font: inherit;
+}
+
+.admin-users__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-users__table th,
+.admin-users__table td {
+    padding: 8px;
+    border: 1px solid #000;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.admin-users__table th {
+    background: #eee;
+}

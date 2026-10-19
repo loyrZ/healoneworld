@@ -26,6 +26,7 @@ router.get(["/home", "/home.html"], (req, res) => {
   res.sendFile(path.join(publicDirectory, "home.html"));
 });
 
+
 // Connect the existing navigation address to the team's React login.
 router.get("/signin.html", (req, res) => {
   res.redirect("/sign-in");

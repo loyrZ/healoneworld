@@ -1,20 +1,26 @@
-"use strict";
+const db = require('../conf/database');
 
-const { requireAccount } = require("../middleware/account");
+const { exec } = require('child_process');
+const pathToFFMPEG = require('ffmpeg-static');
+const path = require('path'); // Import path module
 
-// verifies if a user is authenticated
-// rejects unauthenticated users
-function requireAccount(req, res, next) {
-    const { isAuthenticated, userId } = getAuth(req);
+const USER_SELECT = `
+    SELECT u.id_pk AS id, u.name, u.email,
+        CASE WHEN p.admin THEN 'Admin'
+             WHEN p.staff THEN 'Staff'
+             ELSE 'User' END AS role
+    FROM users u
+    LEFT JOIN permission p ON p.id_fk = u.id_pk
+`;
 
-    if (!isAuthenticated || !userId) {
-        return res.status(401).json({
-            error: "Unauthorized",
-        });
+module.exports = {
+    getAllUsers: async function (req, res, next) {
+        try {
+            const [rows] = await db.query(`${USER_SELECT} ORDER BY u.name`);
+            res.json(rows);
+        } catch (err) {
+            next(err);
+        }
     }
-
-    req.userId = userId;
-    next();
+    
 }
-
-module.exports = requireAccount;
