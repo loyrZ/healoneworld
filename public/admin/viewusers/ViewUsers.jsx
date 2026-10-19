@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "../css/layout.css";
-import "../css/theme.css";
-import "../css/components.css";
+import "../../css/layout.css";
+import "../../css/theme.css";
+import "../../css/components.css";
 import "./ViewUsers.css";
 import { placeholderUsers } from "./placeholderUsers.js";
 

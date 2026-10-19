@@ -41,12 +41,14 @@ router.get("/", (req, res) => {
     For now just leave it as it is because users login is not fully setup yet.
     For now just leave it as is so we can still access the page without signing in, it will get confusing. 
 
+    Access: http://localhost:3000/admin/viewusers
  */
 router.get("/viewUsers", (req, res) => {
   res.redirect("/admin/viewusers");
 });
 
 
+//    Access: http://localhost:3000/admin/viewusers
 
 router.get("/admin/users", isLoggedIn, isAdmin, getAllUsers, 
     async function(req, res, next){

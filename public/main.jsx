@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { ClerkProvider } from "@clerk/react";
 import Login from "./components/Login/Login.jsx";
 import AccountMenu from "./components/AccountMenu/AccountMenu.jsx";
-import ViewUsers from "./admin/ViewUsers.jsx";
+import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 
 // Website pages: the URL path on the left, the component it shows on the right.
 // Add new pages here, e.g. "/classes": Classes,
