@@ -1,4 +1,10 @@
 // Sprint 1 mock data for the admin dashboard. Replace with real API data later.
+
+/**
+ * 
+ CLAUDE GENERATED DATA - PLACEHOLDERS 
+ *
+ */
 export const mockDashboard = {
     stats: {
         upcomingClasses: 12,

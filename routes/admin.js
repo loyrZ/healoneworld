@@ -54,6 +54,11 @@ router.get("/admin/users", isLoggedIn, isAdmin, getAllUsers,
     async function(req, res, next){
         console.log("This shouldnt be able to pass now.")
 });
+
+// Dashboard page: public/admin/dashboard/Dashboard.jsx (React, uses mock data for now).
+// next() hands the request on to the React app, which shows the dashboard.
+// Once this file is mounted at "/admin" in app.js, this is /admin/dashboard.
+router.get("/dashboard", isLoggedIn, isAdmin, (req, res, next) => next());
 /* i dont even need thse 2 cause getAllUsers pulls every single user in the db so staff/volunteer 
 is already apart of that
 router.get("/admin/staff", isLoggedIn, isAdmin, getAllStaff);
