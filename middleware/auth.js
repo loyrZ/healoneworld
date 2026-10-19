@@ -1,3 +1,9 @@
+const db = require('../conf/database');
+
+const { exec } = require('child_process');
+const pathToFFMPEG = require('ffmpeg-static');
+const path = require('path'); // Import path module
+
 module.exports = {
         isLoggedIn: function (req, res, next) {
         if (req.session.userID) { // was req.session.user
