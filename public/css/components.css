@@ -1,0 +1,52 @@
+/*Shared button styles */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 24px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--color-navy);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  text-decoration: none;
+  box-shadow: 0 0 0 2px var(--color-navy);
+}
+
+.button--primary {
+  background: var(--color-green);
+  color: var(--color-navy);
+}
+
+.button--outline {
+  background: transparent;
+  border-color: var(--color-blue);
+  color: var(--color-blue);
+}
+
+/* keyboard shortcut past the navigation */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--color-navy);
+  color: var(--color-white);
+  transform: translateY(calc(-100% - 24px));
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}

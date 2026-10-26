@@ -45,8 +45,7 @@ async function makeClassesTable(connection) {
         `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`classes\` (
             id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
             class_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-            user_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL
-
+            user_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
             PRIMARY KEY (id_pk)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
     );
@@ -58,6 +57,47 @@ async function makeClassesTable(connection) {
     }
 }
 
+async function makeUsersTable(connection) {
+    const [result] = await connection.query(
+        `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`users\` (
+            id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password_hash VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id_pk)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+    );
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created Users Table!");
+    }
+}
+
+async function makePermissionTable(connection) {
+    const [result] = await connection.query(
+        `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`permission\` (
+            id_fk INT UNSIGNED NOT NULL,
+            instructor boolean not null DEFAULT FALSE,
+            staff boolean not null DEFAULT FALSE,
+            admin boolean not null DEFAULT FALSE,
+            PRIMARY KEY (id_fk),
+            FOREIGN KEY (id_fk) REFERENCES users(id_pk)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+    );
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created User's Permission Table!");
+    }
+}
+
+
 (async function main() {
     let connection = null;
     try {
@@ -65,6 +105,7 @@ async function makeClassesTable(connection) {
         await makeDatabase(connection);
         await connection.query(`USE \`${process.env.DB_NAME}\``);
         await makeClassesTable(connection);
+        await makeUsersTable(connection);
         await connection.end();
         console.log("\nDatabase build complete.\n");
     } catch (error) {
