@@ -1,0 +1,99 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif
+}
+body {
+    background-color: #EFF9F7;
+}
+header {
+    min-height: 82px;
+    padding: 8px 5.6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: #ffffff;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.logo img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 50%;
+    margin: 0;
+}
+header nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    flex-wrap: wrap;
+}
+header nav a {
+    text-decoration: none;
+    color: #062f49;
+    font-size: 16px;
+}
+header nav a:hover {
+    text-decoration: underline;
+}
+section {
+    max-width: 596px;
+    margin: 68px auto 0;
+    margin-left: auto;
+}
+section .eyebrow {
+    font-size: 14px;
+    font-family: DM Sans;
+    font-weight: bold;
+    color: #0075B5;
+    margin-top: 10px;
+    margin: 0 0 26px;
+}
+section .title {
+    font-size: 45px;
+    font-family: Hedvig Letters Serif;
+    font-weight: bold;
+    color: #062F49;
+    margin: 0 0 24px;
+}
+section .subtitle {
+    font-size: 14px;
+    font-family: DM Sans;
+    color: #29404A;
+    margin-left: 180px;
+    margin: 0;
+}
+buttons {
+    display: flex;
+    gap: 12px;
+    max-width: 596px;
+    margin: 26px auto 0;
+}
+buttons .find-button {
+    width: 100px;
+    height: 30px;
+    background-color: #8AD324;
+    color: #29404A;
+    border: solid 0px #062F49;
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+buttons .homepage {
+    width: 150px;
+    height: 30px;
+    background-color: #EFF9F7;
+    color: #29404A;
+    border: solid 1px #0075B5;
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}

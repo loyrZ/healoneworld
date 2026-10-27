@@ -161,6 +161,14 @@ upcoming-classes .class-card {
     border-radius: 10px;
     padding: 0px;
 }
+/* Keep the card layout rule from overriding the hidden state set by filters. */
+upcoming-classes .class-card[hidden] {
+    display: none;
+}
+upcoming-classes .no-classes-message {
+    margin: 20px 0 0 180px;
+    color: #29404A;
+}
 upcoming-classes .class-title {
     display: block;
     font-size: 24px;
