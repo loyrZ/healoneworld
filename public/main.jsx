@@ -1,9 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-    AuthenticateWithRedirectCallback,
-    ClerkProvider,
-} from "@clerk/react";
+import { ClerkProvider } from "@clerk/react";
+import ClerkCallback from "./components/Login/ClerkCallback.jsx";
 import Login from "./components/Login/Login.jsx";
 import AccountDashboard from "./components/Account/AccountDashboard.jsx";
 import AccountSettings from "./components/Account/AccountSettings.jsx";
@@ -28,17 +26,10 @@ function NotFound() {
     return <p>Page not found.</p>;
 }
 
-function ClerkCallback() {
-    return (
-        <AuthenticateWithRedirectCallback
-            signInForceRedirectUrl="/account"
-            signUpForceRedirectUrl="/account"
-        />
-    );
-}
-
 const path = window.location.pathname.replace(/\/+$/, "") || "/";
-const Page = pages[path] || NotFound;
+const Page =
+    pages[path] ||
+    (path.startsWith("/sign-in/") ? Login : NotFound);
 const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 createRoot(document.getElementById("root")).render(
