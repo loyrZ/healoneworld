@@ -1,0 +1,23 @@
+.vol-page, .vol-message {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1 rem;
+    font-family: system-ui, sans-serif;
+}
+.vol-link {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.vol-link:focus-visible {outline: 3px solid #1a73e8; outline-offset: 2px;}
+.vol-page section {margin-top: 1.5rem;}
+
+@media (min-width: 768px) {
+    .vol-page, .vol-message {padding: 2rem;}
+
+}
+@media (min-width: 1024px) {
+    .vol-page section {max-width: 60ch;}
+}

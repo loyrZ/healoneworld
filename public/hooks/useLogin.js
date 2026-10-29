@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSignIn } from "@clerk/react";
+import { useSignIn } from "@clerk/react/legacy";
 
 export function useLogin({ redirectTo = "/account" } = {}) {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -33,6 +33,8 @@ export function useLogin({ redirectTo = "/account" } = {}) {
             identifier: normalizedEmail,
             password,
         });
+
+        console.log("sign-in status:", result.status);
 
         if (result.status !== "complete") {
             setError("Additional verification is required.");

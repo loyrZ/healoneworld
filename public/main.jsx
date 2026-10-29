@@ -5,6 +5,7 @@ import Login from "./components/Login/Login.jsx";
 import AccountMenu from "./components/AccountMenu/AccountMenu.jsx";
 import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 import Dashboard from "./admin/dashboard/Dashboard.jsx";
+import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
 
 // Website pages: the URL path on the left, the component it shows on the right.
 // Add new pages here, e.g. "/classes": Classes,
@@ -14,6 +15,7 @@ const pages = {
     "/sign-in": Login,
     "/admin/viewusers": ViewUsers,
     "/admin/dashboard": Dashboard,
+    "/volunteer": VolunteerDashboard,
 };
 
 function NotFound() {
