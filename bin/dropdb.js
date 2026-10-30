@@ -26,6 +26,7 @@ async function getConnection() {
         // Add a DROP line here for every table you add in dbloader.js
         await connection.query(`DROP TABLE IF EXISTS users`);
         await connection.query(`DROP TABLE IF EXISTS permission`);
+        await connection.query(`DROP TABLE IF EXISTS announcements`);
         // Re-enable foreign key checks
         await connection.query(`SET FOREIGN_KEY_CHECKS = 1`);
 

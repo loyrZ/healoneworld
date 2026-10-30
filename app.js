@@ -19,6 +19,7 @@ app.use(clerkMiddleware({ publishableKey: process.env.VITE_CLERK_PUBLISHABLE_KEY
 // --- Routes ---
 app.use("/", require("./routes/index"));
 app.use("/signup", require("./routes/signup"));
+app.use("/announcements", require("./routes/announcements"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
 
 // --- React website (public/) ---

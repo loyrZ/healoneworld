@@ -97,6 +97,32 @@ async function makePermissionTable(connection) {
     }
 }
 
+async function makeAnnouncementsTable(connection) {
+    const [result] = await connection.query(`
+        CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`announcements\` (
+            id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            title VARCHAR(255) NOT NULL,
+            message TEXT NOT NULL,
+            status ENUM('draft', 'published') NOT NULL DEFAULT 'draft',
+            visibility ENUM('public') NOT NULL DEFAULT 'public',
+            published_at TIMESTAMP NULL DEFAULT NULL,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id_pk)
+        ) ENGINE=InnoDB
+        DEFAULT CHARSET=utf8mb4
+        COLLATE=utf8mb4_unicode_ci
+    `);
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created Announcements Table!");
+    }
+}
+
 
 (async function main() {
     let connection = null;
@@ -106,6 +132,7 @@ async function makePermissionTable(connection) {
         await connection.query(`USE \`${process.env.DB_NAME}\``);
         await makeClassesTable(connection);
         await makeUsersTable(connection);
+        await makeAnnouncementsTable(connection);
         await connection.end();
         console.log("\nDatabase build complete.\n");
     } catch (error) {
