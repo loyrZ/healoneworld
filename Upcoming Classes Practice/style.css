@@ -127,6 +127,10 @@ button.week-button {
     margin-left: 10px;
     cursor: pointer;
 }
+filter button[aria-pressed="true"] {
+    background-color: #062F49;
+    color: #ffffff;
+}
 upcoming-classes {
     margin-left: 180px;
     margin-bottom: 120px;

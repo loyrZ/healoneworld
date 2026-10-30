@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const monthYear = document.getElementById("month-year");
     const daysContainer = document.getElementById("days");
+    const emptyState = document.getElementById("empty-state");
     const prevButton = document.getElementById("prev");
     const nextButton = document.getElementById("next");
     const sidebar = document.getElementById("class-sidebar");
@@ -12,11 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "September", "October", "November", "December"
     ];
     let currentDate = new Date();
-    currentDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1
-    );
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const today = new Date();
     function getClassColor(type) {
         switch (type) {
@@ -34,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
-
         return `${year}-${month}-${day}`;
     }
     function openSidebar(content) {
@@ -42,13 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
         sidebar.classList.add("open");
     }
     function showClassDetails(classItem, occurrenceDate) {
-        const details = [
-            `Class: ${classItem.name}`,
-            `Type: ${classItem.type}`,
-            `Date: ${occurrenceDate}`,
-            `Time: ${classItem.startTime}` +
-                (classItem.endTime ? ` - ${classItem.endTime}` : ""),
-            `Format: ${classItem.mode}`,
+        const details = [`Class: ${classItem.name}`, `Type: ${classItem.type}`, `Date: ${occurrenceDate}`,
+            `Time: ${classItem.startTime}` + (classItem.endTime ? ` - ${classItem.endTime}` : ""), `Format: ${classItem.mode}`,
             classItem.instructor
                 ? `Instructor: ${classItem.instructor}`
                 : "",
@@ -60,11 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 : ""
         ].filter(Boolean);
 
-        openSidebar(
-            details
-                .map(detail => `<p>${detail}</p>`)
-                .join("")
-        );
+        openSidebar(details.map(detail => `<p>${detail}</p>`).join(""));
         const classLink = document.createElement("a");
         classLink.href = classItem.classUrl;
         classLink.textContent = "Go to Class";
@@ -90,14 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
         dayDiv.appendChild(dayNumber);
 
         const dayClasses = classes
-            .filter(classItem =>
-                new Date(`${classItem.date}T00:00:00`).getDay() === date.getDay() &&
-                classItem.status !== "Cancelled" &&
-                (
-                    typeof window.matchesCalendarFilter !== "function" ||
-                    window.matchesCalendarFilter(classItem, dateKey)
-                )
-            )
+            .filter(classItem => new Date(`${classItem.date}T00:00:00`).getDay() === date.getDay() && classItem.status !== "Cancelled" && 
+            (typeof window.matchesCalendarFilter !== "function" || window.matchesCalendarFilter(classItem, dateKey)))
             .sort((a, b) =>
                 a.startTime.localeCompare(b.startTime)
             );
@@ -107,41 +88,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         visibleClasses.forEach(classItem => {
             const eventDiv = document.createElement("button");
-
             eventDiv.type = "button";
-            eventDiv.classList.add(
-                "class-event",
-                getClassColor(classItem.type)
-            );
-
-            eventDiv.textContent =
-                `${classItem.startTime} ${classItem.name}`;
-
-            eventDiv.title =
-                `${classItem.name} | ${classItem.startTime}` +
-                ` | ${classItem.mode}`;
-
+            eventDiv.classList.add("class-event", getClassColor(classItem.type));
+            eventDiv.textContent = `${classItem.startTime} ${classItem.name}`;
+            eventDiv.title = `${classItem.name} | ${classItem.startTime}` + ` | ${classItem.mode}`;
             eventDiv.addEventListener("click", function (event) {
                 event.stopPropagation();
                 showClassDetails(classItem, dateKey);
             });
-
             dayDiv.appendChild(eventDiv);
         });
 
         if (dayClasses.length > maxVisible) {
             const moreDiv = document.createElement("button");
-
             moreDiv.type = "button";
             moreDiv.classList.add("more-events");
-            moreDiv.textContent =
-                `+${dayClasses.length - maxVisible} more`;
-
+            moreDiv.textContent =`+${dayClasses.length - maxVisible} more`;
             moreDiv.addEventListener("click", function (event) {
                 event.stopPropagation();
-
                 openSidebar("");
-
                 const heading = document.createElement("p");
                 heading.textContent = `Classes on ${dateKey}`;
                 classDetails.appendChild(heading);
@@ -149,22 +114,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 dayClasses.slice(maxVisible).forEach(item => {
                     const classButton = document.createElement("button");
                     classButton.type = "button";
-                    classButton.classList.add(
-                        "class-event",
-                        getClassColor(item.type)
-                    );
-                    classButton.textContent =
-                        `${item.startTime} - ${item.name} (${item.mode})`;
+                    classButton.classList.add("class-event", getClassColor(item.type));
+                    classButton.textContent = `${item.startTime} - ${item.name} (${item.mode})`;
                     classButton.addEventListener("click", function () {
                         showClassDetails(item, dateKey);
                     });
                     classDetails.appendChild(classButton);
                 });
             });
-
             dayDiv.appendChild(moreDiv);
         }
-
         return dayDiv;
     }
 
@@ -177,65 +136,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const firstOfMonth = new Date(year, month, 1);
         const firstWeekday = firstOfMonth.getDay();
-
         const lastOfMonth = new Date(year, month + 1, 0);
         const daysInMonth = lastOfMonth.getDate();
-
-        const previousMonthLastDate =
-            new Date(year, month, 0).getDate();
+        const previousMonthLastDate = new Date(year, month, 0).getDate();
 
         for (let i = firstWeekday - 1; i >= 0; i--) {
             const day = previousMonthLastDate - i;
             const dateToRender = new Date(year, month - 1, day);
-
-            daysContainer.appendChild(
-                createDayCell(dateToRender, false)
-            );
+            daysContainer.appendChild(createDayCell(dateToRender, false));
         }
-
         for (let day = 1; day <= daysInMonth; day++) {
             const dateToRender = new Date(year, month, day);
-
-            daysContainer.appendChild(
-                createDayCell(dateToRender, true)
-            );
+            daysContainer.appendChild(createDayCell(dateToRender, true));
         }
-
         const totalCells = daysContainer.children.length;
         const remainingCells = (7 - (totalCells % 7)) % 7;
-
         for (let day = 1; day <= remainingCells; day++) {
-            const dateToRender = new Date(year, month + 1, day);
-
-            daysContainer.appendChild(
-                createDayCell(dateToRender, false)
-            );
+            const dateToRender = new Date(year, month + 1, day)
+            daysContainer.appendChild(createDayCell(dateToRender, false));
         }
+        emptyState.hidden = daysContainer.querySelector(".class-event") !== null;
     }
-
     window.addEventListener("calendarFiltersChanged", function () {
         renderCalendar(currentDate);
     });
-
     prevButton.addEventListener("click", function () {
-        currentDate = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth() - 1,
-            1
-        );
-
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
         renderCalendar(currentDate);
     });
-
     nextButton.addEventListener("click", function () {
-        currentDate = new Date(
-            currentDate.getFullYear(),
-            currentDate.getMonth() + 1,
-            1
-        );
-
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
         renderCalendar(currentDate);
     });
-
     renderCalendar(currentDate);
 });

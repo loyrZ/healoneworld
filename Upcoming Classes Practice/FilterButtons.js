@@ -10,14 +10,10 @@
 	emptyMessage.hidden = true;
 	classList?.appendChild(emptyMessage);
 
-	const buttons = [...document.querySelectorAll(
-		'[data-filter], .filter-button, .filter-btn, .format-button, .category-button, .week-button'
-	)];
-	const search = document.querySelector(
-		'input[type="search"], input[placeholder*="search" i], input[aria-label*="search" i]'
-	);
-
-	let activeFilter = 'all';
+	const buttons = [...document.querySelectorAll('[data-filter], .filter-button, .filter-btn, .format-button, .category-button, .week-button')];
+	const search = document.querySelector('input[type="search"], input[placeholder*="search" i], input[aria-label*="search" i]');
+	let activeModality = 'all';
+	let isWeekActive = false;
 	let searchTerm = '';
 	const normalize = value => String(value || '').trim().toLowerCase();
 
@@ -38,24 +34,34 @@
 	function update() {
 		let visibleCount = 0;
 		cards.forEach(card => {
-			const modality = normalize(
-				card.dataset.modality || card.dataset.format || card.dataset.type ||
-				card.querySelector('.class-category')?.textContent
-			);
+			const modality = normalize(card.dataset.modality || card.dataset.format || card.dataset.type || card.querySelector('.class-category')?.textContent);
 			// Search the rendered card content so custom elements like .class-title are searchable too.
 			const searchableText = normalize(card.textContent);
 			const date = card.dataset.date || card.dataset.startDate ||
 				card.querySelector('time[datetime]')?.dateTime;
 
-			// Date-only filters should not also require the card to match a modality.
-			const matchesModality = !['in person', 'hybrid', 'online'].includes(activeFilter) ||
-				(activeFilter === 'in person' && /in[ -]?person/.test(modality)) ||
-				(activeFilter === 'hybrid' && modality.includes('hybrid')) ||
-				(activeFilter === 'online' && modality.includes('online'));
-			const matchesWeek = activeFilter !== 'this week' || isInCurrentWeek(date);
+			const matchesModality = activeModality === 'all' ||
+				(activeModality === 'in person' && /in[ -]?person/.test(modality)) ||
+				(activeModality === 'hybrid' && modality.includes('hybrid')) ||
+				(activeModality === 'online' && modality.includes('online'));
+			const matchesWeek = !isWeekActive || isInCurrentWeek(date);
 			const matchesSearch = !searchTerm || searchableText.includes(searchTerm);
 			card.hidden = !(matchesModality && matchesWeek && matchesSearch);
 			if (!card.hidden) visibleCount++;
+		});
+		buttons.forEach(button => {
+			const label = normalize(button.dataset.filter || button.textContent);
+			const filter = /^in[ -]?person$/.test(label) ? 'in person' :
+				['hybrid', 'online'].includes(label) ? label :
+				/^this week$/.test(label) ? 'this week' :
+				/^all(?: classes| formats)?$/.test(label) ? 'all' : null;
+			if (!filter) return;
+			const isPressed = filter === 'this week'
+				? isWeekActive
+				: filter === 'all'
+					? activeModality === 'all'
+					: activeModality === filter;
+			button.setAttribute('aria-pressed', String(isPressed));
 		});
 		// Show the status message only when the current controls leave no visible classes.
 		emptyMessage.hidden = visibleCount > 0;
@@ -69,7 +75,13 @@
 			/^all(?: classes| formats)?$/.test(label) ? 'all' : null;
 		if (!filter) return;
 		button.addEventListener('click', () => {
-			activeFilter = filter;
+			if (filter === 'this week') {
+				isWeekActive = !isWeekActive;
+			} else if (filter === 'all') {
+				activeModality = 'all';
+			} else {
+				activeModality = activeModality === filter ? 'all' : filter;
+			}
 			update();
 		});
 	});
