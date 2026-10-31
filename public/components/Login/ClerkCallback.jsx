@@ -18,7 +18,7 @@ export default function ClerkCallback() {
                 });
             } catch (error) {
                 console.error("Clerk callback failed:", error);
-                window.location.replace("/");
+                window.location.replace("/sign-in");
             }
         }
 

@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { useAuth, useClerk, useUser } from "@clerk/react";
+import { useAuth, useUser } from "@clerk/react";
+import AccountMenu from "../AccountMenu/AccountMenu.jsx";
 import "./AccountDashboard.css";
 
 function LoadingState() {
     return (
         <main className="account-page">
-            <p role="status">Loading your account...</p>
+            <p role="status">Loading your dashboard...</p>
         </main>
     );
 }
@@ -13,7 +14,6 @@ function LoadingState() {
 export default function AccountDashboard() {
     const { isLoaded, isSignedIn } = useAuth();
     const { user } = useUser();
-    const { signOut } = useClerk();
 
     useEffect(() => {
         if (isLoaded && !isSignedIn) {
@@ -29,18 +29,14 @@ export default function AccountDashboard() {
         return null;
     }
 
-    async function handleSignOut() {
-        await signOut();
-        window.location.assign("/");
-    }
-
-    const name =
+    const displayName =
         user.fullName ||
         user.firstName ||
         user.primaryEmailAddress?.emailAddress ||
         "Member";
 
-    const email = user.primaryEmailAddress?.emailAddress || "";
+    const email =
+        user.primaryEmailAddress?.emailAddress || "No email address available";
 
     return (
         <div className="account-page">
@@ -49,13 +45,7 @@ export default function AccountDashboard() {
                     Heal One World
                 </a>
 
-                <button
-                    type="button"
-                    className="account-header__sign-out"
-                    onClick={handleSignOut}
-                >
-                    Sign out
-                </button>
+                <AccountMenu />
             </header>
 
             <div className="account-layout">
@@ -65,8 +55,8 @@ export default function AccountDashboard() {
                     <nav aria-label="Account navigation">
                         <a
                             href="/account"
-                            aria-current="page"
                             className="account-sidebar__link"
+                            aria-current="page"
                         >
                             Dashboard
                         </a>
@@ -78,22 +68,32 @@ export default function AccountDashboard() {
                             Account settings
                         </a>
 
-                        <span className="account-sidebar__link account-sidebar__link--disabled">
-                            Registration history
-                            <small>Coming soon</small>
-                        </span>
+                        <div
+                            className="account-sidebar__link account-sidebar__link--disabled"
+                            aria-disabled="true"
+                        >
+                            <span>Registration history</span>
+                            <small>Unavailable</small>
+                        </div>
 
-                        <span className="account-sidebar__link account-sidebar__link--disabled">
-                            Donation history
-                            <small>Coming soon</small>
-                        </span>
+                        <div
+                            className="account-sidebar__link account-sidebar__link--disabled"
+                            aria-disabled="true"
+                        >
+                            <span>Donation history</span>
+                            <small>Unavailable</small>
+                        </div>
                     </nav>
                 </aside>
 
-                <main className="account-content">
+                <main className="account-content" id="main-content">
                     <section className="account-welcome">
-                        <p className="account-content__eyebrow">Dashboard</p>
-                        <h1>Welcome, {name}</h1>
+                        <p className="account-content__eyebrow">
+                            Standard user dashboard
+                        </p>
+
+                        <h1>Welcome, {displayName}</h1>
+
                         <p>
                             Manage your Heal One World account and participation.
                         </p>
@@ -107,7 +107,8 @@ export default function AccountDashboard() {
                             <p className="account-content__eyebrow">
                                 Signed-in identity
                             </p>
-                            <h2 id="identity-heading">{name}</h2>
+
+                            <h2 id="identity-heading">{displayName}</h2>
                             <p>{email}</p>
                         </div>
 
@@ -123,11 +124,17 @@ export default function AccountDashboard() {
                         className="account-empty-state"
                         aria-labelledby="activity-heading"
                     >
-                        <p className="account-content__eyebrow">Activity</p>
-                        <h2 id="activity-heading">Your activity</h2>
+                        <p className="account-content__eyebrow">
+                            Participation
+                        </p>
+
+                        <h2 id="activity-heading">
+                            Your activity will appear here
+                        </h2>
+
                         <p>
-                            Registration and donation activity will appear here
-                            when those features are available.
+                            Registration history and donation history are not
+                            available yet.
                         </p>
                     </section>
                 </main>

@@ -26,6 +26,16 @@
     cursor: pointer;
 }
 
+.account-menu__chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1;
+    transform: translateY(1px);
+}
+
 .account-menu__dropdown {
     position: absolute;
     z-index: 10;

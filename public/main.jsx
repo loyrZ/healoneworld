@@ -8,6 +8,9 @@ import AccountSettings from "./components/Account/AccountSettings.jsx";
 import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 import Dashboard from "./admin/dashboard/Dashboard.jsx";
 
+import "./css/theme.css";
+import "./css/layout.css";
+
 
 // Website pages: the URL path on the left, the component it shows on the right.
 // Add new pages here, e.g. "/classes": Classes,
