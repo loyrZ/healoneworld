@@ -5,8 +5,16 @@ const express = require("express");
 const { requireAccount, requireApprovedVolunteer } = require("../middleware/volunteer");
 const router = express.Router();
 
+// Personal data: never let the browser cache these responses.
+router.use((req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+});
+
+// Make sure user is a signed in approved volunteer
 router.use(requireAccount, requireApprovedVolunteer);
 
+// Get the name and email of the volunteer
 router.get("/dashboard", (req, res) => {
     const u = req.clerkUser;
     res.json({
@@ -22,12 +30,12 @@ const MAX_TEXT = 500;
 function validate({phone, interests, availability}) {
     const errors = {};
     if (phone && !PHONE_RE.test(phone)) errors.phone = "Enter a valid phone number.";
-    if (interests.length >MAX_TEXT) errors.interests - 'Max ${MAX_TEXT} characters.';
-    if (availability.length > MAX_TEXT) errors.availability = 'Max ${MAX_TEXT} characters.';
+    if (interests.length >MAX_TEXT) errors.interests = `Max ${MAX_TEXT} characters.`;
+    if (availability.length > MAX_TEXT) errors.availability = `Max ${MAX_TEXT} characters.`;
     return errors;
 }
 
-router.get("/profile", async (req,res, next) => {
+router.get("/profile", async(req,res, next) => {
     try {
         const [rows] = await db.query(
             "SELECT phone, interests, availability FROM volunteer_profiles WHERE clerk_user_id = ?",

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/react";
-import "./Volunteer.css";
+import VolunteerLayout from "./VolunteerLayout.jsx";
+import "../../css/theme.css";
+import "../../css/layout.css";
 
 export default function VolunteerDashboard() {
     const { isLoaded, isSignedIn } = useAuth();
@@ -36,23 +38,37 @@ export default function VolunteerDashboard() {
         );
 
     return (
-        <main className="vol-page">
-            <h1>Volunteer dashboard</h1>
-            <p>
-                Signed in as <strong>{state.data.name || "Volunteer"}</strong> ({state.data.email})
-            </p>
-            <nav aria-label="Volunteer">
-                <a className="vol-link" href="/volunteer/profile">My profile</a>
-            </nav>
+        <VolunteerLayout>
+        <h1>Volunteer dashboard</h1>
+        <p className="vol-subtitle">
+            Manage the classes you host and submit new classes for staff approval.
+        </p>
+        <p className="vol-notice" role="note">
+            Hosting and class submissions are coming soon. These sections will fill in once they're available.
+        </p>
 
-            <section aria-labelledby="classes-heading">
-                <h2 id="classes-heading">My classes</h2>
-                <p>Class proposals and hosted-class history are coming soon.</p>
-            </section>
-            <section aria-labelledby="activities-heading">
-                <h2 id="activities-heading">My activities</h2>
-                <p>Nothing here yet.</p>
-            </section>
-        </main>
+        <div className="vol-stats">
+            {["Upcoming hosted", "Pending approval", "Classes hosted"].map((label) => (
+                <div className="vol-stat" key={label}>
+                    <p className="vol-stat-label">{label}</p>
+                    <p className="vol-stat-value" aria-label="Not available yet">—</p>
+                </div>
+            ))}
+        </div>
+
+        <section className="vol-section" aria-labelledby="upcoming-heading">
+            <h2 id="upcoming-heading">Upcoming hosted classes</h2>
+            <p className="vol-empty">No hosted classes yet. Class hosting is coming soon.</p>
+        </section>
+
+        <section className="vol-section" aria-labelledby="recent-heading">
+            <h2 id="recent-heading">Recent submissions</h2>
+            <p className="vol-empty">No submissions yet. Class submissions are coming soon.</p>
+        </section>
+
+        <button type="button" className="vol-button" disabled>
+            Create a class (coming soon)
+        </button>
+    </VolunteerLayout>
     );
 }   

@@ -1,5 +1,6 @@
 const { getAuth, clerkClient } = require("@clerk/express");
 
+// Check to see if a user is signed in. If not, display "sign in" message
 function requireAccount(req, res, next) { 
     const { userId } = getAuth(req);
     if(!userId) {
@@ -9,7 +10,7 @@ function requireAccount(req, res, next) {
     next();
 }
 
-//check if person is an approved volunteer
+//Check if user is an approved volunteer. If not, display "approval required" message
 async function requireApprovedVolunteer(req, res, next) {
     try {
         const user = await clerkClient.users.getUser(req.userId);
@@ -23,4 +24,5 @@ async function requireApprovedVolunteer(req, res, next) {
     }
 }
 
+// goes to routes/volunteer.js
 module.exports = { requireAccount, requireApprovedVolunteer };
