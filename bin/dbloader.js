@@ -60,13 +60,15 @@ async function makeClassesTable(connection) {
 async function makeUsersTable(connection) {
     const [result] = await connection.query(
         `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`users\` (
-            id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            name VARCHAR(255) NOT NULL,
-            email VARCHAR(255) NOT NULL UNIQUE,
-            password_hash VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (id_pk)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+        id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        clerk_user_id VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NULL,
+        password_hash VARCHAR(255) NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id_pk),
+        UNIQUE KEY uq_users_clerk_user_id (clerk_user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
     );
 
     if (result && result.warningStatus > 0) {
@@ -84,6 +86,7 @@ async function makePermissionTable(connection) {
             instructor boolean not null DEFAULT FALSE,
             staff boolean not null DEFAULT FALSE,
             admin boolean not null DEFAULT FALSE,
+            volunteer boolean not null DEFAULT FALSE,
             PRIMARY KEY (id_fk),
             FOREIGN KEY (id_fk) REFERENCES users(id_pk)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
@@ -106,6 +109,7 @@ async function makePermissionTable(connection) {
         await connection.query(`USE \`${process.env.DB_NAME}\``);
         await makeClassesTable(connection);
         await makeUsersTable(connection);
+        await makePermissionTable(connection);
         await connection.end();
         console.log("\nDatabase build complete.\n");
     } catch (error) {
