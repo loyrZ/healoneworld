@@ -9,7 +9,7 @@ export default function Login() {
                 path="/sign-in"
                 oauthFlow="redirect"
                 forceRedirectUrl="/account"
-                signUpForceRedirectUrl="/account"
+                signUpForceRedirectUrl="/verify-email"
                 signUpUrl="/sign-up"
             />
         </main>

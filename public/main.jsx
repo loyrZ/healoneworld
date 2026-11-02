@@ -9,6 +9,7 @@ import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 import Dashboard from "./admin/dashboard/Dashboard.jsx";
 import Signup from "./components/Login/Signup.jsx";
 import ApplicationAccountGate from "./components/Account/ApplicationAccountGate.jsx";
+import EmailVerification from "./components/Account/EmailVerification.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -26,6 +27,7 @@ const pages = {
     "/admin/viewusers": ViewUsers,
     "/admin/dashboard": Dashboard,
     "/sign-up": Signup,
+    "/verify-email": EmailVerification,
 };
 
 function NotFound() {

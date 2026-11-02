@@ -1,8 +1,59 @@
-import { SignUp } from "@clerk/react";
+import { useEffect } from "react";
+import { SignUp, useUser, useClerk } from "@clerk/react";
+import { useSignUp } from "@clerk/react/legacy";
 import "./Login.css";
 import "./Signup.css";
 
 export default function Signup() {
+    const clerk = useClerk();
+    const { isLoaded, signUp } = useSignUp();
+    const {
+        isLoaded: userLoaded,
+        isSignedIn
+    } = useUser();
+
+    const needsEmailVerification =
+        isLoaded &&
+        signUp?.status === "missing_requirements" &&
+        signUp.missingFields.length === 0 &&
+        signUp.unverifiedFields.includes("email_address") &&
+        signUp.verifications?.emailAddress?.strategy === "email_code";
+
+    const openVerification =
+        needsEmailVerification || (userLoaded && isSignedIn);
+
+    useEffect(() => {
+        if (openVerification) {
+            window.location.replace("/verify-email");
+        }
+    }, [openVerification]);
+
+    useEffect(() => {
+    if (!isLoaded || !userLoaded || isSignedIn) return;
+
+    return clerk.addListener(({ client }) => {
+        const signup = client?.signUp;
+
+        const readyForEmailCode =
+            signup?.status === "missing_requirements" &&
+            signup.missingFields.length === 0 &&
+            signup.unverifiedFields.includes("email_address") &&
+            signup.verifications?.emailAddress?.strategy === "email_code";
+
+        if (readyForEmailCode) {
+            window.location.replace("/verify-email");
+        }
+    });
+    }, [clerk, isLoaded, userLoaded, isSignedIn]);
+
+    if (!isLoaded || !userLoaded) {
+        return <p role="status">Loading signup...</p>;
+    }
+
+    if (openVerification) {
+        return <p role="status">Opening email verification...</p>;
+    }
+
     return (
         <main className="login-page">
             <div className="signup-content">
@@ -21,7 +72,7 @@ export default function Signup() {
                     path="/sign-up"
                     signInUrl="/sign-in"
                     oauthFlow="redirect"
-                    forceRedirectUrl="/account"
+                    forceRedirectUrl="/verify-email"
                     signInForceRedirectUrl="/account"
                 />
             </div>
