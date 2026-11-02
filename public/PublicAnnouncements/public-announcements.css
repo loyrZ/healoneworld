@@ -1,0 +1,105 @@
+/* Public announcements page-specific styles.
+ * Shared layout, colors, buttons, and navigation come from the provided CSS.
+ */
+
+.public-announcements-page {
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.public-announcements-content {
+  width: min(100% - 40px, 900px);
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 100px) 0 110px;
+  text-align: center;
+}
+
+.public-announcements-eyebrow {
+  margin: 0 0 14px;
+  color: var(--color-blue);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.public-announcements-content h1 {
+  margin: 0 0 14px;
+  font-size: clamp(42px, 6vw, 64px);
+}
+
+.public-announcements-intro {
+  max-width: 620px;
+  margin: 0 auto 44px;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.public-announcement-list {
+  display: grid;
+  gap: 18px;
+  text-align: left;
+}
+
+.public-announcement-card {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 28px;
+  padding: 28px 32px;
+  border: 1px solid rgb(6 47 73 / 8%);
+  border-radius: 18px;
+  background: var(--color-white);
+  box-shadow: 0 14px 36px -14px rgb(6 47 73 / 12%);
+}
+
+.public-announcement-card__date {
+  padding-top: 6px;
+  color: var(--color-blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.public-announcement-card h2 {
+  margin: 0 0 10px;
+  font-size: clamp(25px, 3vw, 34px);
+}
+
+.public-announcement-card p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.announcement-status {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 22px;
+  border: 1px solid #dce3e6;
+  border-radius: 14px;
+  background: var(--color-white);
+  text-align: center;
+}
+
+.announcement-status--error {
+  color: #a32626;
+}
+
+@media (max-width: 767px) {
+  .public-announcements-content {
+    width: min(100% - 28px, 900px);
+  }
+
+  .public-announcement-card {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 22px;
+  }
+
+  .public-announcement-card__date {
+    padding-top: 0;
+  }
+}
