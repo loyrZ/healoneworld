@@ -1,0 +1,62 @@
+.vol-layout { display: flex; min-height: 100vh; background: var(--color-white); }
+
+.vol-sidebar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 250px;
+    height: 100vh;
+    padding: 34px 28px 25px;
+    background: var(--color-navy);
+    color: var(--color-white);
+    overflow-y: auto;
+}
+.vol-sidebar__brand { margin: 0; font-size: 17px; font-weight: 500; text-transform: uppercase; }
+.vol-sidebar__sub {
+    margin: 6px 0 40px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #8fd3d9;
+}
+.vol-sidebar__nav { display: flex; flex-direction: column; gap: 22px; margin: 0; padding: 0; list-style: none; }
+.vol-sidebar__nav a,
+.vol-sidebar__soon { color: var(--color-white); font-size: 15px; text-decoration: none; }
+.vol-sidebar__nav a[aria-current="page"] { color: var(--color-green); }
+.vol-sidebar__nav a:hover { text-decoration: underline; }
+.vol-sidebar__soon { opacity: 0.6; cursor: not-allowed; }
+.vol-sidebar__soon small { font-size: 11px; }
+.vol-sidebar__nav a:focus-visible,
+.vol-sidebar__logout:focus-visible { outline-color: var(--color-white); }
+
+.vol-sidebar__user { margin-top: auto; padding-top: 24px; font-size: 13px; overflow-wrap: anywhere; }
+.vol-sidebar__user strong { display: block; font-weight: 500; }
+.vol-sidebar__logout {
+    margin-top: 16px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-white);
+    font: inherit;
+    font-size: 15px;
+    text-align: left;
+    cursor: pointer;
+}
+.vol-sidebar__logout:hover { text-decoration: underline; }
+
+.vol-main { flex: 1; min-width: 0; padding: 44px 48px 48px; }
+.vol-main--grey { background: #f7f8fa; }
+.vol-main h1 { margin: 0 0 12px; font-size: 44px; }
+.vol-main h2 { margin: 0 0 16px; font-size: 28px; }
+.vol-subtitle { margin: 0 0 24px; font-size: 15px; }
+
+@media (max-width: 767px) {
+    .vol-layout { flex-direction: column; }
+    .vol-sidebar { position: static; flex-basis: auto; height: auto; padding: 20px 16px; }
+    .vol-sidebar__sub { margin-bottom: 16px; }
+    .vol-sidebar__nav { flex-direction: row; flex-wrap: wrap; gap: 8px 16px; }
+    .vol-sidebar__user { margin-top: 20px; padding-top: 0; }
+    .vol-main { padding: 28px 16px; }
+    .vol-main h1 { font-size: 34px; }
+}

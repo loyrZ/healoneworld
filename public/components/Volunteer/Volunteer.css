@@ -1,0 +1,18 @@
+.vol-message {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 1 rem;
+}
+
+.vol-button {
+    justify-self: start;
+    padding: 0.75rem 1.3rem;
+    font: inherit;
+    font-weight: 500;
+    color: var(--color-white);
+    background: var(--color-navy);
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.vol-button:disabled { opacity: 0.55; cursor: not-allowed; }

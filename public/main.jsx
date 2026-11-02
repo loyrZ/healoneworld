@@ -10,6 +10,8 @@ import Dashboard from "./admin/dashboard/Dashboard.jsx";
 import Signup from "./components/Login/Signup.jsx";
 import ApplicationAccountGate from "./components/Account/ApplicationAccountGate.jsx";
 import EmailVerification from "./components/Account/EmailVerification.jsx";
+import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
+import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -28,6 +30,8 @@ const pages = {
     "/admin/dashboard": Dashboard,
     "/sign-up": Signup,
     "/verify-email": EmailVerification,
+    "/volunteer": VolunteerDashboard,
+    "/volunteer/profile": VolunteerProfile,
 };
 
 function NotFound() {

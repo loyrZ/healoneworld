@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Calendar.css">
+</head>
+<body>
+    <main class="calendar-layout">
+        <section class="calendar-filters" aria-label="Filter calendar classes">
+            <label>Class name<input id="class-search" type="search" placeholder="Search classes..."></label>
+            <label>Start date<input id="start-date" type="date"></label>
+            <label>End date<input id="end-date" type="date"></label>
+            <div class="filter-buttons">
+                <button class="format-button" data-filter="all" type="button" aria-pressed="true">All Formats</button>
+                <button class="category-button" data-filter="in person" type="button" aria-pressed="false">In Person</button>
+                <button class="category-button" data-filter="hybrid" type="button" aria-pressed="false">Hybrid</button>
+                <button class="category-button" data-filter="online" type="button" aria-pressed="false">Online</button>
+                <button class="week-button" data-filter="this week" type="button" aria-pressed="false">This Week</button>
+            </div>
+            <p id="filter-status" role="status" aria-live="polite"></p>
+        </section>
+        <div class="calendar">
+            <div class="calendar-header">
+                <div class="header">
+                    <div id="prev" class="btn">←</div>
+                    <div id="month-year"></div>
+                    <div id="next" class="btn">→</div>
+                </div>
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="days" id="days"></div>
+            </div>
+            <p id="empty-state" role="status" aria-live="polite" hidden>No available classes</p>
+        </div>
+    </main>
+    <aside id="class-sidebar">
+        <button id="close-sidebar">×</button>
+        <div id="class-details"></div>
+    </aside>
+    <script src="CalendarDatabase.js"></script>
+    <script src="calendar.js"></script>
+    <script src="FilterCalendar.js"></script>
+</body>
+</html>
