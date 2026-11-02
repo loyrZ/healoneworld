@@ -1,6 +1,7 @@
 const classes = [
     {
         id: 1,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=1",
         name: "Morning Yoga",
         type: "Yoga",
         date: "2026-10-22",
@@ -9,10 +10,11 @@ const classes = [
         mode: "In person",
         instructor: "Alex Morgan",
         location: "Studio A",
-        status: "Scheduled"
+        status: "Scheduled",
     },
     {
         id: 2,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=2",
         name: "Introduction to Reiki",
         type: "Reiki",
         date: "2026-10-22",
@@ -25,6 +27,7 @@ const classes = [
     },
     {
         id: 3,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=3",
         name: "Afternoon Tai Chi",
         type: "Tai Chi",
         date: "2026-10-22",
@@ -37,6 +40,7 @@ const classes = [
     },
     {
         id: 4,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=4",
         name: "Evening Yoga",
         type: "Yoga",
         date: "2026-10-24",
@@ -49,6 +53,7 @@ const classes = [
     },
     {
         id: 5,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=5",
         name: "Reiki Fundamentals",
         type: "Reiki",
         date: "2026-10-26",
@@ -61,6 +66,7 @@ const classes = [
     },
     {
         id: 6,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=6",
         name: "Tai Chi for Beginners",
         type: "Tai Chi",
         date: "2026-10-28",
@@ -73,6 +79,7 @@ const classes = [
     },
     {
         id: 7,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=7",
         name: "Restorative Yoga",
         type: "Yoga",
         date: "2026-11-02",
@@ -85,6 +92,7 @@ const classes = [
     },
     {
         id: 8,
+        classUrl: "file:///C:/git/healoneworld/Upcoming%20Classes%20Practice/ClassPage.html?id=8",
         name: "Reiki Practice",
         type: "Reiki",
         date: "2026-11-05",

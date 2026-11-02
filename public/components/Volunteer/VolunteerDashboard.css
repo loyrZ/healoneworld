@@ -1,0 +1,38 @@
+.vol-notice {
+    max-width: 760px;
+    margin: 0 0 24px;
+    padding: 12px 16px;
+    border-left: 4px solid var(--color-blue);
+    background: #eff9f7;
+    font-size: 14px;
+}
+
+.vol-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    max-width: 760px;
+    margin-bottom: 40px;
+}
+.vol-stat { padding: 18px 20px; border-radius: 12px; background: #f2f8f5; }
+.vol-stat-label { margin: 0 0 6px; font-size: 14px; }
+.vol-stat-value {
+    margin: 0;
+    font-family: "Hedvig Letters Serif", Georgia, serif;
+    font-size: 32px;
+    color: var(--color-navy);
+}
+
+.vol-section { margin-bottom: 40px; }
+.vol-empty {
+    max-width: 948px;
+    margin: 0;
+    padding: 16px 18px;
+    border: 1px solid #d9dfe2;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+@media (max-width: 900px) {
+    .vol-stats { grid-template-columns: 1fr; gap: 16px; }
+}
