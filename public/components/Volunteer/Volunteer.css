@@ -22,24 +22,7 @@
     .vol-page section {max-width: 60ch;}
 }
 
-.vol-form { max-width: 40rem; }
-.vol-field { margin-bottom: 1rem; }
-.vol-field label { display: block; margin-bottom: 0.25rem; font-weight: 600; }
-.vol-field input,
-.vol-field textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.6rem;
-    font: inherit;
-    border: 1px solid #767676;
-    border-radius: 6px;
-}
-.vol-field input:focus-visible,
-.vol-field textarea:focus-visible,
 .vol-button:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; }
-.vol-field [aria-invalid="true"] { border-color: #b00020; }
-.vol-error { color: #b00020; min-height: 1.2em; margin: 0.25rem 0 0; }
-.vol-success { color: #1b6e2f; min-height: 1.2em; }
 .vol-button {
     padding: 0.75rem 1.25rem;
     font: inherit;
