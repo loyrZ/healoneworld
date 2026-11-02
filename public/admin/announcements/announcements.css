@@ -1,0 +1,344 @@
+/* Admin announcements
+ * Uses the shared variables from theme.css and shared controls from components.css.
+ */
+
+/* The page background visible around the admin shell in the mockup. */
+.admin-announcements-page {
+  min-height: 100vh;
+  padding: 48px 24px;
+  background: #2354a4;
+}
+
+.admin-announcements-shell {
+  display: grid;
+  grid-template-columns: 214px minmax(0, 1fr);
+  width: min(100%, 1220px);
+  min-height: 760px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+/* Shared admin navigation */
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 24px 22px;
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.admin-sidebar__brand {
+  margin: 0 0 22px;
+  color: var(--color-white);
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.admin-sidebar__links {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-sidebar__links a {
+  display: block;
+  padding: 9px 0;
+  color: var(--color-white);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.admin-sidebar__links a:hover,
+.admin-sidebar__links a:focus-visible,
+.admin-sidebar__links a[aria-current="page"] {
+  color: var(--color-green);
+}
+
+.admin-sidebar__logout {
+  margin-top: auto;
+}
+
+.admin-sidebar__logout .button {
+  width: 128px;
+  min-height: 35px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 7px;
+  background: #285977;
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* Main content area */
+.admin-announcements-content {
+  min-width: 0;
+  padding: 42px 42px 64px;
+  background: var(--color-white);
+}
+
+.admin-announcements-content h1 {
+  margin: 0 0 18px;
+  font-size: clamp(42px, 4vw, 58px);
+}
+
+.admin-announcements-content > header p {
+  margin: 0 0 20px;
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.admin-announcements-content > header .button {
+  margin-bottom: 21px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* List page */
+.announcement-list {
+  display: grid;
+  gap: 20px;
+  margin-top: 0;
+}
+
+.announcement-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.1fr) minmax(100px, 0.8fr) minmax(90px, 0.7fr) 80px;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background: #eff9f7;
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+.announcement-row__title {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.announcement-row__status {
+  text-transform: capitalize;
+}
+
+.announcement-row__date {
+  white-space: nowrap;
+}
+
+.announcement-row__edit {
+  justify-self: start;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.announcement-row__edit:hover,
+.announcement-row__edit:focus-visible {
+  color: var(--color-blue);
+  text-decoration: underline;
+}
+
+/* Create/edit form */
+.announcement-form {
+  max-width: 700px;
+}
+
+.announcement-form__intro {
+  margin: -6px 0 32px;
+  color: var(--color-text);
+  font-size: 15px;
+}
+
+.announcement-form__field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.announcement-form__field label,
+.announcement-form__legend {
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.announcement-form__field input,
+.announcement-form__field textarea {
+  width: 100%;
+  border: 1px solid #dce3e6;
+  border-radius: 7px;
+  background: var(--color-white);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.announcement-form__field input {
+  min-height: 38px;
+  padding: 9px 11px;
+}
+
+.announcement-form__field textarea {
+  min-height: 120px;
+  padding: 11px;
+  resize: vertical;
+}
+
+.announcement-form__field input::placeholder,
+.announcement-form__field textarea::placeholder {
+  color: #7c898e;
+  opacity: 1;
+}
+
+.announcement-form__field input:focus,
+.announcement-form__field textarea:focus {
+  border-color: var(--color-blue);
+  outline: 3px solid rgb(0 117 181 / 18%);
+  outline-offset: 1px;
+}
+
+.announcement-form__visibility {
+  margin: 0 0 32px;
+  padding: 0;
+  border: 0;
+}
+
+.announcement-form__legend {
+  margin-bottom: 10px;
+}
+
+.announcement-form__options {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 14px;
+  border-radius: 7px;
+  background: #eff9f7;
+  font-size: 12px;
+}
+
+.announcement-form__option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.announcement-form__option input {
+  accent-color: var(--color-navy);
+}
+
+.announcement-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.announcement-form__actions .button {
+  min-height: 36px;
+  padding: 9px 15px;
+  border-radius: 7px;
+  font-size: 12px;
+}
+
+.announcement-form__actions .button--secondary {
+  background: #68777d;
+  color: var(--color-white);
+}
+
+.announcement-form__message {
+  margin: 16px 0 0;
+  font-size: 13px;
+}
+
+.announcement-form__message--success {
+  color: #28722c;
+}
+
+.announcement-form__message--error {
+  color: #a32626;
+}
+
+/* Empty/loading/error states */
+.announcement-status {
+  margin: 0;
+  padding: 18px;
+  border-radius: 8px;
+  background: #eff9f7;
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .admin-announcements-page {
+    padding: 20px 12px;
+  }
+
+  .admin-announcements-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    padding: 20px;
+  }
+
+  .admin-sidebar__links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-sidebar__logout {
+    margin-top: 18px;
+  }
+
+  .admin-announcements-content {
+    padding: 32px 24px 48px;
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-announcements-content h1 {
+    font-size: 40px;
+  }
+
+  .announcement-row {
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+    padding: 12px 14px;
+  }
+
+  .announcement-row__title {
+    grid-column: 1 / 2;
+  }
+
+  .announcement-row__status,
+  .announcement-row__date {
+    font-size: 12px;
+  }
+
+  .announcement-row__edit {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    justify-self: end;
+  }
+
+  .announcement-form__options {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 7px;
+    padding-block: 10px;
+  }
+}

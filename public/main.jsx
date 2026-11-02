@@ -6,6 +6,7 @@ import AccountMenu from "./components/AccountMenu/AccountMenu.jsx";
 import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 import Dashboard from "./admin/dashboard/Dashboard.jsx";
 import Announcements from "./admin/announcements/admin-announcements.jsx";
+import PublicAnnouncements from "./PublicAnnouncements/public_announcements.jsx";
 
 // Website pages: the URL path on the left, the component it shows on the right.
 // Add new pages here, e.g. "/classes": Classes,
@@ -16,6 +17,7 @@ const pages = {
     "/admin/viewusers": ViewUsers,
     "/admin/dashboard": Dashboard,
     "/admin/announcements": Announcements,
+    "/PublicAnnouncements": PublicAnnouncements,
 };
 
 function NotFound() {
