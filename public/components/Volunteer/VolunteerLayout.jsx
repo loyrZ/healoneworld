@@ -13,14 +13,14 @@ const NAV = [
 ];
 
 
-export default function VolunteerLayout({ children, tone }) {
+export default function VolunteerLayout({ children, tone, identity }) {
     const { signOut } = useClerk();
     const { user } = useUser();
     const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
 
     async function handleSignOut() {
         await signOut();
-        window.location.assign("/");
+        window.location.assign("/home.html");
     }
 
     return (
@@ -51,8 +51,8 @@ export default function VolunteerLayout({ children, tone }) {
                 </nav>
 
                 <div className="vol-sidebar__user">
-                    <strong>{user?.fullName || "Volunteer"}</strong>
-                    {user?.primaryEmailAddress?.emailAddress}
+                    <strong>{identity?.name || user?.fullName || "Volunteer"}</strong>
+                    {identity?.email || user?.primaryEmailAddress?.emailAddress}
                 </div>
                 <button type="button" className="vol-sidebar__logout" onClick={handleSignOut}>
                     Log out
