@@ -14,12 +14,22 @@ app.use(logger("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Same key the React side uses; npx clerk env pull names it VITE_CLERK_PUBLISHABLE_KEY.
-app.use(clerkMiddleware({ publishableKey: process.env.VITE_CLERK_PUBLISHABLE_KEY }));
+app.use(
+    clerkMiddleware({
+        publishableKey: process.env.VITE_CLERK_PUBLISHABLE_KEY,
+        secretKey: process.env.CLERK_SECRET_KEY,
+    })
+);
 
 // --- Routes ---
 app.use("/", require("./routes/index"));
 app.use("/signup", require("./routes/signup"));
+// --- Routes ---
+app.use("/", require("./routes/index"));
+app.use("/signup", require("./routes/signup"));
 app.use("/announcements", require("./routes/announcements"));
+app.use("/api/account", require("./routes/account"));
+app.use("/api/volunteer", require("./routes/volunteer"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
 
 // --- React website (public/) ---

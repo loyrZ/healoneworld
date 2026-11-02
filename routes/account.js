@@ -1,15 +1,17 @@
 "use strict";
 
 const express = require("express");
-const requireAccount = require("../middleware/account");
+const {
+  requireApplicationUser
+} = require("../middleware/auth");
 
 const router = express.Router();
 
-router.get("/", requireAccount, (req, res) => {
-    res.json({
-        userId: req.userId,
-        message: "Protected account data",
-    });
+router.get("/", requireApplicationUser, (req, res) => {
+  res.json({
+    user: req.applicationUser,
+    permissions: req.applicationPermissions
+  });
 });
 
 module.exports = router;

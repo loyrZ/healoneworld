@@ -1,0 +1,112 @@
+.account-settings {
+    min-height: 100vh;
+    padding: 48px 24px;
+    background: var(--color-background);
+}
+
+.account-settings__back {
+    display: block;
+    width: min(100%, 680px);
+    margin: 0 auto 24px;
+    color: var(--color-navy);
+}
+
+.account-settings__card {
+    width: min(100%, 680px);
+    margin: 0 auto;
+    padding: 32px;
+    border: 1px solid #dce3e6;
+    border-radius: 12px;
+    background: var(--color-white);
+}
+
+.account-settings__eyebrow {
+    margin: 0 0 10px;
+    color: var(--color-blue);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.account-settings h1 {
+    margin-top: 0;
+    color: var(--color-navy);
+}
+
+.account-settings__form {
+    display: grid;
+    gap: 10px;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid #dce3e6;
+}
+
+.account-settings__form h2 {
+    margin: 0 0 8px;
+    color: var(--color-navy);
+    font-size: 1.35rem;
+}
+
+.account-settings__form label {
+    color: var(--color-navy);
+    font-weight: 700;
+}
+
+.account-settings__form input {
+    width: 100%;
+    min-height: 44px;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border: 1px solid #aebdc3;
+    border-radius: 6px;
+    color: var(--color-text);
+    font: inherit;
+}
+
+.account-settings__form input:disabled {
+    background: #eef2f3;
+    color: #71818a;
+}
+
+.account-settings__form button {
+    justify-self: start;
+    min-height: 44px;
+    margin-top: 8px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-navy);
+    color: var(--color-white);
+    font: inherit;
+    cursor: pointer;
+}
+
+.account-settings__form button:hover {
+    background: var(--color-blue);
+}
+
+.account-settings__form button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.account-settings__error {
+    margin: 4px 0;
+    color: #a32626;
+}
+
+.account-settings__status {
+    margin: 4px 0;
+    color: #236b45;
+}
+
+@media (max-width: 767px) {
+    .account-settings {
+        padding: 32px 16px;
+    }
+
+    .account-settings__card {
+        padding: 24px;
+    }
+}

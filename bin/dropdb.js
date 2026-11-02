@@ -27,6 +27,7 @@ async function getConnection() {
         await connection.query(`DROP TABLE IF EXISTS users`);
         await connection.query(`DROP TABLE IF EXISTS permission`);
         await connection.query(`DROP TABLE IF EXISTS announcements`);
+        await connection.query('DROP TABLE IF EXISTS volunteer_profiles');
         // Re-enable foreign key checks
         await connection.query(`SET FOREIGN_KEY_CHECKS = 1`);
 

@@ -1,0 +1,60 @@
+.vol-main--grey h1 { font-family: "DM Sans", Arial, sans-serif; font-weight: 700; font-size: 34px; color: #172026; }
+.vol-main--grey .vol-subtitle { color: #5f6b70; }
+
+.vol-card {
+    max-width: 1000px;
+    margin: 0 0 24px;
+    padding: 24px 22px;
+    border: 1px solid #dde2e5;
+    border-radius: 14px;
+    background: var(--color-white);
+}
+.vol-card h2 {
+    margin: 0 0 6px;
+    font-family: "DM Sans", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #172026;
+}
+.vol-card-desc { margin: 0 0 24px; font-size: 14px; color: #5f6b70; }
+
+.vol-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 34px;
+}
+.vol-wide { grid-column: 1 / -1; }
+.vol-form-note { margin: 0; font-size: 13px; color: #5f6b70; }
+
+.vol-field label { display: block; margin-bottom: 0.45rem; font-size: 13px; color: #172026; }
+.vol-optional { color: #5f6b70; font-weight: 400; }
+.vol-field input,
+.vol-field textarea {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    font: inherit;
+    font-size: 14px;
+    color: #172026;
+    background: var(--color-white);
+    border: 1px solid #d5dbde;
+    border-radius: 8px;
+}
+.vol-field input { min-height: 42px; }
+.vol-field textarea { resize: vertical; }
+.vol-field input.vol-readonly-input { background: #f3f5f6; color: #3d484d; }
+.vol-field [aria-invalid="true"] { border-color: #b00020; }
+
+.vol-error { color: #b00020; min-height: 1.2em; margin: 0.25rem 0 0; }
+.vol-success { color: #1b6e2f; min-height: 1.2em; margin: 0.25rem 0 0; }
+
+.vol-card .vol-button { padding: 0.7rem 1.5rem; font-size: 15px; }
+.vol-button--outline {
+    color: #172026;
+    background: var(--color-white);
+    border: 1px solid #d5dbde;
+}
+
+@media (max-width: 767px) {
+    .vol-form { grid-template-columns: 1fr; gap: 20px; }
+    .vol-card { padding: 18px 16px; }
+}

@@ -1,9 +1,5 @@
 const db = require('../conf/database');
 
-const { exec } = require('child_process');
-const pathToFFMPEG = require('ffmpeg-static');
-const path = require('path'); // Import path module
-
 const USER_SELECT = `
     SELECT u.id_pk AS id, u.name, u.email,
         CASE WHEN p.admin THEN 'Admin'
