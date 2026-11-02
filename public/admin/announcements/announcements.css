@@ -13,7 +13,7 @@
   display: grid;
   grid-template-columns: 214px minmax(0, 1fr);
   width: min(100%, 1220px);
-  min-height: 760px;
+  min-height: calc(100vh - 48px);
   margin: 0 auto;
   overflow: hidden;
   background: var(--color-white);
@@ -341,4 +341,17 @@
     gap: 7px;
     padding-block: 10px;
   }
+ 
+}
+ .admin-announcements-page {
+    min-height: 100vh;
+    padding: 0;
+    background: var(--color-white);
+}
+
+.admin-announcements-shell {
+    width: 100%;
+    min-height: 100vh;
+    max-width: none;
+    margin: 0;
 }

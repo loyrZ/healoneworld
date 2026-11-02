@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import "./css/layout.css";
-import "./css/theme.css";
-import "./css/components.css";
-import "./css/header.css";
+import "../../css/layout.css";
+import "../../css/theme.css";
+import "../../css/components.css";
+import "../../css/header.css";
 import "./announcements.css";
 
 export default function Announcements() {
