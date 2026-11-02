@@ -23,7 +23,7 @@ router.get("/dashboard", (req, res) => {
     });
 });
 
-
+const ALLOWED_FIELDS = ["phone", "interests", "availability"];
 const PHONE_RE = /^[0-9+()\-\s.]{7,20}$/;
 const MAX_TEXT = 500;
 
@@ -35,6 +35,7 @@ function validate({phone, interests, availability}) {
     return errors;
 }
 
+// Get the phone, interests, availability of the user for the profile
 router.get("/profile", async(req,res, next) => {
     try {
         const [rows] = await db.query(
@@ -47,12 +48,30 @@ router.get("/profile", async(req,res, next) => {
     }
 });
 
+// receive, check, and write volunteer's data and write to database
 router.put("/profile", async (req, res, next) => {
     try {
         const body = req.body ?? {};
-        const phone = String(body.phone ?? "").trim();
-        const interests = String(body.interests ?? "").trim();
-        const availability = String(body.availability ?? "").trim();
+        if (typeof body !== "object" || Array.isArray(body)) {
+            return res.status(400).json({error: "Invalid request."});
+        }
+        const unexpected = Object.keys(body).filter((key) => !ALLOWED_FIELDS.includes(key));
+        if (unexpected.length) {
+            return res.status(400).json({
+                error: "Only phone, interests and availability can be updated.",
+                rejected: unexpected,
+            });
+        }
+
+        for (const key of ALLOWED_FIELDS) {
+            if (body[key] !== undefined && typeof body[key] !== "string") {
+                return res.status(400).json({ errors: { [key]: "Must be text." } });
+            }
+        }
+
+        const phone = (body.phone ?? "").trim();
+        const interests = (body.interests ?? "").trim();
+        const availability = (body.availability ?? "").trim();
 
         const errors = validate({phone, interests, availability});
         if (Object.keys(errors).length) {
