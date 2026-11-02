@@ -7,6 +7,8 @@ import AccountDashboard from "./components/Account/AccountDashboard.jsx";
 import AccountSettings from "./components/Account/AccountSettings.jsx";
 import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 import Dashboard from "./admin/dashboard/Dashboard.jsx";
+import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
+import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -23,6 +25,8 @@ const pages = {
     "/account/settings": AccountSettings,
     "/admin/viewusers": ViewUsers,
     "/admin/dashboard": Dashboard,
+    "/volunteer": VolunteerDashboard,
+    "/volunteer/profile": VolunteerProfile,
 };
 
 function NotFound() {
