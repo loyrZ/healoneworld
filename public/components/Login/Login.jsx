@@ -10,6 +10,7 @@ export default function Login() {
                 oauthFlow="redirect"
                 forceRedirectUrl="/account"
                 signUpForceRedirectUrl="/account"
+                signUpUrl="/sign-up"
             />
         </main>
     );

@@ -83,3 +83,74 @@ The migration was applied successfully to the shared Railway database.
 The resulting columns, unique Clerk ID constraint, and default permission
 values were confirmed. Live Clerk sign-in and simultaneous-request
 checks remain pending for integration verification under HOW-533.
+
+## Shared access checks
+
+middleware/auth.js provides:
+
+- requireApplicationUser: allows signed-in users with valid application
+  permissions, including standard users.
+- requireRole("administrator"): requires the MySQL admin permission.
+- requireRole("approved-volunteer"): requires the MySQL volunteer permission.
+
+Protected handlers receive req.applicationUser and
+req.applicationPermissions. Use req.applicationUser.id for the signed-in
+user's application records, rather than an ID supplied by the browser.
+
+Instructor permission alone does not grant approved-volunteer access.
+Unknown roles and missing or invalid permissions are rejected.
+Unexpected database failures are passed to the server error handler.
+
+The existing isLoggedIn and isAdmin export names remain available.
+
+Run the simulated identity and permission tests with:
+
+node --test tests/application-user.test.js tests/auth.test.js
+
+## Account flow
+
+- /sign-up uses Clerk's signup component.
+- /sign-in uses Clerk's sign-in component.
+- Successful authentication currently leads to /account.
+- The dashboard and settings pages call /api/account before loading.
+- /api/account uses verified Clerk identity, not browser-supplied user IDs.
+- The old UserSignUp page redirects to /sign-up.
+- routes/signup.js still contains legacy class-data queries. It is not
+  used for account creation and is preserved for the class-data owner.
+- Role-specific dashboard destinations require coordination with their owners.
+
+## Required environment variables
+
+Authentication:
+- VITE_CLERK_PUBLISHABLE_KEY
+- CLERK_SECRET_KEY
+
+Database:
+- DB_HOST
+- DB_PORT
+- DB_USER
+- DB_PASSWORD
+- DB_NAME
+
+Keep values in the local environment. Never commit or log secrets.
+The shared Railway migration has already been applied; do not rerun it.
+
+## Manual integration results
+
+Passed:
+- Account creation through Clerk.
+- Dashboard access with a linked MySQL user.
+- Returning to the dashboard while signed in.
+- One linked user, one unique Clerk ID, and no missing permission record.
+- Protected account access rejected after sign-out.
+- Dashboard requests sign-in after sign-out.
+- Public homepage remains accessible while signed out.
+
+Pending:
+- Browser-supplied user ID is ignored during authenticated access.
+- Public calendar/class page remains accessible while signed out.
+- Simultaneous requests reuse one MySQL user record.
+- Live administrator and approved-volunteer access checks.
+
+The temporary test email is no longer accessible. Further authenticated
+checks require a verified test account with a durable email address.

@@ -7,6 +7,8 @@ import AccountDashboard from "./components/Account/AccountDashboard.jsx";
 import AccountSettings from "./components/Account/AccountSettings.jsx";
 import ViewUsers from "./admin/viewusers/ViewUsers.jsx";
 import Dashboard from "./admin/dashboard/Dashboard.jsx";
+import Signup from "./components/Login/Signup.jsx";
+import ApplicationAccountGate from "./components/Account/ApplicationAccountGate.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -23,6 +25,7 @@ const pages = {
     "/account/settings": AccountSettings,
     "/admin/viewusers": ViewUsers,
     "/admin/dashboard": Dashboard,
+    "/sign-up": Signup,
 };
 
 function NotFound() {
@@ -32,14 +35,22 @@ function NotFound() {
 const path = window.location.pathname.replace(/\/+$/, "") || "/";
 const Page =
     pages[path] ||
-    (path.startsWith("/sign-in/") ? Login : NotFound);
+    (path.startsWith("/sign-in/") ? Login :
+     path.startsWith("/sign-up/") ? Signup :
+     NotFound);
 const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         {publishableKey ? (
             <ClerkProvider publishableKey={publishableKey}>
-                <Page />
+                {path === "/account" || path === "/account/settings" ? (
+                    <ApplicationAccountGate>
+                        <Page />
+                    </ApplicationAccountGate>
+                ) : (
+                    <Page />
+                )}
             </ClerkProvider>
         ) : (
             <p>VITE_CLERK_PUBLISHABLE_KEY is missing from .env</p>
