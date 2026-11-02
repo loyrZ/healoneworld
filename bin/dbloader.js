@@ -97,6 +97,26 @@ async function makePermissionTable(connection) {
     }
 }
 
+//Volunteer Dashboard 
+async function makeVolunteerProfilesTable(connection){
+    const[result] = await connection.query(
+        `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`volunteer_profiles\` (
+            clerk_user_id VARCHAR(64) NOT NULL,
+            phone VARCHAR(20) NOT NULL DEFAULT '',
+            interests VARCHAR(500) NOT NULL DEFAULT '',
+            availability VARCHAR(500) NOT NULL DEFAULT '',
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (clerk_user_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
+    );
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created Volunteer Profiles Table!");
+    }
+}
 
 (async function main() {
     let connection = null;
@@ -106,6 +126,8 @@ async function makePermissionTable(connection) {
         await connection.query(`USE \`${process.env.DB_NAME}\``);
         await makeClassesTable(connection);
         await makeUsersTable(connection);
+        //Volunteer Dashboard
+        await makeVolunteerProfilesTable(connection);
         await connection.end();
         console.log("\nDatabase build complete.\n");
     } catch (error) {

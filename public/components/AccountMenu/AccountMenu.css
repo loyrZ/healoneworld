@@ -1,0 +1,71 @@
+.account-menu {
+    position: relative;
+}
+
+.account-menu__sign-in,
+.account-menu__trigger {
+    color: var(--color-navy);
+    font: inherit;
+}
+
+.account-menu__sign-in {
+    text-decoration: none;
+}
+
+.account-menu__sign-in:hover {
+    text-decoration: underline;
+}
+
+.account-menu__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 0;
+    padding: 10px 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.account-menu__chevron {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    line-height: 1;
+    transform: translateY(1px);
+}
+
+.account-menu__dropdown {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 8px);
+    right: 0;
+    display: grid;
+    min-width: 190px;
+    padding: 8px;
+    border: 1px solid #dce3e6;
+    border-radius: 8px;
+    background: var(--color-white);
+    box-shadow: 0 8px 24px rgb(6 47 73 / 14%);
+}
+
+.account-menu__dropdown a,
+.account-menu__dropdown button {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-navy);
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.account-menu__dropdown a:hover,
+.account-menu__dropdown button:hover {
+    background: #eef8f7;
+}
