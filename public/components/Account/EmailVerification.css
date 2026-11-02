@@ -1,0 +1,81 @@
+.email-verification {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+.email-verification__card {
+    width: 100%;
+    max-width: 30rem;
+    padding: clamp(1rem, 4vw, 2rem);
+    box-sizing: border-box;
+    border: 1px solid var(--color-navy);
+    border-radius: 1rem;
+    background: var(--color-white);
+    overflow-wrap: anywhere;
+}
+
+.email-verification h1 {
+    margin-top: 0;
+}
+
+.email-verification form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.email-verification label {
+    font-weight: 700;
+}
+
+.email-verification input {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    border: 1px solid var(--color-navy);
+    border-radius: 0.5rem;
+    font: inherit;
+}
+
+.email-verification__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.5rem 0;
+}
+
+.email-verification button,
+.email-verification__primary {
+    display: inline-block;
+    min-height: 2.75rem;
+    padding: 0.75rem 1rem;
+    box-sizing: border-box;
+    border: 1px solid var(--color-navy);
+    border-radius: 0.5rem;
+    background: var(--color-navy);
+    color: var(--color-white);
+    font: inherit;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.email-verification .email-verification__secondary {
+    background: var(--color-white);
+    color: var(--color-navy);
+}
+
+.email-verification button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.email-verification__help {
+    margin-top: 1.5rem;
+}

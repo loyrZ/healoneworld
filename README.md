@@ -211,3 +211,32 @@ Push to main and Railway redeploys on its own. Check https://healoneworld-produc
 - Port 3000 is already in use - another server is still running, ctrl + c it
 - app.set is not a function / argument handler must be a function - a file is empty, save all
 - error about a foreign key when running builddb - the table it points to doesn't exist yet or the types don't match
+Append this section to `README.md`:
+
+### 14. Email verification
+
+Account creation uses Clerk at /sign-up. The old UserSignUp.html and UserSignUp.js page redirects there.
+
+When Clerk asks users to verify their email, they enter the code sent to their inbox. Clerk sends and checks the code. We do not generate or store verification codes in Railway MySQL.
+
+Email-code verification worked during development signup. A teammate with Clerk Dashboard access still needs to confirm the exact settings.
+
+Required authentication variables in .env:
+
+```
+VITE_CLERK_PUBLISHABLE_KEY
+CLERK_SECRET_KEY
+```
+
+- never commit or log the actual values
+- no additional paid verification service is required by this implementation
+- protected account data requires a verified primary email, checked in services/application-user.js
+- routes/signup.js contains legacy class queries and is not used to send or verify emails
+
+Signup and verification files:
+
+```
+public/components/Login/Signup.jsx    Clerk signup form and instructions
+public/components/Login/Signup.css    layout for the signup instructions
+services/application-user.js          backend verified-email check
+```

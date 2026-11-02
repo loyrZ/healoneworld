@@ -11,6 +11,7 @@ import Announcements from "./admin/announcements/admin-announcements.jsx";
 import PublicAnnouncements from "./PublicAnnouncements/public_announcements.jsx";
 import Signup from "./components/Login/Signup.jsx";
 import ApplicationAccountGate from "./components/Account/ApplicationAccountGate.jsx";
+import EmailVerification from "./components/Account/EmailVerification.jsx";
 import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
 import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 
@@ -29,6 +30,7 @@ const pages = {
     "/admin/announcements": Announcements,
     "/PublicAnnouncements": PublicAnnouncements,
     "/sign-up": Signup,
+    "/verify-email": EmailVerification,
     "/volunteer": VolunteerDashboard,
     "/volunteer/profile": VolunteerProfile,
 };

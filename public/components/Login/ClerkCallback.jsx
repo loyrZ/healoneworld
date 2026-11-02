@@ -14,7 +14,7 @@ export default function ClerkCallback() {
             try {
                 await handleRedirectCallback({
                     signInForceRedirectUrl: "/account",
-                    signUpForceRedirectUrl: "/account",
+                    signUpForceRedirectUrl: "/verify-email",
                 });
             } catch (error) {
                 console.error("Clerk callback failed:", error);
