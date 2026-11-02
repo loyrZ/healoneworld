@@ -22,7 +22,7 @@ router.get("/health", async (req, res) => {
 });
 
 // Preserve the homepage route added by the team.
-router.get(["/home", "/home.html"], (req, res) => {
+router.get(["/", "/home", "/home.html"], (req, res) => {
   res.sendFile(path.join(publicDirectory, "home.html"));
 });
 

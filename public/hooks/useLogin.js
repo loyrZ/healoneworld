@@ -34,7 +34,7 @@ export function useLogin({ redirectTo = "/account" } = {}) {
             password,
         });
 
-        console.log("sign-in status:", result.status);
+
 
         if (result.status !== "complete") {
             setError("Additional verification is required.");
