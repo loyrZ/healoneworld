@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/react";
 import "../../css/theme.css";
-import "../../css/layout.css";
+import "./Volunteer.css";
+import "./VolunteerDashboard.css";
 import VolunteerLayout from "./VolunteerLayout.jsx";
 
 // Check to see if signed in
