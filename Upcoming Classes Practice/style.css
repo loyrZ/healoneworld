@@ -127,6 +127,10 @@ button.week-button {
     margin-left: 10px;
     cursor: pointer;
 }
+filter button[aria-pressed="true"] {
+    background-color: #062F49;
+    color: #ffffff;
+}
 upcoming-classes {
     margin-left: 180px;
     margin-bottom: 120px;
@@ -160,6 +164,14 @@ upcoming-classes .class-card {
     border: 1px solid #333;
     border-radius: 10px;
     padding: 0px;
+}
+/* Keep the card layout rule from overriding the hidden state set by filters. */
+upcoming-classes .class-card[hidden] {
+    display: none;
+}
+upcoming-classes .no-classes-message {
+    margin: 20px 0 0 180px;
+    color: #29404A;
 }
 upcoming-classes .class-title {
     display: block;
