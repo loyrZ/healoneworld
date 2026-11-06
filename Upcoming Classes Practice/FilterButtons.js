@@ -1,5 +1,6 @@
 (() => {
-	const cards = [...document.querySelectorAll(
+	// Cards are added after classes load from the API (ViewClassesButtons.js), so look them up each time.
+	const getCards = () => [...document.querySelectorAll(
 		'[data-class-card], .class-card, .class-item'
 	)];
 	const classList = document.querySelector('#class-list');
@@ -32,6 +33,7 @@
 	}
 
 	function update() {
+		const cards = getCards();
 		let visibleCount = 0;
 		cards.forEach(card => {
 			const modality = normalize(card.dataset.modality || card.dataset.format || card.dataset.type || card.querySelector('.class-category')?.textContent);
@@ -64,7 +66,8 @@
 			button.setAttribute('aria-pressed', String(isPressed));
 		});
 		// Show the status message only when the current controls leave no visible classes.
-		emptyMessage.hidden = visibleCount > 0;
+		// With no cards at all, ViewClassesButtons.js shows its own loading or empty message.
+		emptyMessage.hidden = visibleCount > 0 || cards.length === 0;
 	}
 
 	buttons.forEach(button => {
@@ -91,5 +94,6 @@
 		update();
 	});
 
+	document.addEventListener('classesrendered', update);
 	update();
 })();

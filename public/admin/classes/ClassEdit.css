@@ -1,0 +1,199 @@
+/* HOW-113: Edit class form, from the Figma "Admin / Add or Edit Class" frame. */
+/*Claude Migration to match figma looks*/
+
+.class-edit__back {
+    margin: 0 0 16px;
+    font-size: 14px;
+}
+
+.class-edit__back a {
+    color: var(--color-navy);
+}
+
+.class-edit__summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 40px;
+    margin: 0 0 28px;
+    font-size: 14px;
+}
+
+.class-edit__summary dt {
+    color: var(--admin-muted);
+    font-size: 13px;
+}
+
+.class-edit__summary dd {
+    margin: 0;
+    color: var(--color-navy);
+    font-weight: 500;
+}
+
+.class-edit__form {
+    max-width: 760px;
+}
+
+.class-edit__field {
+    margin-bottom: 8px;
+}
+
+.class-edit__field label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--color-navy);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.class-edit__field input,
+.class-edit__field select,
+.class-edit__field textarea {
+    width: 100%;
+    padding: 0 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--color-white);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 15px;
+}
+
+.class-edit__field input,
+.class-edit__field select {
+    min-height: 48px;
+}
+
+.class-edit__field textarea {
+    padding: 12px 14px;
+    resize: vertical;
+}
+
+.class-edit__field [aria-invalid="true"] {
+    border-color: #b00020;
+}
+
+.class-edit__hint {
+    margin: -4px 0 10px;
+    color: var(--admin-muted);
+    font-size: 13px;
+}
+
+.class-edit__error {
+    min-height: 1.2em;
+    margin: 4px 0 0;
+    color: #b00020;
+    font-size: 13px;
+}
+
+.class-edit__success {
+    min-height: 1.2em;
+    margin: 12px 0 0;
+    color: #1b6e2f;
+}
+
+.class-edit__form > .class-edit__error {
+    font-size: 15px;
+}
+
+.class-edit__group {
+    margin: 0 0 8px;
+    padding: 0;
+    border: 0;
+}
+
+.class-edit__group legend {
+    margin-bottom: 12px;
+    padding: 0;
+    color: var(--color-navy);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.class-edit__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+}
+
+.class-edit__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    margin-top: 16px;
+}
+
+.class-edit__button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--color-navy);
+    color: var(--color-white);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.class-edit__button:hover {
+    text-decoration: underline;
+}
+
+.class-edit__button:disabled {
+    background: var(--admin-muted);
+    cursor: wait;
+}
+
+.class-edit__button--secondary {
+    background: var(--admin-muted);
+}
+
+.class-edit__link {
+    padding: 8px 4px;
+    color: var(--color-navy);
+    font-size: 15px;
+}
+
+.class-edit__alert {
+    max-width: 760px;
+    margin: 16px 0;
+    padding: 18px 22px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.class-edit__alert p {
+    margin: 0;
+}
+
+.class-edit__alert h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+/* Focus is moved here by script so the warning is announced; it isn't a control. */
+.class-edit__alert h2:focus {
+    outline: none;
+}
+
+.class-edit__alert--warning {
+    border: 1px solid #f2d39b;
+    background: #fdf6e7;
+}
+
+.class-edit__alert--error {
+    border: 1px solid #f0c4c4;
+    background: #fdf2f2;
+    color: #8a1c1c;
+}
+
+@media (max-width: 767px) {
+    .class-edit__row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

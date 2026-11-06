@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentDate = new Date();
     currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const today = new Date();
+    // HOW-141: published classes from /api/classes, loaded by /js/class-schedule.js.
+    let classes = [];
+    let loadState = "loading";
     function getClassColor(type) {
         switch (type) {
             case "Yoga":
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 : ""
         ].filter(Boolean);
 
-        openSidebar(details.map(detail => `<p>${detail}</p>`).join(""));
+        openSidebar(details.map(detail => `<p>${window.ClassSchedule.escapeHtml(detail)}</p>`).join(""));
         const classLink = document.createElement("a");
         classLink.href = classItem.classUrl;
         classLink.textContent = "Go to Class";
@@ -76,11 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         dayDiv.appendChild(dayNumber);
 
+        // Each class is a dated session, so it only appears on its own date.
         const dayClasses = classes
-            .filter(classItem => new Date(`${classItem.date}T00:00:00`).getDay() === date.getDay() && classItem.status !== "Cancelled" && 
+            .filter(classItem => classItem.date === dateKey && classItem.status !== "Cancelled" &&
             (typeof window.matchesCalendarFilter !== "function" || window.matchesCalendarFilter(classItem, dateKey)))
             .sort((a, b) =>
-                a.startTime.localeCompare(b.startTime)
+                a.startKey.localeCompare(b.startKey)
             );
 
         const maxVisible = 2;
@@ -155,7 +159,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const dateToRender = new Date(year, month + 1, day)
             daysContainer.appendChild(createDayCell(dateToRender, false));
         }
-        emptyState.hidden = daysContainer.querySelector(".class-event") !== null;
+        const hasClasses = daysContainer.querySelector(".class-event") !== null;
+        emptyState.textContent =
+            loadState === "loading" ? "Loading classes…" :
+            loadState === "error" ? "Classes could not be loaded. Please try again later." :
+            "No available classes";
+        emptyState.hidden = loadState === "ready" && hasClasses;
     }
     window.addEventListener("calendarFiltersChanged", function () {
         renderCalendar(currentDate);
@@ -169,4 +178,16 @@ document.addEventListener("DOMContentLoaded", function () {
         renderCalendar(currentDate);
     });
     renderCalendar(currentDate);
+
+    window.ClassSchedule.loadSchedule()
+        .then(function (loaded) {
+            classes = loaded;
+            loadState = "ready";
+        })
+        .catch(function () {
+            loadState = "error";
+        })
+        .finally(function () {
+            renderCalendar(currentDate);
+        });
 });

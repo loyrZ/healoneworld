@@ -8,7 +8,8 @@
     "build": "vite build",
     "builddb": "node ./bin/dbloader.js",
     "dropdb": "node ./bin/dropdb.js",
-    "enginestart": "npm run builddb && npm run start"
+    "enginestart": "npm run builddb && npm run start",
+    "test": "node --test tests/"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
