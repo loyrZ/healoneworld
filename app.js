@@ -30,6 +30,7 @@ app.use("/signup", require("./routes/signup"));
 app.use("/announcements", require("./routes/announcements"));
 app.use("/api/account", require("./routes/account"));
 app.use("/api/volunteer", require("./routes/volunteer"));
+app.use("/api/classes", require("./routes/classes"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
 
 // --- React website (public/) ---
