@@ -14,6 +14,8 @@ import ApplicationAccountGate from "./components/Account/ApplicationAccountGate.
 import EmailVerification from "./components/Account/EmailVerification.jsx";
 import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
 import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
+import ClassesSignIn from "./components/Classes/ClassesSignIn.jsx";
+import UserClasses from "./components/Classes/UserClasses.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -33,6 +35,8 @@ const pages = {
     "/verify-email": EmailVerification,
     "/volunteer": VolunteerDashboard,
     "/volunteer/profile": VolunteerProfile,
+    "/classes/sign-in": ClassesSignIn,
+    "/user-classes": UserClasses,
 };
 
 function NotFound() {

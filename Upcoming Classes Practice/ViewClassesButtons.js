@@ -8,6 +8,13 @@ function formatDate(dateString) {
     day: "numeric"
   });
 }
+function getAvailableSeats(classItem) {
+    const seatCounts = JSON.parse(
+        localStorage.getItem("seatCounts") || "{}"
+    );
+
+    return seatCounts[classItem.id] ?? classItem.seatsAvailable;
+}
 function displayClasses() {
   if (!classList) {
     return;
@@ -79,6 +86,7 @@ function displayClassDetails() {
   const instructor = document.querySelector(
     '[data-detail-field="instructor"]'
   );
+  const spots = document.querySelector('[data-detail-field="spots"]');
   if (title) {
     title.textContent = selectedClass.name;
   }
@@ -98,6 +106,9 @@ function displayClassDetails() {
   }
   if (instructor) {
     instructor.textContent = selectedClass.instructor;
+  }
+  if (spots) {
+    spots.textContent =`${getAvailableSeats(selectedClass)} spots available`;
   }
 }
 if (classList) {
