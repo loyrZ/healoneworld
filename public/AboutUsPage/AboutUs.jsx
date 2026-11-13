@@ -3,7 +3,7 @@ import "./AboutUs.css";
 function AboutUs() {
     return(
         <div className="about-page">
-            <main className="about-main">
+            <main className="about-main" id="main-content" tabIndex={-1}>
             
                 <h1 className="mt-7 mb-7 text-sm text-[#0075B5]">
                     ABOUT

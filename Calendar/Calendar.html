@@ -17,7 +17,7 @@
 <body>
     <div data-site-header></div>
 
-    <main class="calendar-layout">
+    <main class="calendar-layout" id="main-content" tabindex="-1">
         <section class="calendar-filters" aria-label="Filter calendar classes">
             <label>
                 Class name
@@ -87,9 +87,13 @@
         <div class="calendar">
             <div class="calendar-header">
                 <div class="header">
-                    <div id="prev" class="btn">←</div>
+                    <button id="prev" class="btn" type="button" aria-label="Previous month">
+                        ←
+                    </button>
                     <div id="month-year"></div>
-                    <div id="next" class="btn">→</div>
+                    <button id="next" class="btn" type="button" aria-label="Next month">
+                        →
+                    </button>
                 </div>
 
                 <div class="weekdays">
@@ -111,8 +115,10 @@
         </div>
     </main>
 
-    <aside id="class-sidebar">
-        <button id="close-sidebar">×</button>
+    <aside id="class-sidebar" aria-label="Class details">
+        <button id="close-sidebar" type="button" aria-label="Close class details">
+            ×
+        </button>
         <div id="class-details"></div>
     </aside>
 

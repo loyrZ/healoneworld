@@ -28,6 +28,7 @@ import Footer from "./components/Footer/Footer.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
+import "./css/components.css";
 
 const pages = {
     "/login": Login,

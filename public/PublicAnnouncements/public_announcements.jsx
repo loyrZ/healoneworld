@@ -42,7 +42,7 @@ export default function PublicAnnouncements() {
     }, []);
 
     return (
-        <main className="public-announcements-page">
+        <main className="public-announcements-page" id="main-content" tabIndex={-1}>
             <section className="public-announcements-content">
                 <p className="public-announcements-eyebrow">Stay connected</p>
                 <h1>Announcements</h1>

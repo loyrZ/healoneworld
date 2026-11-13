@@ -25,6 +25,9 @@ function AdminLayout({ children }) {
 
     return (
         <div className="admin-layout">
+            <a className="skip-link" href="#main-content">
+                Skip to main content
+            </a>
             <aside className="admin-sidebar">
                 <p className="admin-sidebar__brand">Heal One World</p>
                 <nav aria-label="Admin">
@@ -45,7 +48,9 @@ function AdminLayout({ children }) {
                     Log out
                 </button>
             </aside>
-            <main className="admin-main">{children}</main>
+            <main className="admin-main" id="main-content" tabIndex={-1}>
+                {children}
+            </main>
         </div>
     );
 }
