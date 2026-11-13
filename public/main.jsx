@@ -16,6 +16,9 @@ import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
 import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 import ClassesSignIn from "./components/Classes/ClassesSignIn.jsx";
 import UserClasses from "./components/Classes/UserClasses.jsx";
+import ClassList from "./admin/classes/ClassList.jsx";
+import ClassEdit from "./admin/classes/ClassEdit.jsx";
+import ClassCreate from "./admin/classes/ClassCreate.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -30,6 +33,8 @@ const pages = {
     "/admin/viewusers": ViewUsers,
     "/admin/dashboard": Dashboard,
     "/admin/announcements": Announcements,
+    "/admin/classes": ClassList,
+    "/admin/classes/new": ClassCreate,
     "/PublicAnnouncements": PublicAnnouncements,
     "/sign-up": Signup,
     "/verify-email": EmailVerification,
@@ -44,9 +49,17 @@ function NotFound() {
 }
 
 const path = window.location.pathname.replace(/\/+$/, "") || "/";
+
+// Pages above match exact paths; this one carries the class ID: /admin/classes/12/edit.
+const classEditMatch = path.match(/^\/admin\/classes\/(\d+)\/edit$/);
+function ClassEditPage() {
+    return <ClassEdit classId={classEditMatch[1]} />;
+}
+
 const Page =
     pages[path] ||
-    (path.startsWith("/sign-in/") ? Login :
+    (classEditMatch ? ClassEditPage :
+     path.startsWith("/sign-in/") ? Login :
      path.startsWith("/sign-up/") ? Signup :
      NotFound);
 const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;

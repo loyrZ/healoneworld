@@ -40,13 +40,29 @@ async function makeDatabase(connection) {
     }
 }
 
+// Existing databases: run migrations/002_class_schedule_fields.sql once.
+// class_name is the title and user_name is the instructor (see docs/class-data.md).
 async function makeClassesTable(connection) {
     const [result] = await connection.query(
         `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`classes\` (
             id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
             class_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
             user_name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-            PRIMARY KEY (id_pk)
+            description TEXT NULL,
+            starts_at DATETIME NULL,
+            ends_at DATETIME NULL,
+            time_zone VARCHAR(64) NOT NULL DEFAULT 'America/Los_Angeles',
+            attendance_format ENUM('in_person', 'virtual', 'hybrid') NOT NULL DEFAULT 'in_person',
+            location VARCHAR(255) NULL,
+            meeting_link VARCHAR(2048) NULL,
+            capacity INT UNSIGNED NULL,
+            status ENUM('pending', 'published') NOT NULL DEFAULT 'pending',
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id_pk),
+            KEY idx_classes_starts_at (starts_at),
+            KEY idx_classes_status (status)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
     );
     if (result && result.warningStatus > 0) {

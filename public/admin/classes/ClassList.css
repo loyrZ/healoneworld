@@ -1,0 +1,188 @@
+/* HOW-104: Admin class list, from the Figma "Admin / Classes & Events" frame. */
+/*Claude Migration to match figma looks*/
+.admin-classes__create {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    margin-bottom: 28px;
+}
+
+.admin-classes__button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--color-navy);
+    color: var(--color-white);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.admin-classes__button:hover {
+    text-decoration: underline;
+}
+
+.admin-classes__button:disabled {
+    background: var(--admin-muted);
+    text-decoration: none;
+    cursor: not-allowed;
+}
+
+.admin-classes__notice {
+    max-width: 1080px;
+    margin: 0 0 24px;
+    padding: 14px 18px;
+    border: 1px solid #b9dfa0;
+    border-radius: 8px;
+    background: #f1f9ea;
+    color: #1b6e2f;
+    font-size: 15px;
+}
+
+/* The class just created from the create page. */
+.admin-classes__row--new {
+    box-shadow: inset 0 0 0 2px var(--color-green);
+}
+
+.admin-classes__filters {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+    align-items: end;
+    gap: 16px;
+    max-width: 1080px;
+    margin-bottom: 20px;
+}
+
+.admin-classes__field--wide {
+    grid-column: 1 / -1;
+    max-width: 520px;
+}
+
+.admin-classes__field label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--color-navy);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.admin-classes__field input,
+.admin-classes__field select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--color-white);
+    color: var(--color-text);
+    font: inherit;
+    font-size: 14px;
+}
+
+.admin-classes__clear {
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--admin-border);
+    border-radius: 6px;
+    background: var(--color-white);
+    color: var(--color-navy);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.admin-classes__clear:disabled {
+    color: var(--admin-muted);
+    cursor: default;
+}
+
+.admin-classes__count {
+    margin: 0 0 20px;
+    color: var(--admin-muted);
+    font-size: 14px;
+}
+
+.admin-classes__list {
+    max-width: 1080px;
+    margin: 0 0 32px;
+    padding: 0;
+    list-style: none;
+}
+
+.admin-classes__row {
+    grid-template-columns: 2fr 1.1fr 0.9fr 1.3fr 1.2fr auto;
+    margin-bottom: 16px;
+}
+
+.admin-classes__title {
+    color: var(--color-navy);
+    font-weight: 500;
+}
+
+.admin-classes__status {
+    justify-self: start;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+.admin-classes__status--published {
+    background: #dff1d0;
+    color: #2d5a0e;
+}
+
+/* Matches the Figma "Pending approval" amber, darkened for AA contrast. */
+.admin-classes__status--pending {
+    background: #fdf0d5;
+    color: #7a4b00;
+}
+
+.admin-classes__edit {
+    padding: 8px 4px;
+    color: var(--color-navy);
+    font-weight: 500;
+}
+
+.admin-classes__message {
+    max-width: 1080px;
+    margin: 0 0 24px;
+    font-size: 15px;
+}
+
+.admin-classes__message p {
+    margin: 0 0 12px;
+}
+
+.admin-classes__message--error {
+    padding: 16px 20px;
+    border: 1px solid #f0c4c4;
+    border-radius: 8px;
+    background: #fdf2f2;
+    color: #8a1c1c;
+}
+
+@media (max-width: 1023px) {
+    .admin-classes__filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-classes__clear {
+        justify-self: start;
+    }
+}
+
+@media (max-width: 767px) {
+    .admin-classes__filters {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-classes__title {
+        font-size: 16px;
+    }
+}
