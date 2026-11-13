@@ -50,7 +50,7 @@
       </p>
 
       <div class="hero-actions">
-        <a class="button button--primary" href="/classes/ClassPage.html">
+        <a class="button button--primary" href="/classes/upcoming.html">
           Find a class
         </a>
         <a class="button button--outline" href="/volunteer.html">
@@ -59,13 +59,17 @@
       </div>
       <section class="calendar-preview" aria-labelledby="calendar-title">
         <h2 id="calendar-title">Community calendar</h2>
-        <p><strong>Development preview</strong></p>
+        <iframe
+        class="homepage-calendar"
+        src="/calendar/Calendar.html?embedded=1"
+        title="Community classes and events calendar"
+        loading="lazy"
+        ></iframe>
         <p>
-            The interactive calendar is still being developed.
-            Sample cards below demonstrate the upcoming-classes
-            layout and are not a confirmed schedule.
+          <a href="/calendar/Calendar.html">
+            Open calendar as a full page →
+          </a>
         </p>
-        <a href="#weekly-title">View sample class cards ↓</a>
       </section>
     </section>
 
@@ -84,27 +88,19 @@
       </div>
 
       <div class="card-grid" id="weekly-classes">
-        <!--
-          HOW-337 will render class cards here.
-          HOW-338 will provide sample entries.
-        -->
       </div>
     </section>
-    <!-- Announcements placeholder -->
+
     <section
-      class="announcements-section"
-      aria-labelledby="announcements-title"
+    class="announcements-section"
+    aria-labelledby="announcements-title"
     >
       <h2 id="announcements-title">Announcements</h2>
 
-      <div class="content-status">
-        <p class="announcement-label">Development preview</p>
-        <p>
-          Organization announcements will appear here when
-          this feature is available. No live announcements
-          are displayed yet.
-        </p>
-      </div>
+      <div class="card-grid" id="homepage-announcements"></div>
+      <p>
+        <a href="/PublicAnnouncements">See all announcements →</a>
+      </p>
     </section>
     <!-- How it works -->
     <section class="how-it-works" aria-labelledby="how-title">

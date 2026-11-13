@@ -24,14 +24,26 @@ app.use(
 // --- Routes ---
 app.use("/", require("./routes/index"));
 app.use("/signup", require("./routes/signup"));
-// --- Routes ---
-app.use("/", require("./routes/index"));
-app.use("/signup", require("./routes/signup"));
 app.use("/announcements", require("./routes/announcements"));
 app.use("/api/account", require("./routes/account"));
 app.use("/api/volunteer", require("./routes/volunteer"));
 app.use("/api/classes", require("./routes/classes"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
+
+
+// Production serves source assets for the static public pages.
+// During development, Vite handles these files and their imports.
+if (process.env.NODE_ENV === "production") {
+    for (const directory of ["css", "images", "js"]) {
+        app.use(
+            `/${directory}`,
+            express.static(
+                path.join(__dirname, "public", directory),
+                { index: false }
+            )
+        );
+    }
+}
 
 // --- React website (public/) ---
 // Page URLs like /login are set in public/main.jsx, not here.

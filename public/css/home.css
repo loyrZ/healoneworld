@@ -589,3 +589,27 @@
     transform: scale(1.025);
   }
 }
+
+.homepage-calendar {
+    display: block;
+    width: 100%;
+    height: 850px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--color-background);
+}
+
+/* The latest announcement uses the full section width. */
+#homepage-announcements {
+    display: block;
+}
+
+#homepage-announcements > .class-card,
+#homepage-announcements > .content-status {
+    width: 100%;
+}
+
+/* Loading and empty messages span all class-grid columns. */
+#weekly-classes > .content-status {
+    grid-column: 1 / -1;
+}

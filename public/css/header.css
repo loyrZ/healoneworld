@@ -3,6 +3,9 @@
 .site-header {
   background: var(--color-white);
   border-bottom: 1px solid #dce3e6;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .site-nav {

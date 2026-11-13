@@ -17,6 +17,8 @@ import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 import ClassList from "./admin/classes/ClassList.jsx";
 import ClassEdit from "./admin/classes/ClassEdit.jsx";
 import ClassCreate from "./admin/classes/ClassCreate.jsx";
+import AboutUs from "./AboutUsPage/AboutUs.jsx";
+import PublicHeader from "./components/Header/PublicHeader.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -38,6 +40,7 @@ const pages = {
     "/verify-email": EmailVerification,
     "/volunteer": VolunteerDashboard,
     "/volunteer/profile": VolunteerProfile,
+    "/about": AboutUs,
 };
 
 function NotFound() {
@@ -59,11 +62,16 @@ const Page =
      path.startsWith("/sign-up/") ? Signup :
      NotFound);
 const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const usesPublicHeader = [
+    "/about",
+    "/PublicAnnouncements"
+].includes(path);
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         {publishableKey ? (
             <ClerkProvider publishableKey={publishableKey}>
+                {usesPublicHeader && <PublicHeader />}
                 {path === "/account" || path === "/account/settings" ? (
                     <ApplicationAccountGate>
                         <Page />

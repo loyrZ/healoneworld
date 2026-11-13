@@ -43,29 +43,6 @@ export default function PublicAnnouncements() {
 
     return (
         <main className="public-announcements-page">
-            <header className="site-header">
-                <nav className="site-nav container" aria-label="Main navigation">
-                    <a className="site-brand" href="/">
-                        HEAL ONE WORLD
-                    </a>
-
-                    <ul className="nav-links">
-                        <li><a href="/classes.html">Classes</a></li>
-                        <li><a href="/programs.html">Programs</a></li>
-                        <li><a href="/volunteer.html">Volunteer</a></li>
-                        <li><a href="/rent-space.html">Rent Our Space</a></li>
-                        <li><a href="/about.html">About</a></li>
-                        <li><a href="/blog.html">Blog</a></li>
-                        <li><a href="/sign-in">Sign In</a></li>
-                        <li>
-                            <a className="button button--primary" href="/donate.html">
-                                Donate
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
-
             <section className="public-announcements-content">
                 <p className="public-announcements-eyebrow">Stay connected</p>
                 <h1>Announcements</h1>

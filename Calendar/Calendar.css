@@ -4,12 +4,8 @@
 }
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     min-height: 100vh;
-    margin-left: -225px;
-    padding: 20px;
+    margin: 0;
     background-color: #F3F8F0;
 }
 .calendar-layout {
@@ -19,6 +15,8 @@ body {
     gap: 20px;
     width: 100%;
     max-width: 1240px;
+    margin: 24px auto;
+    padding: 0 20px;
 }
 .calendar {
     background-color: #c7e8fb;
@@ -281,4 +279,16 @@ button.week-button {
     .calendar-filters input[type="search"] {
         width: 100%;
     }
+}
+
+/* Homepage calendar: show the calendar without its filter panel. */
+.calendar-embedded .calendar-filters {
+    display: none;
+}
+
+.calendar-embedded .calendar-layout {
+    display: block;
+    max-width: none;
+    margin: 0;
+    padding: 0;
 }

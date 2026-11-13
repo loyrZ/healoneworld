@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
+    if (
+        new URLSearchParams(window.location.search).get("embedded") === "1"
+    ) {
+        document.body.classList.add("calendar-embedded");
+    }
+
     const monthYear = document.getElementById("month-year");
     const daysContainer = document.getElementById("days");
     const emptyState = document.getElementById("empty-state");

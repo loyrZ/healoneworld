@@ -49,12 +49,12 @@ function AboutUs() {
                     </p>                        
                 </div> 
                 <div className="mt-6 mb-8 flex flex-col sm:flex-row gap-4 font-semibold">
-                    <a href="/class page" className="rounded-full bg-[#8AD324] px-5 py-2 text-center">
+                    <a href="/classes/upcoming.html" className="rounded-full bg-[#8AD324] px-5 py-2 text-center">
                         <p className="text-[#062F49]">
                             Find a class
                         </p>
                     </a>
-                    <a href="/volunteer page" className="rounded-full border-2 border-[#0075B5] text-[#0075B5] px-4 py-2 text-center">
+                    <a href="/volunteer.html" className="rounded-full border-2 border-[#0075B5] text-[#0075B5] px-4 py-2 text-center">
                         Volunteer with us
                     </a>
                 </div>
