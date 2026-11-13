@@ -1,31 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Calendar | Heal One World</title>
+
     <link rel="stylesheet" href="Calendar.css">
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/layout.css">
     <link rel="stylesheet" href="/css/components.css">
     <link rel="stylesheet" href="/css/header.css">
+
     <script src="/js/header.js" defer></script>
     <base target="_top">
 </head>
 <body>
     <div data-site-header></div>
+
     <main class="calendar-layout">
         <section class="calendar-filters" aria-label="Filter calendar classes">
-            <label>Class name<input id="class-search" type="search" placeholder="Search classes..."></label>
-            <label>Start date<input id="start-date" type="date"></label>
-            <label>End date<input id="end-date" type="date"></label>
+            <label>
+                Class name
+                <input
+                    id="class-search"
+                    type="search"
+                    placeholder="Search classes..."
+                >
+            </label>
+
+            <label>
+                Start date
+                <input id="start-date" type="date">
+            </label>
+
+            <label>
+                End date
+                <input id="end-date" type="date">
+            </label>
+
             <div class="filter-buttons">
-                <button class="format-button" data-filter="all" type="button" aria-pressed="true">All Formats</button>
-                <button class="category-button" data-filter="in person" type="button" aria-pressed="false">In Person</button>
-                <button class="category-button" data-filter="hybrid" type="button" aria-pressed="false">Hybrid</button>
-                <button class="category-button" data-filter="online" type="button" aria-pressed="false">Online</button>
-                <button class="week-button" data-filter="this week" type="button" aria-pressed="false">This Week</button>
+                <button
+                    class="format-button"
+                    data-filter="all"
+                    type="button"
+                    aria-pressed="true"
+                >
+                    All Formats
+                </button>
+                <button
+                    class="category-button"
+                    data-filter="in person"
+                    type="button"
+                    aria-pressed="false"
+                >
+                    In Person
+                </button>
+                <button
+                    class="category-button"
+                    data-filter="hybrid"
+                    type="button"
+                    aria-pressed="false"
+                >
+                    Hybrid
+                </button>
+                <button
+                    class="category-button"
+                    data-filter="online"
+                    type="button"
+                    aria-pressed="false"
+                >
+                    Online
+                </button>
+                <button
+                    class="week-button"
+                    data-filter="this week"
+                    type="button"
+                    aria-pressed="false"
+                >
+                    This Week
+                </button>
             </div>
+
             <p id="filter-status" role="status" aria-live="polite"></p>
         </section>
+
         <div class="calendar">
             <div class="calendar-header">
                 <div class="header">
@@ -33,6 +91,7 @@
                     <div id="month-year"></div>
                     <div id="next" class="btn">→</div>
                 </div>
+
                 <div class="weekdays">
                     <div>Sun</div>
                     <div>Mon</div>
@@ -42,15 +101,23 @@
                     <div>Fri</div>
                     <div>Sat</div>
                 </div>
+
                 <div class="days" id="days"></div>
             </div>
-            <p id="empty-state" role="status" aria-live="polite" hidden>No available classes</p>
+
+            <p id="empty-state" role="status" aria-live="polite" hidden>
+                No available classes
+            </p>
         </div>
     </main>
+
     <aside id="class-sidebar">
         <button id="close-sidebar">×</button>
         <div id="class-details"></div>
     </aside>
+
+    <div data-site-footer></div>
+
     <script src="/js/class-schedule.js"></script>
     <script src="calendar.js"></script>
     <script src="FilterCalendar.js"></script>

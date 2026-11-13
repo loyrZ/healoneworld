@@ -1,162 +1,164 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+/* Class-listing styles stay scoped to this page. */
+.classes-page {
+    padding-bottom: 48px;
 }
 
-section .eyebrow {
-    font-size: 18px;
-    font-family: DM Sans;
-    font-weight: bold;
-    color: #8AD324;
-    margin-top: 10px;
-    margin-left: 180px;
-    padding-bottom: 20px;
+.classes-page > section {
+    background: #eff9f7;
+    padding: 40px max(20px, calc((100% - 1180px) / 2));
+    margin-bottom: 24px;
 }
-section .title {
-    font-size: 45px;
-    font-family: Hedvig Letters Serif;
-    font-weight: bold;
-    color: #062F49;
-    margin-left: 180px;
-    padding-bottom: 20px;
+
+.classes-page .eyebrow {
+    margin: 0 0 16px;
+    color: var(--color-blue);
+    font-size: 1rem;
+    font-weight: 700;
 }
-section .subtitle {
-    font-size: 14px;
-    font-family: DM Sans;
-    color: #29404A;
-    margin-left: 180px;
+
+.classes-page .title {
+    margin: 0 0 16px;
+    color: var(--color-navy);
+    font-size: clamp(1.75rem, 4vw, 2.8rem);
+    overflow-wrap: anywhere;
 }
-section {
-    background-color: #EFF9F7;
-    height: 150px;
-    margin-bottom: 20px;
+
+.classes-page .subtitle {
+    margin: 0;
+    color: var(--color-text);
+    font-family: "DM Sans", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
 }
-filter {
-    margin-left: 180px;
-    margin-bottom: 20px;
+
+.classes-page > filter,
+.classes-page > upcoming-classes {
+    width: min(calc(100% - 40px), 1180px);
+    margin-inline: auto;
 }
-filter .type {
-    font-size: 14px;
-    font-family: DM Sans;
-    color: #29404A;
-    margin-left: 180px;
+
+.classes-page > filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
 }
-input[type="text"] {
-    width: 125px;
-    height: 30px;
-    border-radius: 0px;
-    border: 1px solid #062F49;
-    margin-left: 5px;
+
+.classes-page filter input {
+    flex: 1 1 220px;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid var(--color-navy);
+    border-radius: 6px;
+    background: var(--color-white);
+    color: var(--color-text);
+    font: inherit;
 }
-button.format-button {
-    width: 80px;
-    height: 30px;
-    background-color: #ffffff;
-    color: #29404A;
-    border: solid 1px #062F49;
-    border-radius: 0px;
-    margin-left: 10px;
+
+.classes-page filter button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid var(--color-navy);
+    border-radius: 6px;
+    background: var(--color-white);
+    color: var(--color-navy);
+    font: inherit;
     cursor: pointer;
 }
-button.category-button {
-    width: 100px;
-    height: 30px;
-    background-color: #ffffff;
-    color: #29404A;
-    border: solid 1px #062F49;
-    border-radius: 0px;
-    margin-left: 10px;
-    cursor: pointer;
+
+.classes-page filter button[aria-pressed="true"] {
+    background: var(--color-navy);
+    color: var(--color-white);
 }
-button.week-button {
-    width: 80px;
-    height: 30px;
-    background-color: #ffffff;
-    color: #29404A;
-    border: solid 1px #062F49;
-    border-radius: 0px;
-    margin-left: 10px;
-    cursor: pointer;
-}
-filter button[aria-pressed="true"] {
-    background-color: #062F49;
-    color: #ffffff;
-}
-upcoming-classes {
-    margin-left: 180px;
-    margin-bottom: 120px;
-}
-upcoming-classes .title {
-    font-size: 30px;
-    font-family: Hedvig Letters Serif;
-    font-weight: bold;
-    color: #062F49;
-    margin-left: 180px;
-    margin-top: 50px;
-    margin-bottom: 20px;
-}
-upcoming-classes .class-category {
-    display:block;
-    font-size: 10px;
-    font-family: DM Sans;
-    color: #8AD324;
-    margin-left: 10px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-upcoming-classes .class-card {
-    display: inline-block;
-    width: 260px;
-    height: 220px;
-    background-color: #ffffff;
-    border: solid 1px #062F49;
-    margin-left: 180px;
-    margin-bottom: 20px;
-    border: 1px solid #333;
-    border-radius: 10px;
-    padding: 0px;
-}
-/* Keep the card layout rule from overriding the hidden state set by filters. */
-upcoming-classes .class-card[hidden] {
-    display: none;
-}
-upcoming-classes .no-classes-message {
-    margin: 20px 0 0 180px;
-    color: #29404A;
-}
-upcoming-classes .class-title {
+
+.classes-page > upcoming-classes {
     display: block;
-    font-size: 24px;
-    font-family: DM Sans;
-    color: #062F49;
-    margin-top: 10px;
-    margin-left: 10px;
 }
-upcoming-classes .class-time {
-    display: block;
-    font-size: 14px;
-    font-family: DM Sans;
-    color: #29404A;
-    margin-top: 10px;
-    margin-left: 10px;
-}   
-upcoming-classes .class-studio {
-    display: block;
-    font-size: 14px;
-    font-family: DM Sans;
-    color: #29404A;
-    margin-top: 10px;
-    margin-left: 10px;
+
+.classes-page #class-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
 }
-upcoming-classes .class-button { 
-    width: 100px;
-    height: 30px;
-    background-color: #062F49;
-    color: #ffffff;
-    border: solid 1px #062F49;
-    border-radius: 5px;
-    margin-left: 10px;
-    margin-top: 10px;
+
+.classes-page .class-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #dce3e6;
+    border-radius: 12px;
+    background: var(--color-white);
+    overflow-wrap: anywhere;
+}
+
+.classes-page .class-category {
+    color: var(--color-blue);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.classes-page .class-title {
+    margin: 0;
+    color: var(--color-navy);
+    font-size: 1.5rem;
+}
+
+.classes-page .class-time,
+.classes-page .class-studio {
+    display: block;
+    margin: 0;
+    color: var(--color-text);
+}
+
+.classes-page .class-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    margin-top: auto;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--color-navy);
+    color: var(--color-white);
+    font: inherit;
+    text-decoration: none;
     cursor: pointer;
+}
+
+.classes-page .class-button:hover {
+    background: var(--color-blue);
+}
+
+.classes-page .no-classes-message {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--color-text);
+}
+
+@media (max-width: 1000px) {
+    .classes-page #class-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .classes-page #class-list {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .classes-page filter input {
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    .classes-page filter button {
+        flex: 1 1 auto;
+    }
 }

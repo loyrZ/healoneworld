@@ -15,6 +15,8 @@
   flex-wrap: wrap;
   gap: 20px;
   padding-block: 16px;
+  width: min(calc(100% - 40px), 1180px);
+  margin-inline: auto;
 }
 
 .site-brand {
@@ -104,4 +106,41 @@
     min-height: 44px;
     display: flex;
     align-items: center;
+}
+
+@media (max-width: 1199px) {
+    .site-header [data-account-slot] {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .site-header .account-menu {
+        width: 100%;
+    }
+
+    .site-header .account-menu__trigger {
+        display: flex;
+        width: 100%;
+        min-height: 44px;
+        padding: 8px 12px;
+        text-align: left;
+    }
+
+    .site-header .account-menu__trigger > span:first-child {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .site-header .account-menu__chevron {
+        flex-shrink: 0;
+    }
+
+    .site-header .account-menu__dropdown {
+        position: static;
+        width: 100%;
+        min-width: 0;
+        margin-top: 4px;
+        box-shadow: none;
+    }
 }

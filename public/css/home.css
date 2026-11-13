@@ -102,8 +102,8 @@
   font-size: clamp(28px, 3vw, 40px);
 }
 
-.calendar-preview p {
-  margin: 0 0 20px;
+.calendar-preview > p {
+    margin: 20px 0;
 }
 
 /* Weekly classes */
@@ -612,4 +612,25 @@
 /* Loading and empty messages span all class-grid columns. */
 #weekly-classes > .content-status {
     grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .calendar-preview {
+        padding: 16px 10px;
+        border-radius: 20px;
+    }
+}
+
+.calendar-full-link {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+}
+
+.hero h1 {
+    text-wrap: balance;
+}
+
+.hero-description {
+    text-wrap: pretty;
 }

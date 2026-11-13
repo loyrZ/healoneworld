@@ -133,3 +133,34 @@ loadSection(
         error: "Announcements could not load. Please refresh to try again."
     }
 );
+
+const calendarFrame = document.querySelector(".homepage-calendar");
+
+if (calendarFrame) {
+    let calendarObserver;
+
+    function connectCalendarSize() {
+        calendarObserver?.disconnect();
+
+        const layout = calendarFrame.contentDocument?.querySelector(
+            ".calendar-layout"
+        );
+
+        if (!layout) return;
+
+        function updateHeight() {
+            calendarFrame.style.height =
+                `${Math.ceil(layout.getBoundingClientRect().height) + 2}px`;
+        }
+
+        calendarObserver = new ResizeObserver(updateHeight);
+        calendarObserver.observe(layout);
+        updateHeight();
+    }
+
+    calendarFrame.addEventListener("load", connectCalendarSize);
+
+    if (calendarFrame.contentDocument?.readyState === "complete") {
+        connectCalendarSize();
+    }
+}
