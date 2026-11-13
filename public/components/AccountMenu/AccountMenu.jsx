@@ -3,7 +3,7 @@ import { useClerk, useUser } from "@clerk/react";
 import "./AccountMenu.css";
 
 export default function AccountMenu() {
-    const { user } = useUser();
+    const { isLoaded, isSignedIn, user } = useUser();
     const { signOut } = useClerk();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
@@ -26,7 +26,18 @@ export default function AccountMenu() {
         };
     }, []);
 
-    if (!user) {
+    if (!isLoaded) {
+        return (
+            <span
+                className="account-menu__loading"
+                role="status"
+                aria-label="Checking sign-in status"
+                aria-busy="true"
+            />
+        );
+    }
+
+    if (!isSignedIn || !user) {
         return (
             <a className="account-menu__sign-in" href="/sign-in">
                 Sign in

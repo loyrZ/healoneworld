@@ -19,6 +19,19 @@ async function loadHeader() {
 
         container.innerHTML = await response.text();
         initializeHeaderMenu(container);
+        const accountScript = document.createElement("script");
+        accountScript.type = "module";
+        accountScript.src = "/header-account-entry.js";
+
+        accountScript.onerror = () => {
+            const slot = container.querySelector("[data-account-slot]");
+
+            if (slot) {
+                slot.textContent = "Account navigation could not load.";
+            }
+        };
+
+        document.body.append(accountScript);
     } catch (error) {
         console.error(error);
         container.textContent =

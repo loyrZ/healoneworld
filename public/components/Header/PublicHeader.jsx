@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import AccountMenu from "../AccountMenu/AccountMenu.jsx";
 import { initializeHeaderMenu } from "../../js/header-menu.js";
 
 import "../../css/theme.css";
@@ -8,6 +10,7 @@ import "../../css/header.css";
 
 export default function PublicHeader() {
     const containerRef = useRef(null);
+    const [accountSlot, setAccountSlot] = useState(null);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -30,8 +33,16 @@ export default function PublicHeader() {
                 const container = containerRef.current;
                 if (!container) return;
 
-                // This template comes from our own shared header file.
+                // Load our shared HTML template.
                 container.innerHTML = markup;
+
+                const slot = container.querySelector("[data-account-slot]");
+
+                if (slot) {
+                    slot.replaceChildren();
+                    setAccountSlot(slot);
+                }
+
                 cleanupMenu = initializeHeaderMenu(container);
             } catch (error) {
                 if (controller.signal.aborted) return;
@@ -54,8 +65,12 @@ export default function PublicHeader() {
     }, []);
 
     return (
-        <div ref={containerRef}>
-            <p role="status">Loading navigation...</p>
-        </div>
+        <>
+            <div ref={containerRef}>
+                <p role="status">Loading navigation...</p>
+            </div>
+
+            {accountSlot && createPortal(<AccountMenu />, accountSlot)}
+        </>
     );
 }

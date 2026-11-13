@@ -98,3 +98,10 @@
     padding-left: 32px;
   }
 }
+
+[data-account-slot] {
+    min-width: 90px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
