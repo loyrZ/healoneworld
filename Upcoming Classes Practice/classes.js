@@ -1,113 +1,139 @@
+const today = new Date();
+const scheduleStartMonth =
+  today.getMonth() + (today.getDate() > 22 ? 1 : 0);
+
+function getScheduleDate(monthOffset, dayOfMonth) {
+  const date = new Date(
+    today.getFullYear(),
+    scheduleStartMonth + monthOffset,
+    dayOfMonth
+  );
+
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")
+  ].join("-");
+}
+
 const classes = [
   {
     id: 1,
     name: "Morning Yoga",
     type: "Yoga",
-    date: "2026-10-22",
+    date: getScheduleDate(0, 22),
     startTime: "7:00 AM",
     endTime: "8:00 AM",
     mode: "In person",
     instructor: "Alex Morgan",
     location: "Studio A",
     description: "A welcoming yoga class for all experience levels.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 2,
     name: "Introduction to Reiki",
     type: "Reiki",
-    date: "2026-10-22",
+    date: getScheduleDate(0, 22),
     startTime: "10:30 AM",
     endTime: "11:30 AM",
     mode: "Online",
     instructor: "Jamie Lee",
     location: "",
     description: "Learn the basic principles and practices of Reiki.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 3,
     name: "Afternoon Tai Chi",
     type: "Tai Chi",
-    date: "2026-10-22",
+    date: getScheduleDate(0, 22),
     startTime: "3:30 PM",
     endTime: "4:30 PM",
     mode: "Hybrid",
     instructor: "Taylor Smith",
     location: "Garden Studio",
     description: "A gentle movement class focused on balance and relaxation.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 4,
     name: "Evening Yoga",
     type: "Yoga",
-    date: "2026-10-24",
+    date: getScheduleDate(0, 24),
     startTime: "6:00 PM",
     endTime: "7:00 PM",
     mode: "In person",
     instructor: "Alex Morgan",
     location: "Studio A",
     description: "An evening yoga class designed to relax the body and mind.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 5,
     name: "Reiki Fundamentals",
     type: "Reiki",
-    date: "2026-10-26",
+    date: getScheduleDate(0, 26),
     startTime: "9:00 AM",
     endTime: "10:00 AM",
     mode: "Online",
     instructor: "Jamie Lee",
     location: "",
     description: "Explore foundational Reiki techniques in a beginner-friendly class.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 6,
     name: "Tai Chi for Beginners",
     type: "Tai Chi",
-    date: "2026-10-28",
+    date: getScheduleDate(0, 28),
     startTime: "11:00 AM",
     endTime: "12:00 PM",
     mode: "In person",
     instructor: "Taylor Smith",
     location: "Garden Studio",
     description: "Learn basic Tai Chi movements in a supportive environment.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 7,
     name: "Restorative Yoga",
     type: "Yoga",
-    date: "2026-11-02",
+    date: getScheduleDate(1, 2),
     startTime: "8:00 AM",
     endTime: "9:00 AM",
     mode: "Hybrid",
     instructor: "Alex Morgan",
     location: "Studio A",
     description: "A slow-paced class focused on stretching, breathing, and recovery.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   },
 
   {
     id: 8,
     name: "Reiki Practice",
     type: "Reiki",
-    date: "2026-11-05",
+    date: getScheduleDate(1, 5),
     startTime: "2:00 PM",
     endTime: "3:00 PM",
     mode: "In person",
     instructor: "Jamie Lee",
     location: "Room B",
     description: "Practice Reiki techniques with guidance from an experienced instructor.",
-    status: "Scheduled"
+    status: "Scheduled",
+    seatsAvailable: 18
   }
 ];
