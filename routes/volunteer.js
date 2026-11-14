@@ -16,10 +16,10 @@ router.use(requireAccount, requireApprovedVolunteer);
 
 // Get the name and email of the volunteer
 router.get("/dashboard", (req, res) => {
-    const u = req.clerkUser;
+    const u = req.applicationUser;
     res.json({
-        name: [u.firstName, u.lastName].filter(Boolean).join(" "),
-        email: u.primaryEmailAddress?.emailAddress ?? null,
+        name: u.name,
+        email: u.email
     });
 });
 

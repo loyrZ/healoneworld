@@ -179,6 +179,9 @@ async function makeVolunteerApplicationsTable(connection) {
                 'rejected'
             ) NOT NULL DEFAULT 'pending_review',
             request_id CHAR(36) NOT NULL,
+            review_reason TEXT NULL,
+            reviewed_by INT UNSIGNED NULL,
+            reviewed_at TIMESTAMP NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 ON UPDATE CURRENT_TIMESTAMP,
@@ -187,7 +190,10 @@ async function makeVolunteerApplicationsTable(connection) {
             UNIQUE KEY uq_volunteer_request_id (request_id),
             FOREIGN KEY (user_id)
                 REFERENCES users(id_pk)
-                ON DELETE CASCADE
+                ON DELETE CASCADE,
+            FOREIGN KEY (reviewed_by)
+                REFERENCES users(id_pk)
+                ON DELETE SET NULL
         ) ENGINE=InnoDB
         DEFAULT CHARSET=utf8mb4
         COLLATE=utf8mb4_unicode_ci
@@ -198,6 +204,25 @@ async function makeVolunteerApplicationsTable(connection) {
         displayWarningMessage(warningResult[0]);
     } else {
         console.log("Created Volunteer Applications Table!");
+    }
+
+    const [columns] = await connection.query(
+        `SHOW COLUMNS FROM \`${process.env.DB_NAME}\`.\`volunteer_applications\``
+    );
+    const existingColumns = new Set(columns.map((column) => column.Field));
+    const additions = [
+        ["review_reason", "TEXT NULL"],
+        ["reviewed_by", "INT UNSIGNED NULL"],
+        ["reviewed_at", "TIMESTAMP NULL"]
+    ];
+
+    for (const [name, definition] of additions) {
+        if (!existingColumns.has(name)) {
+            await connection.query(
+                `ALTER TABLE \`${process.env.DB_NAME}\`.\`volunteer_applications\`
+                 ADD COLUMN \`${name}\` ${definition}`
+            );
+        }
     }
 }
 
