@@ -22,6 +22,8 @@ import Announcements from "./admin/announcements/admin-announcements.jsx";
 import ClassList from "./admin/classes/ClassList.jsx";
 import ClassEdit from "./admin/classes/ClassEdit.jsx";
 import ClassCreate from "./admin/classes/ClassCreate.jsx";
+import VolunteerApplicationList from "./admin/volunteers/VolunteerApplicationList.jsx";
+import VolunteerApplicationReview from "./admin/volunteers/VolunteerApplicationReview.jsx";
 
 import PublicAnnouncements from "./PublicAnnouncements/public_announcements.jsx";
 import AboutUs from "./AboutUsPage/AboutUs.jsx";
@@ -44,6 +46,7 @@ const pages = {
     "/admin/announcements": Announcements,
     "/admin/classes": ClassList,
     "/admin/classes/new": ClassCreate,
+    "/admin/volunteers": VolunteerApplicationList,
     "/PublicAnnouncements": PublicAnnouncements,
     "/sign-up": Signup,
     "/verify-email": EmailVerification,
@@ -62,14 +65,20 @@ const path = window.location.pathname.replace(/\/+$/, "") || "/";
 
 // This route includes the class ID, for example /admin/classes/12/edit.
 const classEditMatch = path.match(/^\/admin\/classes\/(\d+)\/edit$/);
+const volunteerApplicationMatch = path.match(/^\/admin\/volunteers\/(\d+)$/);
 
 function ClassEditPage() {
     return <ClassEdit classId={classEditMatch[1]} />;
 }
 
+function VolunteerApplicationReviewPage() {
+    return <VolunteerApplicationReview applicationId={volunteerApplicationMatch[1]} />;
+}
+
 const Page =
     pages[path] ||
     (classEditMatch ? ClassEditPage :
+     volunteerApplicationMatch ? VolunteerApplicationReviewPage :
      path.startsWith("/sign-in/") ? Login :
      path.startsWith("/sign-up/") ? Signup :
      NotFound);

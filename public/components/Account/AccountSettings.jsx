@@ -153,11 +153,6 @@ export default function AccountSettings() {
 
                 <h1>Account information</h1>
 
-                <p>
-                    Your account-information form will be available through
-                    HOW-243.
-                </p>
-
                 <form
                     className="account-settings__form"
                     onSubmit={handleNameSubmit}

@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useClerk, useUser } from "@clerk/react";
+import { clearAccountCache } from "../Account/ApplicationAccountGate.jsx";
 import "./AccountMenu.css";
+
 
 export default function AccountMenu() {
     const { isLoaded, isSignedIn, user } = useUser();
@@ -41,6 +43,7 @@ export default function AccountMenu() {
     }
 
     async function handleSignOut() {
+        clearAccountCache();
         await signOut();
         window.location.assign("/");
     }
