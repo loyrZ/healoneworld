@@ -1,16 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&display=swap');
 @import "tailwindcss";
 
-
-body {
-    font-family: 'DM Sans', sans-serif;
+/* Fonts are loaded through the shared theme stylesheet. */
+.about-page {
+    font-family: "DM Sans", Arial, sans-serif;
+    overflow-wrap: anywhere;
 }
 
-h1, h3 {
-    font-family: 'DM Sans', sans-serif;
+.about-page > * {
+    min-width: 0;
 }
 
-h2 {
-    font-family: 'Hedvig Letters Serif', serif;
+.about-page h1,
+.about-page h3 {
+    font-family: "DM Sans", Arial, sans-serif;
+}
+
+.about-page h2 {
+    font-family: "Hedvig Letters Serif", Georgia, serif;
+}
+
+.about-page {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    align-items: start;
+    gap: 48px;
+    padding: 48px max(20px, calc((100% - 1180px) / 2));
+    background: #eff9f7;
+}
+
+.about-main {
+    min-width: 0;
+}
+
+.about-main p {
+    max-width: 65ch;
+}
+
+.about-sidebar {
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+}
+
+.about-card {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #dce3e6;
+    border-radius: 12px;
+    background: var(--color-white);
+}
+
+@media (max-width: 900px) {
+    .about-page {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+        padding-block: 32px;
+    }
 }

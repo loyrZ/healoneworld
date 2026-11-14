@@ -40,6 +40,9 @@ export default function AccountDashboard() {
 
     return (
         <div className="account-page">
+            <a className="skip-link" href="#main-content">
+                Skip to main content
+            </a>
             <header className="account-header">
                 <a className="account-header__brand" href="/">
                     Heal One World
@@ -86,7 +89,7 @@ export default function AccountDashboard() {
                     </nav>
                 </aside>
 
-                <main className="account-content" id="main-content">
+                <main className="account-content" id="main-content" tabIndex={-1}>
                     <section className="account-welcome">
                         <p className="account-content__eyebrow">
                             Standard user dashboard

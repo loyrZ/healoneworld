@@ -68,6 +68,7 @@ async function displayClasses() {
       </studio>
       <button
         class="class-button"
+        aria-label="View details for ${escapeHtml(classItem.name)}"
         data-class-id="${escapeHtml(classItem.id)}"
         type="button"
       >
