@@ -1,0 +1,112 @@
+.site-footer {
+    position: relative;
+    margin-top: 45px;
+    padding: 48px 0 24px;
+    background: var(--color-navy);
+    color: var(--color-white);
+}
+
+.site-footer::before {
+    content: "";
+    position: absolute;
+    inset: -44px 0 auto;
+    height: 45px;
+    background: url("/images/curve-footer.svg") center / 100% 100% no-repeat;
+    pointer-events: none;
+}
+
+.site-footer__inner {
+    width: min(calc(100% - 40px), 1180px);
+    margin-inline: auto;
+}
+
+.site-footer__intro {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgb(255 255 255 / 20%);
+}
+
+.site-footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr));
+    gap: 32px;
+}
+
+.site-footer__grid > * {
+    min-width: 0;
+}
+
+.site-footer__logo {
+    display: block;
+    width: auto;
+    max-width: 160px;
+    height: 56px;
+    object-fit: contain;
+}
+
+.site-footer h2 {
+    margin: 16px 0;
+    color: var(--color-white);
+    font-size: 1.25rem;
+}
+
+.site-footer__intro h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.site-footer p,
+.site-footer address {
+    color: #b7dce2;
+    font-style: normal;
+    overflow-wrap: anywhere;
+}
+
+.site-footer ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.site-footer a {
+    display: inline-block;
+    padding-block: 10px;
+    color: #b7dce2;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
+.site-footer a:focus-visible {
+    outline-color: var(--color-white);
+}
+
+.site-footer__copyright {
+    margin: 32px 0 0;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 255 255 / 20%);
+}
+
+@media (max-width: 900px) {
+    .site-footer__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .site-footer__grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .site-footer {
+        margin-top: 16px;
+    }
+
+    .site-footer::before {
+        top: -15px;
+        height: 16px;
+    }
+}

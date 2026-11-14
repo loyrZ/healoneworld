@@ -24,14 +24,120 @@ app.use(
 // --- Routes ---
 app.use("/", require("./routes/index"));
 app.use("/signup", require("./routes/signup"));
-// --- Routes ---
-app.use("/", require("./routes/index"));
-app.use("/signup", require("./routes/signup"));
 app.use("/announcements", require("./routes/announcements"));
 app.use("/api/account", require("./routes/account"));
 app.use("/api/volunteer", require("./routes/volunteer"));
 app.use("/api/classes", require("./routes/classes"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
+
+// Load the shared React account menu on static public pages.
+app.get("/header-account-entry.js", async (req, res, next) => {
+    try {
+        const production = process.env.NODE_ENV === "production";
+        let entry = "/header-account.jsx";
+        const styles = new Set();
+
+        if (production) {
+            const fs = require("node:fs/promises");
+            const manifest = JSON.parse(
+                await fs.readFile(
+                    path.join(__dirname, "dist", ".vite", "manifest.json"),
+                    "utf8"
+                )
+            );
+
+            const accountEntry = manifest["header-account.jsx"];
+
+            if (!accountEntry) {
+                throw new Error("The account-menu build entry is missing.");
+            }
+
+            const visited = new Set();
+
+            function collectStyles(key) {
+                if (visited.has(key)) return;
+                visited.add(key);
+
+                const chunk = manifest[key];
+                if (!chunk) {
+                    throw new Error("An account-menu build dependency is missing.");
+                }
+
+                for (const file of chunk.css || []) {
+                    styles.add(`/${file}`);
+                }
+
+                for (const dependency of chunk.imports || []) {
+                    collectStyles(dependency);
+                }
+            }
+
+            collectStyles("header-account.jsx");
+            entry = `/${accountEntry.file}`;
+        }
+
+        const config = {
+            development: !production,
+            entry,
+            styles: [...styles]
+        };
+
+        res.set("Cache-Control", "no-store");
+        res.type("application/javascript").send(`
+            const config = ${JSON.stringify(config)};
+
+            try {
+                if (config.development) {
+                    const { default: RefreshRuntime } =
+                        await import("/@react-refresh");
+
+                    RefreshRuntime.injectIntoGlobalHook(window);
+                    window.$RefreshReg$ = () => {};
+                    window.$RefreshSig$ = () => (type) => type;
+                    window.__vite_plugin_react_preamble_installed__ = true;
+
+                    await import("/@vite/client");
+                }
+
+                await Promise.all(config.styles.map((href) =>
+                    new Promise((resolve, reject) => {
+                        const link = document.createElement("link");
+                        link.rel = "stylesheet";
+                        link.href = href;
+                        link.onload = resolve;
+                        link.onerror = reject;
+                        document.head.append(link);
+                    })
+                ));
+
+                await import(config.entry);
+            } catch (error) {
+                console.error("Account navigation could not load:", error);
+
+                const slot = document.querySelector("[data-account-slot]");
+                if (slot) {
+                    slot.textContent = "Account navigation could not load.";
+                }
+            }
+        `);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Production serves source assets for the static public pages.
+// During development, Vite handles these files and their imports.
+if (process.env.NODE_ENV === "production") {
+    for (const directory of ["css", "images", "js"]) {
+        app.use(
+            `/${directory}`,
+            express.static(
+                path.join(__dirname, "public", directory),
+                { index: false }
+            )
+        );
+    }
+}
 
 // --- React website (public/) ---
 // Page URLs like /login are set in public/main.jsx, not here.

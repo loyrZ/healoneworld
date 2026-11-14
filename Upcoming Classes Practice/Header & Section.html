@@ -4,50 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classes and Events | Heal One World</title>
+
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/header.css">
+
+    <script src="/js/header.js" defer></script>
+    <script src="/js/class-schedule.js" defer></script>
+    <script src="ViewClassesButtons.js" defer></script>
+    <script src="FilterButtons.js" defer></script>
 </head>
 <body>
-    <header>
-        <a class="logo" href="HeadAndSection.html">
-            <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6FEg3ejvKVdNfKIp-BFm15QTqBICuOySCxWEmfTiOnO0cDEFpwB5KsTZs&s=10"
-                alt="Heal One World logo"
-            >
-        </a>
-        <nav>
-            <ul>
-                <li><a href="#">Classes</a></li>
-                <li><a href="#">Programs</a></li>
-                <li><a href="#">Volunteer</a></li>
-                <li><a href="#">Rent Our Space</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Sign In</a></li>
-                <li><a href="#">Donate</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+    <div data-site-header></div>
+
+    <main class="classes-page" id="main-content" tabindex="-1">
         <section>
             <h3 class="eyebrow">Classes and Events</h3>
             <h1 class="title">Find your next wellness experience.</h1>
-            <h2 class="subtitle">Browse upcoming classes and events, then filter by format or search for what interests you.</h2>
+            <h2 class="subtitle">
+                Browse upcoming classes and events, then filter
+                by format or search for what interests you.
+            </h2>
         </section>
+
         <filter>
-            <input type="text" class="single-line-input" placeholder="Search classes...">
-            <button class="format-button" type="button">All Formats</button>
-            <button class="category-button" type="button">In Person</button>
-            <button class="category-button" type="button">Hybrid</button>
-            <button class="category-button" type="button">Online</button>
-            <button class="week-button" type="button">This Week</button>
+            <input
+                type="text"
+                class="single-line-input"
+                placeholder="Search classes..."
+                aria-label="Search classes"
+            >
+            <button class="format-button" type="button">
+                All Formats
+            </button>
+            <button class="category-button" type="button">
+                In Person
+            </button>
+            <button class="category-button" type="button">
+                Hybrid
+            </button>
+            <button class="category-button" type="button">
+                Online
+            </button>
+            <button class="week-button" type="button">
+                This Week
+            </button>
         </filter>
+
         <upcoming-classes>
             <h2 class="title">Upcoming Classes & Events</h2>
             <div id="class-list"></div>
         </upcoming-classes>
     </main>
-    <script src="/js/class-schedule.js" defer></script>
-    <script src="ViewClassesButtons.js" defer></script>
-    <script src="FilterButtons.js" defer></script>
+
+    <div data-site-footer></div>
 </body>
 </html>
