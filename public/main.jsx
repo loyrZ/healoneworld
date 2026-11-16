@@ -17,6 +17,7 @@ import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 import ClassList from "./admin/classes/ClassList.jsx";
 import ClassEdit from "./admin/classes/ClassEdit.jsx";
 import ClassCreate from "./admin/classes/ClassCreate.jsx";
+import VolunteerApplication from "./components/Volunteer/VolunteerApplication.jsx";
 
 import "./css/theme.css";
 import "./css/layout.css";
@@ -38,6 +39,7 @@ const pages = {
     "/verify-email": EmailVerification,
     "/volunteer": VolunteerDashboard,
     "/volunteer/profile": VolunteerProfile,
+    "/volunteer/apply": VolunteerApplication,
 };
 
 function NotFound() {
