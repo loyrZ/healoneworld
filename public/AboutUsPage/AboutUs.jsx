@@ -1,7 +1,10 @@
 import "./AboutUs.css";
+import ClassOfferings from "./ClassOfferings.jsx";
+import InstructorShowcase from "./InstructorShowcase.jsx";
 
 function AboutUs() {
     return(
+        <>
         <div className="about-page">
             <main className="about-main" id="main-content" tabIndex={-1}>
             
@@ -67,7 +70,7 @@ function AboutUs() {
                             Founder
                         </h2>
                         <h3 className="mb-2 font-semibold">
-                            Sky Kelly, Executive Director
+                            Skye Kelly, Executive Director
                         </h3>
                         <p>Placeholder for bio</p>
                     </div>
@@ -90,7 +93,7 @@ function AboutUs() {
                             Visit
                         </h2>
                         <p className="text-[#29404A]">
-                            3505 W Pico Blvd <br />
+                            3503 W Pico Blvd <br />
                             Los Angeles, CA 
                         </p>
                         <p className="text-[#5B6F78]">A 501(c)(3) charity  EIN 26-4646731</p>
@@ -98,6 +101,9 @@ function AboutUs() {
                 </div>
             </div>
         </div>
+        <ClassOfferings />
+        <InstructorShowcase />
+        </>
     )
 }
 
