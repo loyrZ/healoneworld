@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #294452;
+    background: #ffffff;
+    line-height: 1.5;
+}
+/* Header */
+.site-header {
+    min-height: 82px;
+    padding: 8px 5.6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: #ffffff;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.logo img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 50%;
+    margin: 0;
+}
+.site-header nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    flex-wrap: wrap;
+}
+.site-header nav a {
+    color: #062f49;
+    font-size: 16px;
+    text-decoration: none;
+}
+.site-header nav a:hover {
+    text-decoration: underline;
+}
+/* Main content */
+main {
+    padding-top: 54px;
+}
+.classes-section {
+    width: 89%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.class-filters {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+.class-filters button {
+    color: #073650;
+    background: #ffffff;
+    border: 1px solid #073650;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.class-filters button:hover,
+.class-filters button:focus {
+    color: #ffffff;
+    background: #073650;
+}
+.class-filters button.active {
+    color: #ffffff;
+    background: #073650;
+}
+h1 {
+    color: #073650;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px;
+    font-weight: normal;
+}
+.intro {
+    margin-top: 8px;
+    font-size: 16px;
+}
+.class-card {
+    min-height: 140px;
+    margin-top: 54px;
+    padding: 22px 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 30px;
+    background: #edf8f6;
+    border-radius: 13px;
+}
+.class-card + .class-card {
+    margin-top: 17px;
+}
+.class-info {
+    flex: 1;
+    padding: 0 0 6px;
+    background: #ffffff;
+}
+.class-info h2 {
+    color: #073650;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px;
+    font-weight: normal;
+}
+.class-info p {
+    margin-top: 4px;
+    font-size: 14px;
+}
+button {
+    color: #073650;
+    background: #ffffff;
+    border: 1px solid #073650;
+    border-radius: 11px;
+    padding: 13px 23px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.account-section {
+    width: 100%;
+    margin-top: 67px;
+    padding: 23px 25px 20px;
+    background: #f1f8f6;
+    border-radius: 10px;
+}
+.account-section h2 {
+    color: #073650;
+    font-size: 21px;
+}
+.account-section p {
+    margin-top: 5px;
+    font-size: 14px;
+}
+.account-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 27px;
+}
+.account-buttons button {
+    color: #ffffff;
+    background: #073650;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 17px;
+}
+.account-section small {
+    display: block;
+    margin-top: 10px;
+    font-size: 11px;
+}
+.registered-classes-list {
+    height: 520px;
+    margin-top: 0;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.registered-classes-list .class-card:first-child {
+    margin-top: 54px;
+}

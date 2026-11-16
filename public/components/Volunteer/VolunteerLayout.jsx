@@ -25,6 +25,9 @@ export default function VolunteerLayout({ children, tone, identity }) {
 
     return (
         <div className="vol-layout">
+            <a className="skip-link" href="#main-content">
+                Skip to main content
+            </a>
             <aside className="vol-sidebar">
                 <p className="vol-sidebar__brand">Heal One World</p>
                 <p className="vol-sidebar__sub">Volunteer portal</p>
@@ -59,7 +62,11 @@ export default function VolunteerLayout({ children, tone, identity }) {
                 </button>
             </aside>
 
-            <main className={"vol-main" + (tone === "grey" ? " vol-main--grey" : "")}>
+            <main
+                className={"vol-main" + (tone === "grey" ? " vol-main--grey" : "")}
+                id="main-content"
+                tabIndex={-1}
+            >
                 {children}
             </main>
         </div>

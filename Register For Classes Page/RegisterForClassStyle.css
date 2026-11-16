@@ -1,0 +1,203 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #294452;
+    background: #ffffff;
+    line-height: 1.5;
+}
+/* Header */
+.site-header {
+    min-height: 82px;
+    padding: 8px 5.6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: #ffffff;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.logo img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 50%;
+    margin: 0;
+}
+.site-header nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    flex-wrap: wrap;
+}
+.site-header nav a {
+    color: #062f49;
+    font-size: 16px;
+    text-decoration: none;
+}
+.site-header nav a:hover {
+    text-decoration: underline;
+}
+section .eyebrow {
+    font-size: 18px;
+    font-family: DM Sans;
+    font-weight: bold;
+    color: #8AD324;
+    margin-top: 10px;
+}  
+section .title {
+    font-size: 44px;
+    font-family: DM Sans;
+    font-weight: normal;
+    color: #062f49;
+    margin-top: 10px;
+}
+section .subtitle {
+    font-size: 20px;
+    font-family: DM Sans;
+    font-weight: normal;
+    color: #062F49;
+    margin-top: 10px;
+}
+section {
+    padding: 20px 5.6%;
+}
+.registration-page {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(260px, 280px);
+    grid-template-areas:
+        "heading card"
+        "form card";
+    gap: 20px 24px;
+    padding: 20px 5.6%;
+}
+.registration-page > .registration-content {
+    grid-area: heading;
+    padding: 0;
+}
+.registration-page > information {
+    grid-area: form;
+    padding: 0;
+}
+.registration-page > .class-card {
+    grid-area: card;
+    align-self: start;
+}
+information {
+    display: block;
+    font-size: 16px;
+    font-family: DM Sans;
+    font-weight: normal;
+    color: #062f49;
+    margin-top: 10px;
+    padding: 0px 5.6%;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: min(100%, 240px);
+    height: auto;
+    margin: 0;
+}
+form label {
+    font-size: 16px;
+    font-family: DM Sans;
+    font-weight: normal;
+    color: #062f49;
+    width: 100%;
+}
+form input {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px;
+    border: 1px solid #c9d8e2;
+    border-radius: 4px;
+    font: inherit;
+}
+form input:last-of-type {
+    min-height: 110px;
+    resize: vertical;
+}
+.form-error {
+    color: #b42318;
+    margin-top: 12px;
+    font-size: 14px;
+}
+form button {
+    background-color: #062F49;
+    color: #ffffff;
+    font-size: 16px;
+    font-family: DM Sans;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 240px;
+    height: 49px;
+}
+aside.class-card {
+    margin-left: -235px;
+}
+aside.class-card {
+    background-color: #EFF9F7;
+    padding: 20px;
+    border-radius: 4px;
+    width: min(100%, 420px);
+    height: 270px;
+    aspect-ratio: 1;
+    margin-top: 0;
+    margin-right: 0;
+}
+aside.class-card h2 {
+    font-size: 20px;
+    font-family: DM Sans;
+    font-weight: bold;
+    color: #062f49;
+    margin-bottom: 10px;
+}
+aside.class-card h3 {
+    font-size: 18px;
+    font-family: DM Sans;
+    font-weight: bold;
+    color: #062f49;
+    margin-bottom: 5px;
+}
+aside.class-card p {
+    font-size: 16px;
+    font-family: DM Sans;
+    font-weight: normal;
+    color: #062f49;
+    margin-bottom: 5px;
+}
+aside.class-card .free-text {
+    font-size: 16px;
+    font-family: DM Sans;
+    font-weight: bold;
+    color: #8AD324;
+}
+
+@media (max-width: 700px) {
+    .registration-page {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "heading"
+            "form"
+            "card";
+    }
+
+    .registration-page form {
+        width: 100%;
+        max-width: 360px;
+    }
+}

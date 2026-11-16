@@ -10,6 +10,14 @@ function formatDate(dateString) {
     day: "numeric"
   });
 }
+function getAvailableSeats(classItem) {
+    const seatCounts = JSON.parse(
+        localStorage.getItem("seatCounts") || "{}"
+    );
+
+    return seatCounts[classItem.id] ?? classItem.seatsAvailable;
+}
+function displayClasses() {
 // Loading and error messages for the class list. Kept separate from the cards
 // so FilterButtons.js can keep its own "no matches" message in the list.
 function showListStatus(text) {
@@ -60,6 +68,7 @@ async function displayClasses() {
       </studio>
       <button
         class="class-button"
+        aria-label="View details for ${escapeHtml(classItem.name)}"
         data-class-id="${escapeHtml(classItem.id)}"
         type="button"
       >
@@ -107,6 +116,10 @@ async function displayClassDetails() {
   const instructor = document.querySelector(
     '[data-detail-field="instructor"]'
   );
+  const spots = document.querySelector('[data-detail-field="spots"]');
+  if (title) {
+    title.textContent = selectedClass.name;
+  }
   document.title = `${selectedClass.name} | Heal One World`;
   title.textContent = selectedClass.name;
   if (category) {
@@ -127,6 +140,9 @@ async function displayClassDetails() {
   }
   if (instructor) {
     instructor.textContent = selectedClass.instructor;
+  }
+  if (spots) {
+    spots.textContent =`${getAvailableSeats(selectedClass)} spots available`;
   }
 }
 if (classList) {

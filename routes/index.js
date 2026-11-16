@@ -32,12 +32,16 @@ router.get("/signin.html", (req, res) => {
   res.redirect("/sign-in");
 });
 
+// Preserve the existing About Us navigation address.
+router.get("/about.html", (req, res) => {
+  res.redirect("/about");
+});
+
 // Temporary destinations for unfinished pages.
 const placeholderRoutes = [
   "/programs.html",
   "/volunteer.html",
   "/rent.html",
-  "/about.html",
   "/blog.html",
   "/donate.html"
 ];
@@ -103,9 +107,15 @@ router.get(classPageFiles, (req, res) => {
   );
 });
 
-// Preserve old links to the deleted duplicate.
-router.get("/classes.html", (req, res) => {
-  res.redirect("/classes/ClassPage.html");
+// Preserve existing class links and open the listing when no class is selected.
+router.get(["/classes", "/classes.html"], (req, res) => {
+  const classId = req.query.id;
+
+  if (typeof classId === "string" && /^\d+$/.test(classId)) {
+    return res.redirect(`/classes/ClassPage.html?id=${classId}`);
+  }
+
+  return res.redirect("/classes/upcoming.html");
 });
 
 // Serve the shared HTML header used by the homepage.

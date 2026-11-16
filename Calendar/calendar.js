@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
+    if (
+        new URLSearchParams(window.location.search).get("embedded") === "1"
+    ) {
+        document.body.classList.add("calendar-embedded");
+    }
+
     const monthYear = document.getElementById("month-year");
     const daysContainer = document.getElementById("days");
     const emptyState = document.getElementById("empty-state");
@@ -36,9 +42,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     }
+    let sidebarTrigger = null;
+
     function openSidebar(content) {
+        if (!sidebar.contains(document.activeElement)) {
+            sidebarTrigger = document.activeElement;
+        }
+
         classDetails.innerHTML = content;
         sidebar.classList.add("open");
+        closeSidebar.focus();
+    }
+
+    function hideSidebar() {
+        sidebar.classList.remove("open");
+
+        if (sidebarTrigger?.isConnected) {
+            sidebarTrigger.focus();
+        } else {
+            prevButton.focus();
+        }
     }
     function showClassDetails(classItem, occurrenceDate) {
         const details = [`Class: ${classItem.name}`, `Type: ${classItem.type}`, `Date: ${occurrenceDate}`,
@@ -60,8 +83,14 @@ document.addEventListener("DOMContentLoaded", function () {
         classLink.textContent = "Go to Class";
         classDetails.appendChild(classLink);
     }
-    closeSidebar.addEventListener("click", function () {
-        sidebar.classList.remove("open");
+    closeSidebar.addEventListener("click", hideSidebar);
+
+    sidebar.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            event.stopPropagation();
+            hideSidebar();
+        }
     });
     function createDayCell(date, isCurrentMonth) {
         const dayDiv = document.createElement("div");

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for a Class</title>
+    <link rel="stylesheet" href="RegisterForClassStyle.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="HeadAndSection.html">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6FEg3ejvKVdNfKIp-BFm15QTqBICuOySCxWEmfTiOnO0cDEFpwB5KsTZs&s=10" alt="Heal One World logo">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#">Classes</a></li>
+        <li><a href="#">Programs</a></li>
+        <li><a href="#">Volunteer</a></li>
+        <li><a href="#">Rent Our Space</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Sign In</a></li>
+        <li><a href="#">Donate</a></li>
+      </ul>
+    </nav>
+  </header>
+    <main class="registration-page">
+        <section class="registration-content">
+            <h3 class="eyebrow">CLASS REGISTRATION</h3>
+            <h1 class="title" id="registration-title">Register for a Class</h1>
+            <h2 class="subtitle">Confirm your information below. Your registration will be saved to your account.</h2>
+        </section>
+        <information>
+            <form id="registration-form">
+                <label for="first-name">Fist Name</label>
+                <input type="text" id="first-name" name="first-name" required>
+
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name" required>
+
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Phone number</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="accessibility">Accessibility or accommodation notes (optional)</label>
+                <input type="text" id="accessibility" name="accessibility">
+
+                <p id="form-error" class="form-error"></p>
+
+                <button type="submit">Confirm Registration</button>
+            </form>
+        </information>
+        <aside class="class-card">
+            <h2>Your class</h2>
+            <h3 id="class-name"></h3>
+            <p id="class-date"></p>
+            <p id="class-time"></p>
+            <p id="class-mode"></p>
+            <p id="class-location"></p>
+            <p class="free-text">Free</p>
+            <a href="file:///C:/git/healoneworld/Register%20For%20Classes%20Page/SignInPage.html#" id="class-link">Already Registered?</a>
+        </aside>
+    </main>
+    <script src="../Upcoming%20Classes%20Practice/classes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@5/dist/email.min.js"></script>
+    <script src="EmailNotification.js"></script>
+    <script src="RegisterForClass.js"></script>
+</body>
+</html>

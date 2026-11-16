@@ -1,0 +1,111 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif
+}
+body {
+    background-color: #EFF9F7;
+}
+header {
+    min-height: 82px;
+    padding: 8px 5.6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    background: #ffffff;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.logo img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 50%;
+    margin: 0;
+}
+header nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    list-style: none;
+    flex-wrap: wrap;
+}
+header nav a {
+    text-decoration: none;
+    color: #062f49;
+    font-size: 16px;
+}
+header nav a:hover {
+    text-decoration: underline;
+}
+section {
+    max-width: 650px;
+    margin: 0 auto;
+    padding-top: 190px;
+    text-align: center;
+}
+.confirmation-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    background-color: #8AD324;
+}
+section .eyebrow {
+    margin: 0 0 28px;
+    color: #8AD324;
+    font-size: 14px;
+    font-weight: bold;
+}
+section .title {
+    margin: 0 0 25px;
+    color: #062F49;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 48px;
+    font-weight: normal;
+}
+section .subtitle {
+    margin: 0 0 24px;
+    color: #29404A;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 1.4;
+}
+section .description {
+    margin: 0 0 24px;
+    color: #888888;
+    font-size: 15px;
+}
+buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    max-width: 650px;
+    margin: 23px auto 0;
+}
+buttons .my-classes {
+    width: 100px;
+    height: 30px;
+    background-color: #062F49;
+    color: #FFFFFF;
+    border: solid 0px #062F49;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+buttons .browse-classes {
+    width: 150px;
+    height: 30px;
+    background-color: #EFF9F7;
+    color: #29404A;
+    border: solid 1px #0075B5;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+}

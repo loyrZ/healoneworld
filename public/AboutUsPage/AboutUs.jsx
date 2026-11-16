@@ -2,8 +2,8 @@ import "./AboutUs.css";
 
 function AboutUs() {
     return(
-        <div className="bg-[#EFF9F7] flex flex-col lg:flex-row">
-            <main className="w-full lg:basis-2/3 px-6 sm:px-10 lg:pl-20 lg:pr-8">
+        <div className="about-page">
+            <main className="about-main" id="main-content" tabIndex={-1}>
             
                 <h1 className="mt-7 mb-7 text-sm text-[#0075B5]">
                     ABOUT
@@ -13,7 +13,7 @@ function AboutUs() {
                     Wellness without barriers.
                 </h2>
 
-                    <p className="lg:whitespace-nowrap">
+                    <p>
                         Founded in 2009, Heal One World recognizes that our
                         greatest tools for healing lie within our own selves.
                     </p>
@@ -49,19 +49,19 @@ function AboutUs() {
                     </p>                        
                 </div> 
                 <div className="mt-6 mb-8 flex flex-col sm:flex-row gap-4 font-semibold">
-                    <a href="/class page" className="rounded-full bg-[#8AD324] px-5 py-2 text-center">
+                    <a href="/classes/upcoming.html" className="rounded-full bg-[#8AD324] px-5 py-2 text-center">
                         <p className="text-[#062F49]">
                             Find a class
                         </p>
                     </a>
-                    <a href="/volunteer page" className="rounded-full border-2 border-[#0075B5] text-[#0075B5] px-4 py-2 text-center">
+                    <a href="/volunteer.html" className="rounded-full border-2 border-[#0075B5] text-[#0075B5] px-4 py-2 text-center">
                         Volunteer with us
                     </a>
                 </div>
             </main>
 
-            <div className="w-full lg:basis-1/3 my-8 lg:my-50 px-6 sm:px-10 lg:px-6 flex flex-col gap-4 items-center">
-                <div className="max-w-full bg-[#FFFFFF] box-border border-1 border-gray-300 rounded-xl w-80 p-6">
+            <div className="about-sidebar">
+                <div className="about-card">
                     <div className="ml-2">
                         <h2 className="text-xl mb-2">
                             Founder
@@ -73,7 +73,7 @@ function AboutUs() {
                     </div>
                 </div>
 
-                <div className="bg-[#FFFFFF] max-w-full box-border border-1 border-gray-300 rounded-xl align-center w-80 p-6">
+                <div className="about-card">
                     <div className="ml-2 flex flex-col gap-2">
                         <h2 className="text-xl">
                             Programs
@@ -84,7 +84,7 @@ function AboutUs() {
                         </div>    
                 </div>
 
-                <div className="bg-[#FFFFFF] box-border border-1 border-gray-300 rounded-xl max-w-full w-80 p-6">
+                <div className="about-card">
                     <div className="ml-2 flex flex-col gap-2">
                         <h2 className="text-xl">
                             Visit

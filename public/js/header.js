@@ -1,66 +1,42 @@
-/* Load the shared header and control its mobile menu. */
-
+/* Load the shared header on static public pages. */
 async function loadHeader() {
-  const container = document.querySelector("[data-site-header]");
-  if (!container) return;
+    const container = document.querySelector("[data-site-header]");
+    if (!container) return;
+    const isEmbeddedCalendar =
+    window.location.pathname === "/calendar/Calendar.html" &&
+    new URLSearchParams(window.location.search).get("embedded") === "1";
+    if (isEmbeddedCalendar) return;
 
-  try {
-    const response = await fetch("/components/header.html");
-    if (!response.ok) throw new Error("Could not load the header.");
+    try {
+        const [response, { initializeHeaderMenu }] = await Promise.all([
+            fetch("/components/header.html"),
+            import("/js/header-menu.js")
+        ]);
 
-    container.innerHTML = await response.text();
+        if (!response.ok) {
+            throw new Error("Could not load the header.");
+        }
 
-    const toggle = container.querySelector(".menu-toggle");
-    const links = container.querySelector("#main-navigation");
-    const mobile = window.matchMedia("(max-width: 1199px)");
+        container.innerHTML = await response.text();
+        initializeHeaderMenu(container);
+        const accountScript = document.createElement("script");
+        accountScript.type = "module";
+        accountScript.src = "/header-account-entry.js";
 
-    function setOpen(open) {
-      toggle.setAttribute("aria-expanded", String(open));
-      links.hidden = mobile.matches && !open;
+        accountScript.onerror = () => {
+            const slot = container.querySelector("[data-account-slot]");
+
+            if (slot) {
+                slot.textContent = "Account navigation could not load.";
+            }
+        };
+
+        document.body.append(accountScript);
+    } catch (error) {
+        console.error(error);
+        container.textContent =
+            "Navigation could not load. Please refresh.";
     }
-
-    function updateLayout() {
-      if (!mobile.matches && document.activeElement === toggle) {
-        links.querySelector("a").focus();
-      }
-
-      toggle.hidden = !mobile.matches;
-
-      if (mobile.matches && links.contains(document.activeElement)) {
-        toggle.focus();
-      }
-
-      setOpen(false);
-    }
-
-    toggle.addEventListener("click", () => {
-      setOpen(toggle.getAttribute("aria-expanded") !== "true");
-    });
-
-    container.addEventListener("keydown", (event) => {
-      if (
-        event.key === "Escape" &&
-        mobile.matches &&
-        toggle.getAttribute("aria-expanded") === "true"
-      ) {
-        setOpen(false);
-        toggle.focus();
-      }
-    });
-
-    links.addEventListener("click", (event) => {
-      if (mobile.matches && event.target.closest("a")) {
-        setOpen(false);
-        toggle.focus();
-      }
-    });
-
-    mobile.addEventListener("change", updateLayout);
-    updateLayout();
-  } catch (error) {
-    console.error(error);
-    container.textContent = "Navigation could not load. Please refresh.";
-  }
 }
 
 loadHeader();

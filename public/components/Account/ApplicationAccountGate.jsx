@@ -1,6 +1,43 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/react";
 
+
+const ACCOUNT_CACHE_KEY = "healoneworld.account";
+const CACHE_TIME = 60 * 1000;
+
+function getCachedAccount(userId) {
+    let cached;
+
+    try {
+        cached = JSON.parse(sessionStorage.getItem(ACCOUNT_CACHE_KEY));
+    } catch {
+        sessionStorage.removeItem(ACCOUNT_CACHE_KEY);
+        return null;
+    }
+
+    if (
+        !cached ||
+        cached.userId !== userId ||
+        Date.now() - cached.time > CACHE_TIME
+    ) {
+        sessionStorage.removeItem(ACCOUNT_CACHE_KEY);
+        return null;
+    }
+
+    return cached.data;
+}
+
+function cacheAccount(userId, data) {
+    sessionStorage.setItem(
+        ACCOUNT_CACHE_KEY,
+        JSON.stringify({ userId, data, time: Date.now() })
+    );
+}
+
+export function clearAccountCache() {
+    sessionStorage.removeItem(ACCOUNT_CACHE_KEY);
+}
+
 export default function ApplicationAccountGate({ children }) {
     const { isLoaded, isSignedIn, userId, getToken } = useAuth();
     const [linkedUserId, setLinkedUserId] = useState(null);
@@ -16,6 +53,15 @@ export default function ApplicationAccountGate({ children }) {
 
         async function connectAccount() {
             try {
+                if (controller.signal.aborted) return;
+
+                const cached = getCachedAccount(userId);
+
+                if (cached) {
+                    setLinkedUserId(userId);
+                    return;
+                }
+                
                 const token = await getToken();
 
                 if (controller.signal.aborted) return;
@@ -30,6 +76,7 @@ export default function ApplicationAccountGate({ children }) {
                         Authorization: `Bearer ${token}`
                     },
                     credentials: "same-origin",
+                    cache: "no-store",
                     signal: controller.signal
                 });
 
@@ -46,6 +93,8 @@ export default function ApplicationAccountGate({ children }) {
                 if (data.user?.clerkUserId !== userId) {
                     throw new Error("Unable to confirm your account.");
                 }
+
+                cacheAccount(userId, data);
 
                 if (!controller.signal.aborted) {
                     setLinkedUserId(userId);

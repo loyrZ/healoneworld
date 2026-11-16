@@ -200,6 +200,70 @@ async function makeVolunteerProfilesTable(connection) {
         console.log("Created Volunteer Profiles Table!");
     }
 }
+
+async function makeVolunteerApplicationsTable(connection) {
+    const [result] = await connection.query(`
+        CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`volunteer_applications\` (
+            id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id INT UNSIGNED NOT NULL,
+            opportunity VARCHAR(255) NOT NULL,
+            phone VARCHAR(30) NOT NULL,
+            interests_skills TEXT NOT NULL,
+            availability TEXT NOT NULL,
+            reason TEXT NOT NULL,
+            status ENUM(
+                'pending_review',
+                'approved',
+                'rejected'
+            ) NOT NULL DEFAULT 'pending_review',
+            request_id CHAR(36) NOT NULL,
+            review_reason TEXT NULL,
+            reviewed_by INT UNSIGNED NULL,
+            reviewed_at TIMESTAMP NULL,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ON UPDATE CURRENT_TIMESTAMP,
+
+            PRIMARY KEY (id_pk),
+            UNIQUE KEY uq_volunteer_request_id (request_id),
+            FOREIGN KEY (user_id)
+                REFERENCES users(id_pk)
+                ON DELETE CASCADE,
+            FOREIGN KEY (reviewed_by)
+                REFERENCES users(id_pk)
+                ON DELETE SET NULL
+        ) ENGINE=InnoDB
+        DEFAULT CHARSET=utf8mb4
+        COLLATE=utf8mb4_unicode_ci
+    `);
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created Volunteer Applications Table!");
+    }
+
+    const [columns] = await connection.query(
+        `SHOW COLUMNS FROM \`${process.env.DB_NAME}\`.\`volunteer_applications\``
+    );
+    const existingColumns = new Set(columns.map((column) => column.Field));
+    const additions = [
+        ["review_reason", "TEXT NULL"],
+        ["reviewed_by", "INT UNSIGNED NULL"],
+        ["reviewed_at", "TIMESTAMP NULL"]
+    ];
+
+    for (const [name, definition] of additions) {
+        if (!existingColumns.has(name)) {
+            await connection.query(
+                `ALTER TABLE \`${process.env.DB_NAME}\`.\`volunteer_applications\`
+                 ADD COLUMN \`${name}\` ${definition}`
+            );
+        }
+    }
+}
+
 (async function main() {
     let connection = null;
     try {
@@ -208,6 +272,7 @@ async function makeVolunteerProfilesTable(connection) {
         await connection.query(`USE \`${process.env.DB_NAME}\``);
         await makeClassesTable(connection);
         await makeUsersTable(connection);
+        await makeVolunteerApplicationsTable(connection);
         await makePermissionTable(connection);
         await makeAnnouncementsTable(connection);
         await makeVolunteerProfilesTable(connection);

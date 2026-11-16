@@ -1,32 +1,60 @@
-<header class="site-header">
-  <nav class="container site-nav" aria-label="Main navigation">
-    <a class="site-brand" href="/home.html">
-    <img
-        src="/images/logo.png"
-        alt="Heal One World home"
-        width="68"
-        height="68"
-    >
-    </a>
-    <button
-      class="button menu-toggle"
-      type="button"
-      aria-expanded="false"
-      aria-controls="main-navigation"
-      hidden
-    >
-      Menu
-    </button>
+<a class="skip-link" href="#main-content">
+    Skip to main content
+</a>
 
-    <ul class="nav-links" id="main-navigation">
-      <li><a href="/classes/ClassPage.html">Classes</a></li>
-      <li><a href="/home.html#programs">Programs</a></li>
-      <li><a href="/volunteer.html">Volunteer</a></li>
-      <li><a href="/rent.html">Rent Our Space</a></li>
-      <li><a href="/about.html">About</a></li>
-      <li><a href="/blog.html">Blog</a></li>
-      <li><a href="/sign-in">Sign In</a></li>
-      <li><a class="button" href="/donate.html">Donate</a></li>
-    </ul>
-  </nav>
+<header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+        <a class="site-brand" href="/home.html">
+            <img
+                src="/images/logo.png"
+                alt="Heal One World home"
+                width="68"
+                height="68"
+            >
+        </a>
+
+        <button
+            class="button menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="main-navigation"
+            hidden
+        >
+            Menu
+        </button>
+
+        <ul class="nav-links" id="main-navigation">
+            <li>
+                <a href="/classes/upcoming.html">Classes</a>
+            </li>
+            <li>
+                <a href="/home.html#programs">Programs</a>
+            </li>
+            <li>
+                <a href="/volunteer.html">Volunteer</a>
+            </li>
+            <li>
+                <a href="/rent.html">Rent Our Space</a>
+            </li>
+            <li>
+                <a href="/about.html">About</a>
+            </li>
+            <li>
+                <a href="/blog.html">Blog</a>
+            </li>
+
+            <li data-account-slot>
+                <span
+                    class="account-menu__loading"
+                    role="status"
+                    aria-label="Checking sign-in status"
+                    aria-busy="true"
+                ></span>
+            </li>
+
+            <li>
+                <a class="button" href="/donate.html">Donate</a>
+            </li>
+        </ul>
+    </nav>
 </header>

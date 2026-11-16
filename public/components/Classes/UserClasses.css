@@ -1,0 +1,79 @@
+.user-classes {
+    min-height: 100vh;
+    padding: 24px 5.6% 64px;
+    color: #294452;
+    background: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.user-classes__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 54px;
+}
+
+.user-classes__brand {
+    color: #062f49;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.user-classes button {
+    padding: 10px 16px;
+    color: #ffffff;
+    background: #073650;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.user-classes h1 {
+    color: #073650;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 42px;
+    font-weight: normal;
+}
+
+.user-classes__intro {
+    margin-top: 8px;
+}
+
+.user-classes__list {
+    display: grid;
+    gap: 16px;
+    margin-top: 30px;
+}
+
+.user-classes__card,
+.user-classes__empty {
+    padding: 22px 26px;
+    background: #edf8f6;
+    border-radius: 13px;
+}
+
+.user-classes__card h2 {
+    color: #073650;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px;
+    font-weight: normal;
+}
+
+.user-classes__card p + p {
+    margin-top: 4px;
+}
+
+.user-classes__empty {
+    margin-top: 30px;
+}
+
+@media (max-width: 600px) {
+    .user-classes {
+        padding: 20px 24px 48px;
+    }
+
+    .user-classes__header {
+        margin-bottom: 40px;
+    }
+}
