@@ -1,0 +1,17 @@
+.offerings { max-width: 1180px; margin: 0 auto; padding: 32px 24px; }
+.offerings h2 { margin: 0 0 8px; font-size: clamp(1.75rem, 4vw, 2.5rem); }
+.offerings-intro { margin: 0 0 16px; }
+.offerings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.offerings-card { padding: 24px; background: var(--color-white); border: 1px solid #dde2e5; border-radius: 12px; }
+.offerings-card h3 { margin: 0 0 8px; font-size: 1.5rem; }
+.offerings-card p { margin: 0 0 12px; }
+.offerings-meta { font-size: 14px; }
+.offerings-image { display: block; width: 100%; height: 160px; margin-bottom: 16px; border-radius: 8px; object-fit: cover; }
+.offerings-empty { padding: 16px; border: 1px dashed #c9d1d5; border-radius: 8px; }
