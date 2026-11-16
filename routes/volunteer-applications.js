@@ -12,8 +12,6 @@ const router = express.Router();
 const { requireRole } = require("../middleware/auth");
 const applications = require("../services/volunteer-applications");
 
-const router = express.Router();
-
 function parseId(value) {
     return /^[1-9]\d{0,9}$/.test(value) ? Number(value) : null;
 }

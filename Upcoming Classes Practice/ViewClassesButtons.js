@@ -17,7 +17,6 @@ function getAvailableSeats(classItem) {
 
     return seatCounts[classItem.id] ?? classItem.seatsAvailable;
 }
-function displayClasses() {
 // Loading and error messages for the class list. Kept separate from the cards
 // so FilterButtons.js can keep its own "no matches" message in the list.
 function showListStatus(text) {

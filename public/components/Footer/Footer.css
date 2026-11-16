@@ -1,6 +1,6 @@
 .site-footer {
     position: relative;
-    margin-top: 45px;
+    margin-top: clamp(64px, 10vw, 120px);
     padding: 48px 0 24px;
     background: var(--color-navy);
     color: var(--color-white);
@@ -9,8 +9,9 @@
 .site-footer::before {
     content: "";
     position: absolute;
-    inset: -44px 0 auto;
-    height: 45px;
+    inset: auto 0 100%;
+    height: clamp(16px, 4vw, 45px);
+    margin-bottom: -1px;
     background: url("/images/curve-footer.svg") center / 100% 100% no-repeat;
     pointer-events: none;
 }
@@ -99,14 +100,5 @@
     .site-footer__grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 20px;
-    }
-
-    .site-footer {
-        margin-top: 16px;
-    }
-
-    .site-footer::before {
-        top: -15px;
-        height: 16px;
     }
 }
