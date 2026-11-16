@@ -3,6 +3,9 @@
 const express = require("express");
 const db = require("../conf/database");
 const { requireAccount } = require("../middleware/volunteer");
+const {
+    getOrCreateApplicationUser
+} = require("../services/application-user");
 
 const router = express.Router();
 
@@ -11,48 +14,35 @@ router.use((req, res, next) => {
     next();
 });
 
-// Users must be signed in, but they do not need to be approved volunteers.
+// Signed-in users may apply.
+// Do not use requireApprovedVolunteer here.
 router.use(requireAccount);
 
-function getVerifiedEmail(req) {
-    return (
-        req.clerkUser?.primaryEmailAddress?.verification?.status ===
-        "verified"
-    );
+function sendRouteError(err, res, next) {
+    if (err.status) {
+        return res.status(err.status).json({
+            error: err.message
+        });
+    }
+
+    next(err);
 }
 
 // GET /api/volunteer/application/me
 router.get("/me", async (req, res, next) => {
     try {
-        if (!getVerifiedEmail(req)) {
-            return res.status(403).json({
-                error: "Your email must be verified before applying.",
-                verifiedEmail: false
-            });
-        }
+        // This verifies the email and links the Clerk account to users.id_pk.
+        const user = await getOrCreateApplicationUser(req);
 
-        const [rows] = await db.query(
-            `SELECT
-                u.id_pk,
-                u.name,
-                u.email,
-                va.status
-             FROM users u
-             LEFT JOIN volunteer_applications va
-                ON va.user_id = u.id_pk
-               AND va.status = 'pending_review'
-             WHERE u.clerk_user_id = ?
+        const [applications] = await db.query(
+            `SELECT id_pk, status, created_at
+             FROM volunteer_applications
+             WHERE user_id = ?
+               AND status = 'pending_review'
+             ORDER BY created_at DESC
              LIMIT 1`,
-            [req.userId]
+            [user.id]
         );
-
-        if (rows.length === 0) {
-            return res.status(404).json({
-                error: "Your account could not be found."
-            });
-        }
-
-        const user = rows[0];
 
         res.json({
             user: {
@@ -60,23 +50,20 @@ router.get("/me", async (req, res, next) => {
                 email: user.email
             },
             verifiedEmail: true,
-            application: user.status
-                ? { status: user.status }
+            application: applications.length > 0
+                ? applications[0]
                 : null
         });
     } catch (err) {
-        next(err);
+        sendRouteError(err, res, next);
     }
 });
 
 // POST /api/volunteer/application
 router.post("/", async (req, res, next) => {
     try {
-        if (!getVerifiedEmail(req)) {
-            return res.status(403).json({
-                error: "Your email must be verified before applying."
-            });
-        }
+        // This verifies the email and returns the local users.id_pk.
+        const user = await getOrCreateApplicationUser(req);
 
         const {
             phone,
@@ -126,33 +113,16 @@ router.post("/", async (req, res, next) => {
         const maxLength = 500;
 
         if (
+            cleanOpportunity.length > maxLength ||
             cleanAvailability.length > maxLength ||
             cleanInterestsSkills.length > maxLength ||
             cleanReason.length > maxLength
         ) {
             return res.status(400).json({
-                error: "Availability, interests, and reason must be 500 characters or fewer."
+                error: "Application fields must be 500 characters or fewer."
             });
         }
 
-        // The Clerk user ID comes from the authenticated request.
-        // The browser cannot choose the applicant.
-        const [users] = await db.query(
-            `SELECT id_pk
-             FROM users
-             WHERE clerk_user_id = ?`,
-            [req.userId]
-        );
-
-        if (users.length === 0) {
-            return res.status(404).json({
-                error: "Your account could not be linked to an application."
-            });
-        }
-
-        const userId = users[0].id_pk;
-
-        // Prevent duplicate retries of the same request.
         const [existingRequest] = await db.query(
             `SELECT id_pk
              FROM volunteer_applications
@@ -166,14 +136,13 @@ router.post("/", async (req, res, next) => {
             });
         }
 
-        // Prevent a user from submitting multiple pending applications.
         const [pendingApplications] = await db.query(
             `SELECT id_pk
              FROM volunteer_applications
              WHERE user_id = ?
                AND status = 'pending_review'
              LIMIT 1`,
-            [userId]
+            [user.id]
         );
 
         if (pendingApplications.length > 0) {
@@ -182,8 +151,8 @@ router.post("/", async (req, res, next) => {
             });
         }
 
-        // Status is always assigned by the server.
-        // The client cannot choose approved or rejected.
+        // The server assigns both user_id and status.
+        // The browser cannot submit as another user or choose approval status.
         await db.query(
             `INSERT INTO volunteer_applications
                 (
@@ -198,7 +167,7 @@ router.post("/", async (req, res, next) => {
                 )
              VALUES (?, ?, ?, ?, ?, ?, 'pending_review', ?)`,
             [
-                userId,
+                user.id,
                 cleanPhone,
                 cleanOpportunity,
                 cleanAvailability,
@@ -213,14 +182,13 @@ router.post("/", async (req, res, next) => {
                 "Your volunteer application was received and is awaiting review."
         });
     } catch (err) {
-        // Duplicate request_id protection at the database level.
         if (err.code === "ER_DUP_ENTRY") {
             return res.status(200).json({
                 message: "Your volunteer application was already received."
             });
         }
 
-        next(err);
+        sendRouteError(err, res, next);
     }
 });
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/react";
 
 // Keep these imports if this file is placed in public/components/Volunteer.
 // Adjust ../ paths if your component is stored in a different folder.
@@ -6,6 +7,7 @@ import "../../css/layout.css";
 import "../../css/theme.css";
 import "../../css/components.css";
 import "../../css/header.css";
+import "./VolunteerApplication.css";
 
 const initialForm = {
     phone: "",
@@ -16,6 +18,7 @@ const initialForm = {
 };
 
 export default function VolunteerApplication() {
+    const { isLoaded, isSignedIn } = useAuth();
     const [account, setAccount] = useState(null);
     const [form, setForm] = useState(initialForm);
     const [loading, setLoading] = useState(true);
@@ -36,10 +39,23 @@ export default function VolunteerApplication() {
     });
 
     useEffect(() => {
+        if (!isLoaded) {
+            return;
+        }
+
+        if (!isSignedIn) {
+            setError("Please sign in before submitting a volunteer application.");
+            setLoading(false);
+            return;
+        }
+
         async function loadApplicationState() {
             try {
                 const response = await fetch(
-                    "/api/volunteer/application"
+                    "/api/volunteer/application/me",
+                    {
+                        credentials: "include"
+                    }
                 );
                 const data = await response.json();
 
@@ -51,7 +67,19 @@ export default function VolunteerApplication() {
 
                 setAccount(data.user || null);
                 setVerifiedEmail(Boolean(data.verifiedEmail));
-                setApplicationStatus(data.application?.status || null);
+                const application = data.application || null;
+
+                setApplicationStatus(application?.status || null);
+
+                if (application) {
+                    setForm({
+                        phone: application.phone || "",
+                        opportunity: application.opportunity || "",
+                        availability: application.availability || "",
+                        interests_skills: application.interests_skills || "",
+                        reason: application.reason || ""
+                    });
+                }
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -60,7 +88,7 @@ export default function VolunteerApplication() {
         }
 
         loadApplicationState();
-    }, []);
+    }, [isLoaded, isSignedIn]);
 
     function updateField(event) {
         const { name, value } = event.target;
@@ -75,6 +103,11 @@ export default function VolunteerApplication() {
         event.preventDefault();
         setMessage("");
         setError("");
+
+        if (!isSignedIn || !account) {
+            setError("Please sign in before submitting a volunteer application.");
+            return;
+        }
 
         if (!verifiedEmail) {
             setError("Please verify your email address before applying.");
@@ -108,6 +141,7 @@ export default function VolunteerApplication() {
         try {
             const response = await fetch("/api/volunteer/application", {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -138,10 +172,14 @@ export default function VolunteerApplication() {
     }
 
     const isPending = applicationStatus === "pending_review";
-    const canApply = Boolean(account && verifiedEmail && !isPending);
-    const formDisabled = loading || submitting || !canApply;
+    const formDisabled =
+        loading ||
+        submitting ||
+        !isSignedIn ||
+        !verifiedEmail ||
+        isPending;
 
-    if (loading) {
+    if (!isLoaded || loading) {
         return (
             <main className="volunteer-page">
                 <p className="content-status">Loading volunteer application...</p>
@@ -153,8 +191,11 @@ export default function VolunteerApplication() {
         <main className="volunteer-page">
             <header className="site-header">
                 <nav className="site-nav container" aria-label="Main navigation">
-                    <a className="site-brand" href="/">
-                        HEAL ONE WORLD
+                    <a className="site-brand" href="/" aria-label="Heal One World home">
+                        <img
+                            src="/images/logo.png"
+                            alt="Heal One World logo"
+                        />
                     </a>
 
                     <ul className="nav-links">
@@ -168,7 +209,11 @@ export default function VolunteerApplication() {
                         <li><a href="/rent-space.html">Rent Our Space</a></li>
                         <li><a href="/about.html">About</a></li>
                         <li><a href="/blog.html">Blog</a></li>
-                        <li><a href="/sign-in">Sign In</a></li>
+                        <li>
+                            <a href="/account" className="account-link">
+                                {account?.name || "Sign In"}
+                            </a>
+                        </li>
                         <li>
                             <a className="button button--primary" href="/donate.html">
                                 Donate
@@ -209,7 +254,7 @@ export default function VolunteerApplication() {
                         </div>
                     )}
 
-                    {!account && !error && (
+                    {!isSignedIn && (
                         <p className="form-error" role="alert">
                             Please sign in before submitting a volunteer application.
                         </p>
@@ -354,4 +399,3 @@ export default function VolunteerApplication() {
         </main>
     );
 }
-
