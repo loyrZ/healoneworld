@@ -22,6 +22,7 @@ import Announcements from "./admin/announcements/admin-announcements.jsx";
 import ClassList from "./admin/classes/ClassList.jsx";
 import ClassEdit from "./admin/classes/ClassEdit.jsx";
 import ClassCreate from "./admin/classes/ClassCreate.jsx";
+import VolunteerApplication from "./components/Volunteer/VolunteerApplication.jsx";
 import VolunteerApplicationList from "./admin/volunteers/VolunteerApplicationList.jsx";
 import VolunteerApplicationReview from "./admin/volunteers/VolunteerApplicationReview.jsx";
 
@@ -52,6 +53,7 @@ const pages = {
     "/verify-email": EmailVerification,
     "/volunteer": VolunteerDashboard,
     "/volunteer/profile": VolunteerProfile,
+    "/volunteer/apply": VolunteerApplication,
     "/classes/sign-in": ClassesSignIn,
     "/user-classes": UserClasses,
     "/about": AboutUs

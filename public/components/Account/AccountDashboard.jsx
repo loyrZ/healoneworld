@@ -71,6 +71,13 @@ export default function AccountDashboard() {
                             Account settings
                         </a>
 
+                        <a
+                            href="/volunteer/apply"
+                            className="account-sidebar__link"
+                        >
+                            Volunteer application
+                        </a>
+
                         <div
                             className="account-sidebar__link account-sidebar__link--disabled"
                             aria-disabled="true"
