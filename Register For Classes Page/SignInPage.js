@@ -1,37 +1,24 @@
-const USERS_STORAGE_KEY = "healOneWorldUsers";
+"use strict";
+
 const ACTIVE_USER_KEY = "healOneWorldActiveUser";
 const form = document.getElementById("sign-in-form");
+const emailInput = document.getElementById("email");
 const errorMessage = document.getElementById("form-error");
+const emailFromUrl = new URLSearchParams(window.location.search).get("email");
 
-form.addEventListener("submit", function (event) {
+if (emailFromUrl) {
+  emailInput.value = emailFromUrl;
+}
+
+form.addEventListener("submit", (event) => {
   event.preventDefault();
-  const email = document
-    .getElementById("email")
-    .value
-    .trim()
-    .toLowerCase();
-  const password = document.getElementById("password").value;
-  if (email === "" || password === "") {
-    errorMessage.textContent = "Please enter your email and password.";
-    return;
-  }
-  let users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY) || "{}");
-  if (users[email] && users[email].password !== password) {
-    errorMessage.textContent = "The password entered is incorrect.";
-    return;
-  }
-  if (!users[email]) {
-    users[email] = {
-      email: email,
-      password: password,
-      registeredClasses: []
-    };
-  }
-  localStorage.setItem(
-    USERS_STORAGE_KEY,
-    JSON.stringify(users)
-  );
-  localStorage.setItem(ACTIVE_USER_KEY, email);
+  const email = emailInput.value.trim().toLowerCase();
 
-  window.location.href = "./User's Classes.html";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errorMessage.textContent = "Please enter a valid email address.";
+    return;
+  }
+
+  localStorage.setItem(ACTIVE_USER_KEY, email);
+  window.location.href = new URL("User's Classes.html", window.location.href).href;
 });

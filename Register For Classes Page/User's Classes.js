@@ -180,10 +180,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return card;
   }
 
-  window.displayClasses = function displayClasses(view) {
+  window.displayClasses = async function displayClasses(view) {
     classListContainer.innerHTML = "";
     if (view === "upcoming") {
-      if (typeof classes === "undefined" || !Array.isArray(classes)) {
+      if (!window.ClassSchedule) {
+        showMessage("Upcoming classes could not be loaded.");
+        return;
+      }
+      let classes;
+      try {
+        classes = await window.ClassSchedule.loadSchedule();
+      } catch (error) {
+        console.error("Upcoming classes could not be loaded:", error);
         showMessage("Upcoming classes could not be loaded.");
         return;
       }
@@ -214,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
     removeExpiredDeletedRegistrations();
     const activeUserEmail = getActiveUserEmail();
     if (!activeUserEmail) {
-      showMessage("Please sign in to view your registered classes.");
+      showMessage("Enter the email used for your registration on the registration page to view your classes.");
       return;
     }
     const userRegistrations = getUserRegistrations();

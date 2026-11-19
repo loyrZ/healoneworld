@@ -5,43 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register for a Class</title>
     <link rel="stylesheet" href="RegisteredPageStyle.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="/js/header.js" defer></script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="HeadAndSection.html">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6FEg3ejvKVdNfKIp-BFm15QTqBICuOySCxWEmfTiOnO0cDEFpwB5KsTZs&s=10" alt="Heal One World logo">
-    </a>
-    <nav>
-      <ul>
-        <li><a href="#">Classes</a></li>
-        <li><a href="#">Programs</a></li>
-        <li><a href="#">Volunteer</a></li>
-        <li><a href="#">Rent Our Space</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Sign In</a></li>
-        <li><a href="#">Donate</a></li>
-      </ul>
-    </nav>
-  </header>
-  <section class="confirmation">
+  <div data-site-header></div>
+  <section class="confirmation" id="main-content" tabindex="-1">
     <div class="confirmation-icon"></div>
     <h3 class="eyebrow">REGISTRATION CONFIRMED</h3>
     <h1 class="title">You're registered.</h1>
     <h2 class="subtitle" id="registered-class"></h2>
     <p class="description">Your registration has been saved.</p>
+    <p class="description" id="email-notification-status" role="status" aria-live="polite"></p>
   </section>
   <buttons>
     <button type="button" class="my-classes">My Classes</button>
     <button type="button" class="browse-classes">Browse Classes</button>
   </buttons>
-  <script src="C:\git\healoneworld\Upcoming Classes Practice\classes.js"></script>
   <script>
     const registration = JSON.parse(localStorage.getItem("latestRegistration") || "null");
-    const registeredClass = registration && registration.class
-      ? classes.find((classItem) => classItem.id === registration.class.id)
-      : null;
+    const registeredClass = registration && registration.class;
     const classSummary = document.querySelector("#registered-class");
+    const emailStatus = document.querySelector("#email-notification-status");
 
     if (registeredClass) {
       const classDate = new Date(`${registeredClass.date}T00:00:00`);
@@ -58,11 +46,16 @@
     } else {
       classSummary.textContent = "Class information could not be found.";
     }
+
+    if (registration && registration.emailNotificationStatus === "sent") {
+      emailStatus.textContent = `A confirmation email was sent to ${registration.email}.`;
+    } else if (registration && registration.emailNotificationStatus === "failed") {
+      emailStatus.textContent =
+        "Your registration was saved, but we couldn't send the confirmation email. Please verify your email address and contact us if you need help.";
+    }
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@5/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="EmailNotification.js"></script>
   <script src="RegisteredPageButtons.js" defer></script>
-  <script src="RegisteredPage.js" defer></script>
-  <script src="User's Classes.js" defer></script>
 </body>
 </html>

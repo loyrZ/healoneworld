@@ -6,6 +6,11 @@ const db = require("../conf/database");
 
 const router = express.Router();
 const publicDirectory = path.join(__dirname, "..", "public");
+const registrationPagesDirectory = path.join(
+    __dirname,
+    "..",
+    "Register For Classes Page"
+);
 
 // Check the server and database connection.
 router.get("/health", async (req, res) => {
@@ -62,11 +67,18 @@ router.get("/js/class-schedule.js", (req, res) => {
   res.sendFile(path.join(publicDirectory, "js", "class-schedule.js"));
 });
 
+// Serve the standalone registration pages and their sibling assets locally.
+router.use(
+  "/register",
+  express.static(registrationPagesDirectory, { index: false })
+);
+
 // Serve the existing class page and its required assets.
 const classPageFiles = [
   "/classes/ClassPage.html",
   "/classes/ClassPageStyle.css",
   "/classes/ViewClassesButtons.js",
+  "/classes/RegisterForClassButton.js",
   "/classes/style.css",
   "/classes/FilterButtons.js"
 ];

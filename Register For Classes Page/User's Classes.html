@@ -5,27 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>User's Classes</title>
         <link rel="stylesheet" href="User's Classes Style.css">
+        <link rel="stylesheet" href="/css/theme.css">
+        <link rel="stylesheet" href="/css/layout.css">
+        <link rel="stylesheet" href="/css/components.css">
+        <link rel="stylesheet" href="/css/header.css">
+        <script src="/js/header.js" defer></script>
     </head>
     <body>
-        <header class="site-header">
-            <a class="logo" href="HeadAndSection.html">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6FEg3ejvKVdNfKIp-BFm15QTqBICuOySCxWEmfTiOnO0cDEFpwB5KsTZs&s=10"
-                     alt="Heal One World logo">
-            </a>
-            <nav>
-                <ul>
-                    <li><a href="#">Classes</a></li>
-                    <li><a href="#">Programs</a></li>
-                    <li><a href="#">Volunteer</a></li>
-                    <li><a href="#">Rent Our Space</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li class="sign-in"><a href="#">Sign In</a></li>
-                    <li><a class="donate" href="#">Donate</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
+        <div data-site-header></div>
+        <main id="main-content" tabindex="-1">
             <section class="classes-section">
                 <h1>My classes</h1>
                 <p class="intro">View and manage your upcoming registrations.</p>
@@ -57,16 +45,12 @@
             <section class="account-section">
                 <h2>Manage your account</h2>
                 <p>Cancel an upcoming registration if your plans change, or sign out when you’re finished.</p>
-                <div class="account-buttons">
-                    <button>Sign out</button>
-                </div>
                 <small>A confirmation step appears before a registration is removed.</small>
             </section>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@5/dist/email.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
         <script src="EmailNotification.js"></script>
-        <script src="SignInPage.js"></script>
-        <script src="../Upcoming%20Classes%20Practice/classes.js"></script>
+        <script src="/js/class-schedule.js"></script>
         <script src="User's Classes.js"></script>
         <script src="User's Classes Buttons.js" defer></script>
     </body>
