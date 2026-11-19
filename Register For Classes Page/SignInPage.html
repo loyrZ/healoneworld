@@ -3,37 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In Page</title>
+    <title>Sign In to Your Classes</title>
     <link rel="stylesheet" href="SignInStyle.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <script src="/js/header.js" defer></script>
     <script src="SignInPage.js" defer></script>
 </head>
 <body>
-  <header class="site-header">
-    <a class="logo" href="HeadAndSection.html">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6FEg3ejvKVdNfKIp-BFm15QTqBICuOySCxWEmfTiOnO0cDEFpwB5KsTZs&s=10" alt="Heal One World logo">
-    </a>
+  <div data-site-header></div>
 
-    <nav>
-      <ul>
-        <li><a href="#">Classes</a></li>
-        <li><a href="#">Programs</a></li>
-        <li><a href="#">Volunteer</a></li>
-        <li><a href="#">Rent Our Space</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Sign In</a></li>
-        <li><a href="#">Donate</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main class="sign-in-page">
+  <main class="sign-in-page" id="main-content" tabindex="-1">
     <section class="sign-in-card">
       <h1>Welcome back</h1>
 
       <p class="intro">
-        Sign in to manage your classes and account.
+        Enter the email address you used to register for your classes.
       </p>
 
       <form class="sign-in-form" id="sign-in-form">
@@ -42,19 +29,9 @@
           <input type="email" id="email" name="email" placeholder="name@example.com" required>
         </div>
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="••••••••" required>
-        </div>
-
         <p id="form-error" class="form-error" role="alert"></p>
 
-        <button type="submit">Sign In</button>
-
-        <div class="account-links">
-          <a href="#">Create account</a>
-          <a href="#">Forgot password?</a>
-        </div>
+        <button type="submit">View My Classes</button>
       </form>
     </section>
   </main>

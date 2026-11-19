@@ -1,15 +1,76 @@
 const form = document.querySelector("#registration-form");
 const errorMessage = document.querySelector("#form-error");
+const classLink = document.querySelector("#class-link");
 
 form.noValidate = true;
 
-const classId = Number(
-  new URLSearchParams(window.location.search).get("id")
-);
+const classId = new URLSearchParams(window.location.search).get("id");
+let selectedClass = null;
 
-const selectedClass = classes.find(
-  (classItem) => classItem.id === classId
-);
+classLink.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  const enteredEmail = document
+    .querySelector("#email")
+    .value
+    .trim()
+    .toLowerCase();
+  let latestRegistrationEmail = "";
+  try {
+    const latestRegistration = JSON.parse(
+      localStorage.getItem("latestRegistration") || "null"
+    );
+    if (typeof latestRegistration?.email === "string") {
+      latestRegistrationEmail = latestRegistration.email.trim().toLowerCase();
+    }
+  } catch (error) {
+    console.error("Could not read the latest registration:", error);
+  }
+
+  fetch("/api/account", {
+    headers: {
+      Accept: "application/json"
+    }
+  })
+    .then(async (response) => {
+      if (response.status === 401) {
+        return null;
+      }
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Sign-in status could not be checked.");
+      }
+
+      if (!result.user || typeof result.user.email !== "string") {
+        throw new Error("Your signed-in account could not be verified.");
+      }
+
+      return result.user;
+    })
+    .then((account) => {
+      if (!account) {
+        const signInUrl = new URL("SignInPage.html", window.location.href);
+        const email = enteredEmail || latestRegistrationEmail;
+        if (email) {
+          signInUrl.searchParams.set("email", email);
+        }
+        window.location.href = signInUrl.href;
+        return;
+      }
+
+      const activeUserEmail =
+        enteredEmail ||
+        latestRegistrationEmail ||
+        account.email.trim().toLowerCase();
+      localStorage.setItem("healOneWorldActiveUser", activeUserEmail);
+      window.location.href = new URL("User's Classes.html", window.location.href).href;
+    })
+    .catch((error) => {
+      console.error("Sign-in status could not be checked:", error);
+      showError("Sign-in status could not be checked. Please try again.");
+    });
+});
 
 function showError(message) {
   errorMessage.textContent = message;
@@ -38,11 +99,24 @@ function getAvailableSeats() {
 
   return (
     seatCounts[classId] ??
-    selectedClass.seatsAvailable
+    selectedClass.capacity
   );
 }
 
-function displayClass() {
+async function loadClass() {
+  if (!/^[1-9]\d{0,9}$/.test(classId || "")) {
+    showError("Class information could not be found.");
+    return;
+  }
+
+  try {
+    selectedClass = await window.ClassSchedule.loadClass(classId);
+  } catch (error) {
+    console.error("Class details could not be loaded:", error);
+    showError("Class details could not be loaded. Please try again later.");
+    return;
+  }
+
   if (!selectedClass) {
     showError("Class information could not be found.");
     return;
@@ -132,7 +206,7 @@ form.addEventListener("submit", async (event) => {
     (registration) => {
       return (
         registration.class &&
-        Number(registration.class.id) === classId &&
+        Number(registration.class.id) === Number(classId) &&
         registration.email &&
         registration.email.toLowerCase() === email
       );
@@ -147,15 +221,22 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
+  const submitButton = form.querySelector(
+    "button[type='submit']"
+  );
+  submitButton.disabled = true;
   const availableSeats = getAvailableSeats();
 
   if (availableSeats <= 0) {
     showError("This class is currently full.");
+    submitButton.disabled = false;
+    submitButton.textContent = "Confirm Registration";
     return;
   }
 
   const registration = {
     class: selectedClass,
+    accountEmail: email,
     firstName: firstName,
     lastName: lastName,
     email: email,
@@ -166,11 +247,6 @@ form.addEventListener("submit", async (event) => {
     seatReleased: false
   };
 
-  const submitButton = form.querySelector(
-    "button[type='submit']"
-  );
-
-  submitButton.disabled = true;
   submitButton.textContent = "Registering...";
 
   try {
@@ -197,6 +273,7 @@ form.addEventListener("submit", async (event) => {
       JSON.stringify(registration)
     );
 
+    registration.emailNotificationStatus = "pending";
     try {
       await window.sendClassNotification({
         to: email,
@@ -210,14 +287,25 @@ form.addEventListener("submit", async (event) => {
         classLocation:
           selectedClass.location || "Online"
       });
+      registration.emailNotificationStatus = "sent";
     } catch (emailError) {
+      registration.emailNotificationStatus = "failed";
       console.error(
         "Registration email failed:",
         emailError
       );
     }
 
-    window.location.href = "RegisteredPage.html";
+    localStorage.setItem(
+      "registrations",
+      JSON.stringify(registrations)
+    );
+    localStorage.setItem(
+      "latestRegistration",
+      JSON.stringify(registration)
+    );
+
+    window.location.href = "/register/RegisteredPage.html";
   } catch (error) {
     showError(
       "Registration could not be saved. Please try again."
@@ -230,4 +318,4 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-displayClass();
+loadClass();

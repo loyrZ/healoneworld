@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       if (buttonText === "browse classes") {
-        window.location.href = new URL("../Upcoming%20Classes%20Practice/Header%20%26%20Section.html",window.location.href).href;
+        window.location.href = "/classes/upcoming.html";
       }
     });
   });

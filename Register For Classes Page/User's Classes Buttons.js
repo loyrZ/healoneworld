@@ -36,11 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function returnSeatToClass(registration) {
     const classItem = registration.class;
     const classId = classItem.id;
+    const capacity = Number(classItem.capacity ?? classItem.seatsAvailable);
     if (registration.seatReleased === true) 
       return;
     const seatCounts = getSeatCounts();
-    const currentSeats = seatCounts[classId] ?? classItem.seatsAvailable;
-    seatCounts[classId] = Math.min(Number(classItem.seatsAvailable), Number(currentSeats) + 1);
+    const currentSeats = seatCounts[classId] ?? capacity;
+    seatCounts[classId] = Math.min(capacity, Number(currentSeats) + 1);
     registration.seatReleased = true;
     saveSeatCounts(seatCounts);
   }
@@ -54,8 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (registration.seatReleased !== true) {
       return true;
     }
+    const capacity = Number(classItem.capacity ?? classItem.seatsAvailable);
     const seatCounts = getSeatCounts();
-    const currentSeats = seatCounts[classId] ?? classItem.seatsAvailable;
+    const currentSeats = seatCounts[classId] ?? capacity;
     if (Number(currentSeats) <= 0) {
       return false;
     }
@@ -117,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!action || !classId) 
       return;
     if (action === "view-details") {
-      const classPageUrl = new URL("../Upcoming%20Classes%20Practice/ClassPage.html", window.location.href);
+      const classPageUrl = new URL("/classes/ClassPage.html", window.location.origin);
       classPageUrl.searchParams.set("id", classId);
       window.location.href = classPageUrl.href;
       return;
@@ -136,6 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!confirmed) {
         return;
       }
+      clickedButton.disabled = true;
+      clickedButton.textContent = "Canceling...";
       registrations[registrationIndex].status = "deleted";
       registrations[registrationIndex].cancelledAt = new Date().toISOString();
       returnSeatToClass(registrations[registrationIndex]);
@@ -163,9 +167,12 @@ document.addEventListener("DOMContentLoaded", () => {
           classLocation:
             registration.class.location || "Online"
         });
+        registrations[registrationIndex].cancellationEmailNotificationStatus = "sent";
       } catch (emailError) {
+        registrations[registrationIndex].cancellationEmailNotificationStatus = "failed";
         console.error("Cancellation email failed:", emailError);
       }
+      saveRegistrations(registrations);
 
       refreshClasses(getCurrentView());
       return;
@@ -202,8 +209,38 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!confirmed) {
         return;
       }
+      clickedButton.disabled = true;
+      clickedButton.textContent = "Deleting...";
       registrations.splice(registrationIndex, 1);
       saveRegistrations(registrations);
+
+      try {
+        await window.sendClassNotification({
+          to: registration.email,
+          firstName: registration.firstName,
+          className: registration.class.name,
+          action: "deleted",
+          classDate: registration.class.date
+            ? new Date(`${registration.class.date}T00:00:00`).toLocaleDateString(
+                "en-US",
+                {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric"
+                }
+              )
+            : "",
+          classTime:
+            `${registration.class.startTime || ""}–` +
+            `${registration.class.endTime || ""}`,
+          classLocation:
+            registration.class.location || "Online"
+        });
+      } catch (emailError) {
+        console.error("Deletion email failed:", emailError);
+        alert("The registration was deleted, but the notification email could not be sent.");
+      }
+
       refreshClasses("deleted");
     }
   });
@@ -213,6 +250,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   signOutButton?.addEventListener("click", () => {
     localStorage.removeItem(ACTIVE_USER_KEY);
-    window.location.href = "SignInPage.html";
+    window.location.href = "/sign-in";
   });
 });
