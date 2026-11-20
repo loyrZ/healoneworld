@@ -16,43 +16,6 @@ body {
   line-height: 1.5;
 }
 /* Original Header */
-.site-header {
-  min-height: 82px;
-  padding: 8px 5.6%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;
-  background: #ffffff;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-.logo img {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-  border-radius: 50%;
-  margin: 0;
-}
-.site-header nav ul {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
-  list-style: none;
-  flex-wrap: wrap;
-}
-.site-header nav a {
-  color: #062f49;
-  font-size: 16px;
-  text-decoration: none;
-}
-.site-header nav a:hover {
-  text-decoration: underline;
-}
 /* Sign-in Page */
 .sign-in-page {
   min-height: calc(100vh - 82px);
@@ -145,26 +108,7 @@ body {
   text-decoration: underline;
 }
 /* Responsive Design */
-@media (max-width: 900px) {
-  .site-header {
-    align-items: flex-start;
-  }
-  .site-header nav ul {
-    justify-content: flex-end;
-    gap: 16px;
-  }
-}
 @media (max-width: 650px) {
-  .site-header {
-    min-height: auto;
-    padding: 14px 24px;
-  }
-  .site-header nav ul {
-    gap: 9px 14px;
-  }
-  .site-header nav a {
-    font-size: 13px;
-  }
   .sign-in-page {
     min-height: calc(100vh - 100px);
     padding-top: 60px;
