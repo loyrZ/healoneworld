@@ -54,7 +54,7 @@ export default function Footer() {
                         <h2>Get involved</h2>
                         <ul>
                             <li><a href="/volunteer.html">Volunteer</a></li>
-                            <li><a href="/donate.html">Donate</a></li>
+                            <li><a href="/donate">Donate</a></li>
                             <li><a href="/PublicAnnouncements">Announcements</a></li>
                         </ul>
                     </nav>
