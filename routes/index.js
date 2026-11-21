@@ -42,13 +42,17 @@ router.get("/about.html", (req, res) => {
   res.redirect("/about");
 });
 
+// Preserve the previous donation link while serving the completed donation page.
+router.get("/donate.html", (req, res) => {
+  res.redirect("/donate");
+});
+
 // Temporary destinations for unfinished pages.
 const placeholderRoutes = [
   "/programs.html",
   "/volunteer.html",
   "/rent.html",
-  "/blog.html",
-  "/donate.html"
+  "/blog.html"
 ];
 
 router.get(placeholderRoutes, (req, res) => {
