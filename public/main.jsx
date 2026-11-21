@@ -28,6 +28,7 @@ import VolunteerApplicationReview from "./admin/volunteers/VolunteerApplicationR
 
 import PublicAnnouncements from "./PublicAnnouncements/public_announcements.jsx";
 import AboutUs from "./AboutUsPage/AboutUs.jsx";
+import Contact from "./ContactPage/Contact.jsx";
 import Donate from "./DonatePage/Donate.jsx";
 import PublicHeader from "./components/Header/PublicHeader.jsx";
 import Footer from "./components/Footer/Footer.jsx";
@@ -58,6 +59,7 @@ const pages = {
     "/classes/sign-in": ClassesSignIn,
     "/user-classes": UserClasses,
     "/about": AboutUs,
+    "/contact": Contact,
     "/donate": Donate
 };
 
@@ -92,6 +94,7 @@ const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 const usesPublicHeader = [
     "/about",
     "/PublicAnnouncements",
+    "/contact",
     "/donate"
 ].includes(path);
 

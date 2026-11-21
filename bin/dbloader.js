@@ -180,6 +180,31 @@ async function makeVolunteerApplicationsTable(connection) {
     }
 }
 
+async function makeContactSubmissionsTable(connection) {
+    const [result] = await connection.query(`
+        CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`contact_submissions\` (
+            id_pk INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(100) NOT NULL,
+            email VARCHAR(254) NOT NULL,
+            subject VARCHAR(200) NOT NULL,
+            message TEXT NOT NULL,
+            status ENUM('new', 'in_progress', 'closed') NOT NULL DEFAULT 'new',
+            submitted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id_pk),
+            KEY idx_contact_submissions_status_submitted_at (status, submitted_at)
+        ) ENGINE=InnoDB
+        DEFAULT CHARSET=utf8mb4
+        COLLATE=utf8mb4_unicode_ci
+    `);
+
+    if (result && result.warningStatus > 0) {
+        const [warningResult] = await connection.query("SHOW WARNINGS");
+        displayWarningMessage(warningResult[0]);
+    } else {
+        console.log("Created Contact Submissions Table!");
+    }
+}
+
 async function makeVolunteerProfilesTable(connection) {
     const [result] = await connection.query(
         `CREATE TABLE IF NOT EXISTS \`${process.env.DB_NAME}\`.\`volunteer_profiles\` (
@@ -277,6 +302,7 @@ async function makeVolunteerApplicationsTable(connection) {
         await makeAnnouncementsTable(connection);
         await makeVolunteerProfilesTable(connection);
         await makeVolunteerApplicationsTable(connection);
+        await makeContactSubmissionsTable(connection);
         await connection.end();
         console.log("\nDatabase build complete.\n");
     } catch (error) {

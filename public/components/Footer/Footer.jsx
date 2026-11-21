@@ -64,6 +64,7 @@ export default function Footer() {
                         <a href="mailto:skye@healoneworld.org">
                             skye@healoneworld.org
                         </a>
+                        <p><a href="/contact">Send an inquiry</a></p>
 
                         <nav aria-label="Social media">
                             <ul>
