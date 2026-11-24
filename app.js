@@ -28,6 +28,7 @@ app.use("/announcements", require("./routes/announcements"));
 app.use("/api/account", require("./routes/account"));
 app.use("/api/volunteer/application", require("./routes/volunteer-applications"));
 app.use("/api/volunteer", require("./routes/volunteer"));
+app.use("/api/contact-submissions", require("./routes/contact-submissions"));
 app.use(
     "/api/volunteer-applications",
     require("./routes/volunteer-applications")

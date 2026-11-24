@@ -215,7 +215,7 @@ export default function VolunteerApplication() {
                             </a>
                         </li>
                         <li>
-                            <a className="button button--primary" href="/donate.html">
+                            <a className="button button--primary" href="/donate">
                                 Donate
                             </a>
                         </li>
