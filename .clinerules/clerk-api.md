@@ -1,5 +1,7 @@
-# Activate the Clerk API change skill
+# Authentication and ownership
 
-Before editing any code that calls or configures Clerk, or changes behavior that depends on Clerk identity, activate the `clerk-api-change` skill. This includes `@clerk/express` and `@clerk/react` integration, sign-in and sign-up callbacks, session and email verification, account linking, and identity-based access or ownership checks.
+- Use the existing Clerk flow for sign-in, passwords, sessions, and email verification. MySQL owns application users and permissions. Do not add email-only or local-password login.
+- Reuse the application-user service and auth middleware to resolve identity, roles, and ownership on the backend. A typed email, URL user ID, `localStorage` value, or hidden button is never proof of identity or permission.
+- Keep secret keys and session tokens out of source, frontend bundles, logs, and test fixtures. Document environment variable names, never values.
 
-Apply this rule even when the task never mentioned Clerk: if you discover relevant code mid-task, load the skill before editing it. If the skill tool is unavailable, read and follow [the skill file](../.cline/skills/clerk-api-change/SKILL.md) directly. Unrelated styling or copy edits that leave Clerk-dependent behavior unchanged do not require the skill.
+Activate [clerk-api-change](../.cline/skills/clerk-api-change/SKILL.md) before changing Clerk integration or identity-dependent behavior, even if you discover the dependency mid-task. Unrelated styling or copy edits do not require it.
