@@ -218,6 +218,20 @@ async function getAdminClass(id) {
   return toAdminClass(rows[0], counts.get(id));
 }
 
+// The creator can review only submissions linked to their verified
+// application-user ID. This response includes meeting links because it is
+// never exposed through a public endpoint.
+async function listInstructorSubmissions(creatorUserId) {
+  const [rows] = await db.execute(
+    `${SELECT_CLASSES}
+     WHERE creator_user_id = ?
+     ${ORDER_BY_START}`,
+    [creatorUserId]
+  );
+
+  return rows.map((row) => toAdminClass(row, null));
+}
+
 async function listPublicClasses() {
   const [rows] = await db.execute(
     `${SELECT_CLASSES}
@@ -270,6 +284,21 @@ async function createClass(values) {
         status)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published')`,
     columnValues(values)
+  );
+
+  return getAdminClass(result.insertId);
+}
+
+// The route supplies both the verified creator ID and verified display name.
+// The browser has no path to choose an owner or publish a submission.
+async function createInstructorSubmission(values, creatorUserId) {
+  const [result] = await db.execute(
+    `INSERT INTO classes
+       (class_name, description, starts_at, ends_at, time_zone,
+        attendance_format, location, meeting_link, user_name, capacity,
+        creator_user_id, status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
+    [...columnValues(values), creatorUserId]
   );
 
   return getAdminClass(result.insertId);
@@ -352,8 +381,10 @@ module.exports = {
   validateClassInput,
   listAdminClasses,
   getAdminClass,
+  listInstructorSubmissions,
   listPublicClasses,
   getPublicClass,
   createClass,
+  createInstructorSubmission,
   updateClass
 };

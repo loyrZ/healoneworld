@@ -3,10 +3,9 @@ import "../../css/theme.css";
 import "../../css/layout.css";
 import "./VolunteerLayout.css";
 
-// Links on sidebar for pages that are coming later
 const NAV = [
     { label: "Dashboard", href: "/volunteer" },
-    { label: "Create a class", soon: true },
+    { label: "Create a class", href: "/volunteer/classes/new" },
     { label: "Upcoming classes", soon: true },
     { label: "Previous classes", soon: true },
     { label: "Settings", href: "/volunteer/profile" },

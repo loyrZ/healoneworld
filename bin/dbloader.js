@@ -40,7 +40,7 @@ async function makeDatabase(connection) {
     }
 }
 
-// Existing databases: run migrations/002_class_schedule_fields.sql once.
+// Existing databases: run the reviewed migrations in migrations/ once.
 // class_name is the title and user_name is the instructor (see docs/class-data.md).
 async function makeClassesTable(connection) {
     const [result] = await connection.query(
@@ -56,13 +56,17 @@ async function makeClassesTable(connection) {
             location VARCHAR(255) NULL,
             meeting_link VARCHAR(2048) NULL,
             capacity INT UNSIGNED NULL,
+            creator_user_id INT UNSIGNED NULL,
             status ENUM('pending', 'published') NOT NULL DEFAULT 'pending',
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id_pk),
             KEY idx_classes_starts_at (starts_at),
-            KEY idx_classes_status (status)
+            KEY idx_classes_status (status),
+            KEY idx_classes_creator_user_id (creator_user_id),
+            FOREIGN KEY (creator_user_id) REFERENCES users(id_pk)
+                ON DELETE SET NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`
     );
     if (result && result.warningStatus > 0) {
@@ -270,8 +274,8 @@ async function makeVolunteerApplicationsTable(connection) {
         connection = await getConnection();
         await makeDatabase(connection);
         await connection.query(`USE \`${process.env.DB_NAME}\``);
-        await makeClassesTable(connection);
         await makeUsersTable(connection);
+        await makeClassesTable(connection);
         await makeVolunteerApplicationsTable(connection);
         await makePermissionTable(connection);
         await makeAnnouncementsTable(connection);

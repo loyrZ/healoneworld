@@ -9,6 +9,7 @@ import VolunteerLayout from "./VolunteerLayout.jsx";
 export default function VolunteerDashboard() {
     const { isLoaded, isSignedIn } = useAuth();
     const [state, setState] = useState({status: "loading"});
+    const [submissions, setSubmissions] = useState({ status: "loading", classes: [] });
     const [attempt, setAttempt] = useState(0);
 
     useEffect(() => {
@@ -34,6 +35,31 @@ export default function VolunteerDashboard() {
                 setState({status: "error"});
             });
     }, [isLoaded, isSignedIn]);
+
+    useEffect(() => {
+        if (state.status !== "ok") return;
+
+        let cancelled = false;
+
+        fetch("/api/classes/submissions", { headers: { Accept: "application/json" } })
+            .then(async (res) => {
+                if (cancelled) return;
+                if (res.ok) {
+                    setSubmissions({ status: "ready", classes: await res.json() });
+                } else if (res.status === 403) {
+                    setSubmissions({ status: "unavailable", classes: [] });
+                } else {
+                    setSubmissions({ status: "error", classes: [] });
+                }
+            })
+            .catch(() => {
+                if (!cancelled) setSubmissions({ status: "error", classes: [] });
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [state.status]);
 
     // don't leave page loading
     useEffect(() => {
@@ -72,7 +98,7 @@ export default function VolunteerDashboard() {
             Manage the classes you host and submit new classes for staff approval.
         </p>
         <p className="vol-notice" role="note">
-            Hosting and class submissions are coming soon. These sections will fill in once they're available.
+            New class submissions are reviewed by staff before they appear on the public calendar.
         </p>
 
         <div className="vol-stats">
@@ -91,12 +117,25 @@ export default function VolunteerDashboard() {
 
         <section className="vol-section" aria-labelledby="recent-heading">
             <h2 id="recent-heading">Recent submissions</h2>
-            <p className="vol-empty">No submissions yet. Class submissions are coming soon.</p>
+            {submissions.status === "loading" && <p className="vol-empty" role="status">Loading submissions…</p>}
+            {submissions.status === "unavailable" && <p className="vol-empty">Instructor access is required to view class submissions.</p>}
+            {submissions.status === "error" && <p className="vol-empty" role="alert">Submissions could not be loaded.</p>}
+            {submissions.status === "ready" && submissions.classes.length === 0 && (
+                <p className="vol-empty">No class submissions yet.</p>
+            )}
+            {submissions.status === "ready" && submissions.classes.length > 0 && (
+                <ul className="vol-submissions">
+                    {submissions.classes.slice(0, 5).map((item) => (
+                        <li key={item.id}>
+                            <strong>{item.title}</strong>
+                            <span>{item.status === "pending" ? "Pending approval" : "Published"}</span>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </section>
 
-        <button type="button" className="vol-button" disabled>
-            Create a class (coming soon)
-        </button>
+        <a className="vol-button" href="/volunteer/classes/new">Create a class</a>
     </VolunteerLayout>
     );
 }   

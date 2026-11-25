@@ -19,7 +19,7 @@ function Field({ id, label, error, hint, children }) {
     );
 }
 
-function ClassFormFields({ form, errors, onChange }) {
+function ClassFormFields({ form, errors, onChange, showInstructor = true }) {
     const showLocation = form.format === "in_person" || form.format === "hybrid";
     const showMeetingLink = form.format === "virtual" || form.format === "hybrid";
 
@@ -89,9 +89,11 @@ function ClassFormFields({ form, errors, onChange }) {
                 </Field>
             )}
 
-            <Field id="instructor" label="Instructor" error={errors.instructor}>
-                {(props) => <input {...props} name="instructor" type="text" maxLength={255} value={form.instructor} onChange={onChange} />}
-            </Field>
+            {showInstructor && (
+                <Field id="instructor" label="Instructor" error={errors.instructor}>
+                    {(props) => <input {...props} name="instructor" type="text" maxLength={255} value={form.instructor} onChange={onChange} />}
+                </Field>
+            )}
 
             <Field id="capacity" label="Capacity" error={errors.capacity}>
                 {(props) => <input {...props} name="capacity" type="number" min={1} max={1000} step={1} inputMode="numeric" value={form.capacity} onChange={onChange} />}

@@ -4,7 +4,7 @@
 // access control, and public visibility.
 // Uses in-memory class records, so the shared Railway database is never touched.
 // The real permission lookup is covered by tests/auth.test.js; here the
-// x-test-user header stands in for a signed-out, standard, or admin user.
+// x-test-user header stands in for a signed-out, standard, admin, or instructor user.
 //  Entirely claude generated
 
 const test = require("node:test");
@@ -104,10 +104,16 @@ function createFakeDb() {
   async function execute(sql, params = []) {
     if (/^\s*INSERT INTO classes/.test(sql)) {
       const id = Math.max(0, ...store.keys()) + 1;
-      const row = { id_pk: id, status: "published" };
+      const row = {
+        id_pk: id,
+        status: sql.includes("'pending'") ? "pending" : "published"
+      };
       UPDATE_COLUMNS.forEach((column, index) => {
         row[column] = params[index];
       });
+      if (sql.includes("creator_user_id")) {
+        row.creator_user_id = params[UPDATE_COLUMNS.length];
+      }
       store.set(id, row);
       return [{ insertId: id, affectedRows: 1 }];
     }
@@ -130,6 +136,10 @@ function createFakeDb() {
 
       if (sql.includes("status = 'published'")) {
         rows = rows.filter((row) => row.status === "published" && row.starts_at);
+      }
+
+      if (sql.includes("creator_user_id = ?")) {
+        rows = rows.filter((row) => row.creator_user_id === params[0]);
       }
 
       if (/WHERE[\s\S]*id_pk = \?/.test(sql)) {
@@ -176,6 +186,16 @@ stub("middleware/auth", {
 
       if (!user) {
         return res.status(401).json({ error: "Please sign in." });
+      }
+
+      const instructors = {
+        instructor: { id: 7, name: "Avery Instructor" },
+        instructor2: { id: 8, name: "Riley Instructor" }
+      };
+
+      if (role === "instructor" && instructors[user]) {
+        req.applicationUser = instructors[user];
+        return next();
       }
 
       if (role !== "administrator" || user !== "admin") {
@@ -521,6 +541,64 @@ test("database failures are reported instead of success", async () => {
 
   assert.equal(created.status, 500);
   assert.equal(created.body.id, undefined);
+});
+
+// --- Instructor submissions ---
+
+test("only authorized instructors can view or submit class submissions", async () => {
+  assert.equal((await request("GET", "/api/classes/submissions")).status, 401);
+  assert.equal((await request("GET", "/api/classes/submissions", { user: "member" })).status, 403);
+  assert.equal((await request("POST", "/api/classes/submissions", { user: "member", body: newClass() })).status, 403);
+  assert.equal(fakeDb.store.size, 3);
+});
+
+test("an instructor submission is pending, assigned by the server, and private from public results", async () => {
+  const { instructor, ...submission } = newClass();
+  const created = await request("POST", "/api/classes/submissions", {
+    user: "instructor",
+    body: submission
+  });
+
+  assert.equal(created.status, 201);
+  assert.equal(created.body.status, "pending");
+  assert.equal(created.body.instructor, "Avery Instructor");
+  assert.equal(fakeDb.store.get(4).creator_user_id, 7);
+  assert.equal(fakeDb.store.get(4).status, "pending");
+
+  const ownSubmissions = await request("GET", "/api/classes/submissions", { user: "instructor" });
+  assert.deepEqual(ownSubmissions.body.map((item) => item.id), [4]);
+  assert.equal(ownSubmissions.body[0].meetingLink, "https://zoom.example/j/private-789");
+
+  const otherSubmissions = await request("GET", "/api/classes/submissions", { user: "instructor2" });
+  assert.deepEqual(otherSubmissions.body, []);
+
+  const adminList = await request("GET", "/api/classes/admin", { user: "admin" });
+  assert.ok(adminList.body.some((item) => item.id === 4 && item.status === "pending"));
+
+  const publicList = await request("GET", "/api/classes");
+  assert.equal(publicList.body.some((item) => item.id === 4), false);
+  assert.equal((await request("GET", "/api/classes/4")).status, 404);
+});
+
+test("an instructor submission cannot set an instructor, owner, or publication status", async () => {
+  const { instructor, ...submission } = newClass();
+
+  for (const extra of [
+    { instructor: "Someone Else" },
+    { creatorUserId: 99 },
+    { creator_user_id: 99 },
+    { status: "published" }
+  ]) {
+    const created = await request("POST", "/api/classes/submissions", {
+      user: "instructor",
+      body: { ...submission, ...extra }
+    });
+
+    assert.equal(created.status, 400);
+    assert.deepEqual(created.body.rejected, Object.keys(extra));
+  }
+
+  assert.equal(fakeDb.store.size, 3);
 });
 
 // --- Capacity warnings (HOW-167) ---

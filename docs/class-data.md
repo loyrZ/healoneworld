@@ -41,6 +41,8 @@ their names so existing code keeps working.
 | `POST /api/classes/admin` | Administrators | Creates a published session and returns it with its new `id` (201). |
 | `GET /api/classes/admin/:id` | Administrators | One class, or 404. |
 | `PUT /api/classes/admin/:id` | Administrators | Saves an edit and returns the updated class. |
+| `GET /api/classes/submissions` | Instructors | The caller's own submissions, including pending records. |
+| `POST /api/classes/submissions` | Instructors | Creates a pending submission owned by the verified application user (201). |
 
 Admin endpoints use `requireRole("administrator")` from `middleware/auth.js` (HOW-532):
 signed out gets 401, signed in without admin permission gets 403. Responses are sent with
@@ -58,6 +60,10 @@ saved registrations.
 
 Instructors are stored as a name. Creating a session does not create instructor accounts or grant
 permissions.
+
+Instructor submissions require the MySQL `instructor` permission. The server assigns both the
+instructor display name and `creator_user_id` from the verified application user. The browser
+cannot choose a different owner or set the submission status.
 
 ### Saving an edit
 
@@ -100,9 +106,11 @@ Update `getRegistrationCounts` there when registrations are stored.
 
 New databases: `npm run builddb` creates the full table.
 
-Existing databases: run `migrations/002_class_schedule_fields.sql` once, after telling the group.
-It only adds columns and keeps existing rows. Existing rows become `pending`, so they are not shown
-publicly until an admin reviews them.
+Existing databases: run `migrations/002_class_schedule_fields.sql` and then
+`migrations/003_class_submission_creator.sql`, once and after telling the group. The schedule
+migration keeps existing rows and makes them `pending`, so they are not shown publicly until an
+admin reviews them. The creator migration leaves existing classes unowned and adds ownership only
+for new instructor submissions.
 
 ## Tests
 
