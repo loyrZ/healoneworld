@@ -13,6 +13,8 @@ import EmailVerification from "./components/Account/EmailVerification.jsx";
 
 import VolunteerDashboard from "./components/Volunteer/VolunteerDashboard.jsx";
 import VolunteerClassCreate from "./components/Volunteer/VolunteerClassCreate.jsx";
+import VolunteerClassList from "./components/Volunteer/VolunteerClassList.jsx";
+import VolunteerClassDetail from "./components/Volunteer/VolunteerClassDetail.jsx";
 import VolunteerProfile from "./components/Volunteer/VolunteerProfile.jsx";
 import ClassesSignIn from "./components/Classes/ClassesSignIn.jsx";
 import UserClasses from "./components/Classes/UserClasses.jsx";
@@ -54,6 +56,8 @@ const pages = {
     "/verify-email": EmailVerification,
     "/volunteer": VolunteerDashboard,
     "/volunteer/classes/new": VolunteerClassCreate,
+    "/volunteer/classes/upcoming": () => <VolunteerClassList period="upcoming" />,
+    "/volunteer/classes/previous": () => <VolunteerClassList period="past" />,
     "/volunteer/profile": VolunteerProfile,
     "/volunteer/apply": VolunteerApplication,
     "/classes/sign-in": ClassesSignIn,
@@ -70,6 +74,7 @@ const path = window.location.pathname.replace(/\/+$/, "") || "/";
 // This route includes the class ID, for example /admin/classes/12/edit.
 const classEditMatch = path.match(/^\/admin\/classes\/(\d+)\/edit$/);
 const volunteerApplicationMatch = path.match(/^\/admin\/volunteers\/(\d+)$/);
+const volunteerClassMatch = path.match(/^\/volunteer\/classes\/(\d+)$/);
 
 function ClassEditPage() {
     return <ClassEdit classId={classEditMatch[1]} />;
@@ -79,10 +84,15 @@ function VolunteerApplicationReviewPage() {
     return <VolunteerApplicationReview applicationId={volunteerApplicationMatch[1]} />;
 }
 
+function VolunteerClassDetailPage() {
+    return <VolunteerClassDetail classId={volunteerClassMatch[1]} />;
+}
+
 const Page =
     pages[path] ||
     (classEditMatch ? ClassEditPage :
      volunteerApplicationMatch ? VolunteerApplicationReviewPage :
+     volunteerClassMatch ? VolunteerClassDetailPage :
      path.startsWith("/sign-in/") ? Login :
      path.startsWith("/sign-up/") ? Signup :
      NotFound);

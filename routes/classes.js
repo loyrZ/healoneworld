@@ -169,6 +169,33 @@ router.post("/submissions", async (req, res, next) => {
     }
 });
 
+// Instructor teaching activity uses only the verified creator ID. These
+// private responses may include the meeting link, so they are never cached.
+router.use("/instructor", requireRole("instructor"), (req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+});
+
+router.get("/instructor/dashboard", async (req, res, next) => {
+    try {
+        res.json(await classes.getInstructorDashboard(req.applicationUser.id));
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get("/instructor/:id", async (req, res, next) => {
+    try {
+        const id = parseId(req.params.id);
+        const record = id && await classes.getInstructorClass(id, req.applicationUser.id);
+
+        if (!record) return res.status(404).json({ error: "Class not found." });
+        res.json(record);
+    } catch (err) {
+        next(err);
+    }
+});
+
 // --- Public (calendar and class details) ---
 
 router.get("/", async (req, res, next) => {

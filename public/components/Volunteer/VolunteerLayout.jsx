@@ -6,8 +6,8 @@ import "./VolunteerLayout.css";
 const NAV = [
     { label: "Dashboard", href: "/volunteer" },
     { label: "Create a class", href: "/volunteer/classes/new" },
-    { label: "Upcoming classes", soon: true },
-    { label: "Previous classes", soon: true },
+    { label: "Upcoming classes", href: "/volunteer/classes/upcoming" },
+    { label: "Previous classes", href: "/volunteer/classes/previous" },
     { label: "Settings", href: "/volunteer/profile" },
 ];
 

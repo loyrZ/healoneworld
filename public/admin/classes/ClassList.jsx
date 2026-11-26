@@ -127,6 +127,7 @@ function ClassList() {
     const filtered = filterClasses(load.classes, filters);
     const published = filtered.filter((item) => item.status === "published");
     const pending = filtered.filter((item) => item.status === "pending");
+    const cancelled = filtered.filter((item) => item.status === "cancelled");
     const filtersActive = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
     const createdClass = load.classes.find((item) => item.id === createdId);
 
@@ -170,6 +171,14 @@ function ClassList() {
                         </p>
                         <ul className="admin-classes__list">
                             {pending.map((item) => <ClassRow key={item.id} item={item} isNew={item.id === createdId} />)}
+                        </ul>
+                    </section>
+                )}
+                {cancelled.length > 0 && (
+                    <section aria-labelledby="cancelled-heading">
+                        <h2 id="cancelled-heading">Cancelled classes</h2>
+                        <ul className="admin-classes__list">
+                            {cancelled.map((item) => <ClassRow key={item.id} item={item} isNew={item.id === createdId} />)}
                         </ul>
                     </section>
                 )}
@@ -222,6 +231,7 @@ function ClassList() {
                         <option value="all">All statuses</option>
                         <option value="published">{STATUS_LABELS.published}</option>
                         <option value="pending">{STATUS_LABELS.pending}</option>
+                        <option value="cancelled">{STATUS_LABELS.cancelled}</option>
                     </select>
                 </div>
                 <div className="admin-classes__field">

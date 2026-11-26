@@ -11,6 +11,7 @@ export const FORMAT_LABELS = {
 export const STATUS_LABELS = {
     published: "Published",
     pending: "Pending approval",
+    cancelled: "Cancelled",
 };
 
 export const TIME_ZONE_LABELS = {

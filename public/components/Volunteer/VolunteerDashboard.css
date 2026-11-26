@@ -51,8 +51,28 @@
     border-radius: 8px;
 }
 
-.vol-submissions span { font-size: 14px; }
+.vol-submissions li > span:first-child { display: grid; gap: 4px; }
+.vol-submissions a { color: var(--color-navy); font-weight: 600; }
+.vol-submissions small { font-size: 14px; }
+.vol-class-status { align-self: start; padding: 3px 9px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
+.vol-class-status--published { background: #dff1d0; color: #2d5a0e; }
+.vol-class-status--pending { background: #fdf0d5; color: #7a4b00; }
+.vol-class-status--cancelled { background: #f3dddd; color: #7a2020; }
+.vol-section-link { margin: 14px 0 0; }
+.vol-dashboard__actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.vol-link-button { align-self: center; color: var(--color-navy); font-weight: 500; }
+.vol-class-list { display: grid; max-width: 860px; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.vol-class-list li { display: flex; justify-content: space-between; gap: 18px; padding: 18px; border: 1px solid #d9dfe2; border-radius: 8px; }
+.vol-class-list h2 { margin: 0 0 8px; font-size: 20px; }
+.vol-class-list p { margin: 4px 0; font-size: 14px; }
+.vol-class-list a, .vol-class-detail a { color: var(--color-navy); }
+.vol-class-detail { max-width: 760px; }
+.vol-class-detail__heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.vol-class-detail dl { display: grid; gap: 16px; margin: 28px 0; }
+.vol-class-detail dt { font-weight: 600; color: var(--color-navy); }
+.vol-class-detail dd { margin: 4px 0 0; }
 
 @media (max-width: 900px) {
     .vol-stats { grid-template-columns: 1fr; gap: 16px; }
+    .vol-class-list li { flex-direction: column; }
 }

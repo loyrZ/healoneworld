@@ -4,12 +4,13 @@ import "../../css/theme.css";
 import "./Volunteer.css";
 import "./VolunteerDashboard.css";
 import VolunteerLayout from "./VolunteerLayout.jsx";
+import { STATUS_LABELS, formatShortDate, formatTime } from "../../admin/classes/classData.mjs";
 
 // Check to see if signed in
 export default function VolunteerDashboard() {
     const { isLoaded, isSignedIn } = useAuth();
     const [state, setState] = useState({status: "loading"});
-    const [submissions, setSubmissions] = useState({ status: "loading", classes: [] });
+    const [classes, setClasses] = useState({ status: "loading", data: null });
     const [attempt, setAttempt] = useState(0);
 
     useEffect(() => {
@@ -41,19 +42,19 @@ export default function VolunteerDashboard() {
 
         let cancelled = false;
 
-        fetch("/api/classes/submissions", { headers: { Accept: "application/json" } })
+        fetch("/api/classes/instructor/dashboard", { headers: { Accept: "application/json" } })
             .then(async (res) => {
                 if (cancelled) return;
                 if (res.ok) {
-                    setSubmissions({ status: "ready", classes: await res.json() });
+                    setClasses({ status: "ready", data: await res.json() });
                 } else if (res.status === 403) {
-                    setSubmissions({ status: "unavailable", classes: [] });
+                    setClasses({ status: "unavailable", data: null });
                 } else {
-                    setSubmissions({ status: "error", classes: [] });
+                    setClasses({ status: "error", data: null });
                 }
             })
             .catch(() => {
-                if (!cancelled) setSubmissions({ status: "error", classes: [] });
+                if (!cancelled) setClasses({ status: "error", data: null });
             });
 
         return () => {
@@ -102,40 +103,63 @@ export default function VolunteerDashboard() {
         </p>
 
         <div className="vol-stats">
-            {["Upcoming hosted", "Pending approval", "Classes hosted"].map((label) => (
+            {[
+                ["Upcoming hosted", classes.data?.totals.upcoming],
+                ["Pending approval", classes.data?.totals.pending],
+                ["Classes hosted", classes.data?.totals.hosted],
+            ].map(([label, value]) => (
                 <div className="vol-stat" key={label}>
                     <p className="vol-stat-label">{label}</p>
-                    <p className="vol-stat-value" aria-label="Not available yet">—</p>
+                    <p className="vol-stat-value" aria-label={classes.status === "ready" ? `${value} ${label.toLowerCase()}` : "Not available yet"}>
+                        {classes.status === "ready" ? value : "—"}
+                    </p>
                 </div>
             ))}
         </div>
 
         <section className="vol-section" aria-labelledby="upcoming-heading">
             <h2 id="upcoming-heading">Upcoming hosted classes</h2>
-            <p className="vol-empty">No hosted classes yet. Class hosting is coming soon.</p>
+            {classes.status === "loading" && <p className="vol-empty" role="status">Loading hosted classes…</p>}
+            {classes.status === "unavailable" && <p className="vol-empty">Instructor access is required to view hosted classes.</p>}
+            {classes.status === "error" && <p className="vol-empty" role="alert">Hosted classes could not be loaded.</p>}
+            {classes.status === "ready" && classes.data.upcoming.length === 0 && <p className="vol-empty">No upcoming hosted classes.</p>}
+            {classes.status === "ready" && classes.data.upcoming.length > 0 && (
+                <ul className="vol-submissions">
+                    {classes.data.upcoming.slice(0, 5).map((item) => (
+                        <li key={item.id}>
+                            <span><a href={`/volunteer/classes/${item.id}`}>{item.title}</a><small>{formatShortDate(item.date)}{item.startTime && ` • ${formatTime(item.startTime)}`}</small></span>
+                            <span className={`vol-class-status vol-class-status--${item.status}`}>{STATUS_LABELS[item.status]}</span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+            {classes.status === "ready" && classes.data.upcoming.length > 0 && <p className="vol-section-link"><a href="/volunteer/classes/upcoming">View all upcoming classes</a></p>}
         </section>
 
         <section className="vol-section" aria-labelledby="recent-heading">
-            <h2 id="recent-heading">Recent submissions</h2>
-            {submissions.status === "loading" && <p className="vol-empty" role="status">Loading submissions…</p>}
-            {submissions.status === "unavailable" && <p className="vol-empty">Instructor access is required to view class submissions.</p>}
-            {submissions.status === "error" && <p className="vol-empty" role="alert">Submissions could not be loaded.</p>}
-            {submissions.status === "ready" && submissions.classes.length === 0 && (
+            <h2 id="recent-heading">Pending submissions</h2>
+            {classes.status === "loading" && <p className="vol-empty" role="status">Loading submissions…</p>}
+            {classes.status === "unavailable" && <p className="vol-empty">Instructor access is required to view class submissions.</p>}
+            {classes.status === "error" && <p className="vol-empty" role="alert">Submissions could not be loaded.</p>}
+            {classes.status === "ready" && classes.data.pending.length === 0 && (
                 <p className="vol-empty">No class submissions yet.</p>
             )}
-            {submissions.status === "ready" && submissions.classes.length > 0 && (
+            {classes.status === "ready" && classes.data.pending.length > 0 && (
                 <ul className="vol-submissions">
-                    {submissions.classes.slice(0, 5).map((item) => (
+                    {classes.data.pending.slice(0, 5).map((item) => (
                         <li key={item.id}>
-                            <strong>{item.title}</strong>
-                            <span>{item.status === "pending" ? "Pending approval" : "Published"}</span>
+                            <span><a href={`/volunteer/classes/${item.id}`}>{item.title}</a><small>{formatShortDate(item.date)}{item.startTime && ` • ${formatTime(item.startTime)}`}</small></span>
+                            <span className="vol-class-status vol-class-status--pending">Pending approval</span>
                         </li>
                     ))}
                 </ul>
             )}
         </section>
 
-        <a className="vol-button" href="/volunteer/classes/new">Create a class</a>
+        <div className="vol-dashboard__actions">
+            <a className="vol-button" href="/volunteer/classes/new">Create a class</a>
+            <a className="vol-link-button" href="/volunteer/classes/previous">View previous classes</a>
+        </div>
     </VolunteerLayout>
     );
 }   

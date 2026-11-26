@@ -143,6 +143,11 @@
     color: #7a4b00;
 }
 
+.admin-classes__status--cancelled {
+    background: #f3dddd;
+    color: #7a2020;
+}
+
 .admin-classes__edit {
     padding: 8px 4px;
     color: var(--color-navy);

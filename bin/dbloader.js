@@ -57,7 +57,7 @@ async function makeClassesTable(connection) {
             meeting_link VARCHAR(2048) NULL,
             capacity INT UNSIGNED NULL,
             creator_user_id INT UNSIGNED NULL,
-            status ENUM('pending', 'published') NOT NULL DEFAULT 'pending',
+            status ENUM('pending', 'published', 'cancelled') NOT NULL DEFAULT 'pending',
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 ON UPDATE CURRENT_TIMESTAMP,
