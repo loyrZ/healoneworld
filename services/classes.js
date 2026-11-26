@@ -76,7 +76,9 @@ function toPublicClass(row) {
     format: row.attendance_format,
     location: row.location ?? "",
     instructor: row.user_name,
-    capacity: row.capacity
+    capacity: row.capacity,
+    // HOW-288: a yes/no flag instead of `status`, so pending never leaks publicly.
+    canceled: row.status === "canceled"
   };
 }
 
@@ -218,10 +220,14 @@ async function getAdminClass(id) {
   return toAdminClass(rows[0], counts.get(id));
 }
 
+// HOW-288: canceled classes stay public so old links still open and show
+// that the session was canceled (HOW-279 #4, #5). Pending stays private.
+const PUBLIC_STATUSES = "(status = 'published' OR status = 'canceled')";
+
 async function listPublicClasses() {
   const [rows] = await db.execute(
     `${SELECT_CLASSES}
-     WHERE status = 'published' AND starts_at IS NOT NULL
+     WHERE ${PUBLIC_STATUSES} AND starts_at IS NOT NULL
      ${ORDER_BY_START}`
   );
 
@@ -231,7 +237,7 @@ async function listPublicClasses() {
 async function getPublicClass(id) {
   const [rows] = await db.execute(
     `${SELECT_CLASSES}
-     WHERE status = 'published' AND starts_at IS NOT NULL AND id_pk = ?`,
+     WHERE ${PUBLIC_STATUSES} AND starts_at IS NOT NULL AND id_pk = ?`,
     [id]
   );
 
@@ -342,6 +348,71 @@ async function updateClass(id, values, { confirmCapacityReduction = false } = {}
   return { class: await getAdminClass(id) };
 }
 
+// HOW-287: admin cancels a class. Keep the class row and its registrations;
+// only flip status and record who/when. Returns { class }, { notFound: true },
+// or { alreadyCanceled: true, class }.
+async function cancelClass(id, adminUserId) {
+  const connection = await db.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    // Lock the class row so a concurrent registration (HOW-228) that also
+    // locks this row FOR UPDATE cannot interleave with the status change.
+    const [rows] = await connection.execute(
+      "SELECT status FROM classes WHERE id_pk = ? FOR UPDATE",
+      [id]
+    );
+
+    if (rows.length !== 1) {
+      await connection.rollback();
+      return { notFound: true };
+    }
+
+    // Repeating the request must be safe: don't write again or fire a second
+    // side effect for an already-canceled class (HOW-279 #5, #8).
+    if (rows[0].status === "canceled") {
+      await connection.rollback();
+      return { alreadyCanceled: true, class: await getAdminClass(id) };
+    }
+
+    // Keep registrations, instructor, and meeting link; no emails (HOW-235).
+    await connection.execute(
+      `UPDATE classes
+       SET status = 'canceled',
+           canceled_at = CURRENT_TIMESTAMP,
+           canceled_by_fk = ?
+       WHERE id_pk = ?`,
+      [adminUserId, id]
+    );
+
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+
+  return { class: await getAdminClass(id) };
+}
+
+// HOW-287: canceled (or pending) classes can't take new sign-ups, even if
+// someone calls the API directly. The register endpoint is HOW-228's; that
+// owner calls this from inside their registration transaction, passing the
+// transaction's connection, BEFORE inserting the registration row. The
+// FOR UPDATE lock on the class row orders this check against cancelClass:
+// whichever transaction locks the row first runs to commit before the other
+// reads it, so a registration cannot be saved once a cancel has committed.
+async function isClassOpenForRegistration(id, connection = db) {
+  const [rows] = await connection.execute(
+    "SELECT status FROM classes WHERE id_pk = ? FOR UPDATE",
+    [id]
+  );
+
+  return rows.length === 1 && rows[0].status === "published";
+}
+
 module.exports = {
   EDITABLE_FIELDS,
   FORMATS,
@@ -355,5 +426,7 @@ module.exports = {
   listPublicClasses,
   getPublicClass,
   createClass,
-  updateClass
+  updateClass,
+  cancelClass,
+  isClassOpenForRegistration
 };

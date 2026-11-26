@@ -43,6 +43,9 @@ async function displayClasses() {
     showListStatus("Classes could not be loaded. Please try again later.");
     return;
   }
+  // HOW-288: this is the list people book from, so canceled sessions are left out.
+  // Their own class page still opens and says they were canceled.
+  scheduledClasses = scheduledClasses.filter((classItem) => !classItem.canceled);
   showListStatus(scheduledClasses.length ? "" : "No upcoming classes or events.");
   classList.querySelectorAll(".class-card").forEach((card) => card.remove());
   scheduledClasses.forEach((classItem) => {
@@ -140,9 +143,37 @@ async function displayClassDetails() {
   if (instructor) {
     instructor.textContent = selectedClass.instructor;
   }
+  if (selectedClass.canceled) {
+    showCanceledClass(selectedClass);
+    return;
+  }
   if (spots) {
     spots.textContent =`${getAvailableSeats(selectedClass)} spots available`;
   }
+}
+// HOW-288: a canceled class keeps its details but can't be booked.
+// Follows the Figma "Public / Class — Canceled" frame: a Canceled badge,
+// a warning panel, and a "See other classes" link instead of Register.
+function showCanceledClass(selectedClass) {
+  const category = document.querySelector('[data-detail-field="category"]');
+  if (category) {
+    const badge = document.createElement("span");
+    badge.className = "class-canceled-badge";
+    badge.textContent = "Canceled";
+    category.append(" ", badge);
+  }
+
+  const card = document.querySelector(".reservation-card");
+  if (!card) return;
+
+  card.classList.add("reservation-card--canceled");
+  card.innerHTML = `
+    <div class="class-canceled-alert" role="status">
+      <h2>This class was canceled.</h2>
+      <p>Registration for ${window.ClassSchedule.escapeHtml(selectedClass.name)} is closed.</p>
+    </div>
+    <a class="register-button" href="/classes/upcoming.html">See other classes</a>
+  `;
 }
 if (classList) {
   displayClasses();

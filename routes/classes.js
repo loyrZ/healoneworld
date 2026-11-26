@@ -8,6 +8,8 @@
 const express = require("express");
 const { requireRole } = require("../middleware/auth");
 const classes = require("../services/classes");
+const classRoster = require("../services/class-roster");
+const attendeeExport = require("../services/attendee-export");
 
 const router = express.Router();
 
@@ -126,6 +128,112 @@ router.put("/admin/:id", async (req, res, next) => {
         }
 
         res.json(result.class);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// --- Admin roster, cancel, remove, export (Sprint 4) ---
+// All of these are under /admin, so requireRole("administrator") above already
+// runs and responses are no-store.
+
+// HOW-148: class + roster for the Admin / Class Roster page
+router.get("/admin/:id/roster", async (req, res, next) => {
+    try {
+        const id = parseId(req.params.id);
+        const record = id && await classes.getAdminClass(id);
+
+        if (!record) {
+            return res.status(404).json({ error: "Class not found." });
+        }
+
+        const attendees = await classRoster.listRoster(id);
+        const activeCount = attendees.filter((person) => person.status === "active").length;
+
+        // The roster rows are the saved registrations, so their active count is
+        // known even while the shared count service still returns unknown.
+        res.json({
+            class: { ...record, registrationCount: record.registrationCount ?? activeCount },
+            attendees,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// HOW-156: CSV download, active attendees only
+router.get("/admin/:id/roster.csv", async (req, res, next) => {
+    try {
+        const id = parseId(req.params.id);
+        const record = id && await classes.getAdminClass(id);
+
+        if (!record) {
+            return res.status(404).json({ error: "Class not found." });
+        }
+
+        const attendees = await classRoster.listActiveAttendees(id);
+
+        res.set("Content-Type", "text/csv; charset=utf-8");
+        res.attachment(attendeeExport.csvFileName(record));
+        // The byte-order mark makes Excel read accented names as UTF-8.
+        res.send(`﻿${attendeeExport.toAttendeeCsv(attendees)}`);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// HOW-287: cancel the class
+router.post("/admin/:id/cancel", async (req, res, next) => {
+    try {
+        const id = parseId(req.params.id);
+
+        if (!id) {
+            return res.status(404).json({ error: "Class not found." });
+        }
+
+        const result = await classes.cancelClass(id, req.applicationUser.id);
+
+        if (result.notFound) {
+            return res.status(404).json({ error: "Class not found." });
+        }
+
+        // A repeated cancel is reported as success, not an error: result.class
+        // is the already-canceled session (HOW-279 #5).
+        res.json(result.class);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// HOW-567: admin removes one registration from this class
+router.post("/admin/:id/registrations/:registrationId/remove", async (req, res, next) => {
+    try {
+        const id = parseId(req.params.id);
+        const registrationId = parseId(req.params.registrationId);
+
+        if (!id || !registrationId) {
+            return res.status(404).json({ error: "Registration not found." });
+        }
+
+        const result = await classRoster.removeAttendee(id, registrationId, req.applicationUser.id);
+
+        if (result.notFound) {
+            return res.status(404).json({ error: "Registration not found." });
+        }
+
+        // 409 so the page never shows a second "removed" success (HOW-540 #6).
+        if (result.alreadyInactive) {
+            return res.status(409).json({
+                error: "This person is no longer registered for this class.",
+                code: "registration_inactive",
+                registration: result.registration,
+            });
+        }
+
+        res.json({
+            registration: result.registration,
+            registrationCount: result.registrationCount,
+        });
     } catch (err) {
         next(err);
     }

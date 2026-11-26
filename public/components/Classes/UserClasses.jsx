@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth, useClerk, useUser } from "@clerk/react";
 import "./UserClasses.css";
 
@@ -38,10 +38,41 @@ export default function UserClasses() {
     const { user } = useUser();
     const { signOut } = useClerk();
 
+    // HOW-568 / HOW-288: saved changes from the database (admin removals and
+    // canceled classes), keyed by class ID. The list itself still comes from
+    // getRegistrations below.
+    const [savedChanges, setSavedChanges] = useState({ status: "loading", byClass: new Map() });
+
     useEffect(() => {
         if (isLoaded && !isSignedIn) {
             window.location.replace("/classes/sign-in");
         }
+    }, [isLoaded, isSignedIn]);
+
+    useEffect(() => {
+        if (!isLoaded || !isSignedIn) return;
+
+        let cancelled = false;
+
+        fetch("/api/my-registrations", { headers: { Accept: "application/json" } })
+            .then((res) => {
+                if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+                return res.json();
+            })
+            .then((rows) => {
+                if (cancelled) return;
+                setSavedChanges({
+                    status: "ready",
+                    byClass: new Map(rows.map((row) => [row.classId, row])),
+                });
+            })
+            .catch(() => {
+                if (!cancelled) setSavedChanges({ status: "error", byClass: new Map() });
+            });
+
+        return () => {
+            cancelled = true;
+        };
     }, [isLoaded, isSignedIn]);
 
     if (!isLoaded) {
@@ -83,12 +114,19 @@ export default function UserClasses() {
                     View your registrations for {email || "your account"}.
                 </p>
 
+                {savedChanges.status === "error" && (
+                    <p role="status" className="user-classes__notice">
+                        We couldn't check for class changes right now. Refresh to try again.
+                    </p>
+                )}
+
                 {registrationError ? (
                     <p role="alert">{registrationError}</p>
                 ) : registrations.length ? (
                     <div className="user-classes__list">
                         {registrations.map((registration, index) => {
                             const classItem = registration.class;
+                            const saved = savedChanges.byClass.get(Number(classItem.id));
                             return (
                                 <article
                                     className="user-classes__card"
@@ -107,6 +145,16 @@ export default function UserClasses() {
                                         {classItem.location &&
                                             ` · ${classItem.location}`}
                                     </p>
+                                    {saved?.classCanceled && (
+                                        <p className="user-classes__notice">
+                                            This class was canceled.
+                                        </p>
+                                    )}
+                                    {saved?.status === "removed" && (
+                                        <p className="user-classes__notice">
+                                            An organizer removed you from this class.
+                                        </p>
+                                    )}
                                 </article>
                             );
                         })}

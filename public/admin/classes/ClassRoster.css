@@ -1,0 +1,299 @@
+/* HOW-108 / HOW-110 / HOW-279 / HOW-540: admin roster.
+   From the Figma "Admin / Class Roster" frame (358:8475) and its mobile frame (358:13116).
+   Buttons reuse .button / .button--outline from components.css. */
+
+.admin-roster {
+    max-width: 1104px;
+}
+
+.admin-roster__breadcrumb {
+    margin-bottom: 16px;
+    color: var(--admin-muted);
+    font-size: 14px;
+}
+
+.admin-roster__breadcrumb a {
+    color: inherit;
+}
+
+.admin-roster__meta {
+    margin: 0 0 24px;
+    font-size: 18px;
+}
+
+/* HOW-288: Figma "Alert / warn" colors, same amber as the pending badge */
+.admin-roster__alert {
+    margin: 0 0 24px;
+    padding: 14px 18px;
+    border: 1px solid #f3d9a4;
+    border-radius: 8px;
+    background: #fdf0d5;
+    color: #7a4b00;
+}
+
+/* Figma "Stats": white tiles, big number above the label */
+.admin-roster__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0 0 24px;
+}
+
+.admin-roster__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 16px 18px;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    background: var(--color-white);
+}
+
+.admin-roster__stat dt {
+    color: var(--admin-muted);
+    font-size: 14px;
+}
+
+.admin-roster__stat dd {
+    margin: 0 0 4px;
+    color: var(--color-navy);
+    font-family: "Hedvig Letters Serif", Georgia, serif;
+    font-size: 28px;
+}
+
+/* Figma "Toolbar": filters left, actions right, bottoms lined up */
+.admin-roster__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-roster__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.admin-roster__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.admin-roster__field input,
+.admin-roster__field select {
+    width: 260px;
+    min-height: 48px;
+    padding: 0 14px;
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    background: var(--color-white);
+    font: inherit;
+}
+
+.admin-roster__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* HOW-286 / HOW-566: destructive actions */
+.admin-roster__danger {
+    background: #8a1c1c;
+}
+
+.admin-roster__danger:hover {
+    box-shadow: 0 0 0 2px #8a1c1c;
+}
+
+.admin-roster__small {
+    min-height: 36px;
+    padding: 6px 16px;
+}
+
+/* Figma "Table": white card, tinted header, thin row lines */
+.admin-roster__table-wrap {
+    overflow: hidden;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    background: var(--color-white);
+}
+
+.admin-roster__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-roster__table th,
+.admin-roster__table td {
+    padding: 14px 16px;
+    text-align: left;
+}
+
+.admin-roster__table th {
+    background: #f1f5f6;
+    font-weight: 500;
+}
+
+.admin-roster__table tbody tr {
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-roster__row-actions {
+    text-align: right;
+}
+
+.admin-roster__badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-roster__badge--active {
+    background: #dff1d0;
+    color: #2d5a0e;
+}
+
+.admin-roster__badge--canceled,
+.admin-roster__badge--removed {
+    background: #fdf2f2;
+    color: #8a1c1c;
+}
+
+.admin-roster__message {
+    margin: 0 0 24px;
+}
+
+.admin-roster__message--error {
+    padding: 16px 20px;
+    border: 1px solid #f0c4c4;
+    border-radius: 8px;
+    background: #fdf2f2;
+    color: #8a1c1c;
+}
+
+.admin-roster__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ConfirmDialog, sized like the Figma prototype dialog (480 wide) */
+.admin-confirm {
+    width: min(480px, calc(100% - 32px));
+    padding: 32px;
+    border: 0;
+    border-radius: 12px;
+}
+
+.admin-confirm::backdrop {
+    background: rgb(6 47 73 / 0.4);
+}
+
+.admin-confirm__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* Mobile frame: 2 stat tiles per row, everything stacked, rows become cards
+   so the page never scrolls sideways */
+@media (max-width: 767px) {
+    .admin-roster__stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-roster__filters,
+    .admin-roster__actions,
+    .admin-roster__field,
+    .admin-roster__field input,
+    .admin-roster__field select,
+    .admin-roster__actions .button {
+        width: 100%;
+    }
+
+    .admin-roster__table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+    }
+
+    .admin-roster__table tr,
+    .admin-roster__table td {
+        display: block;
+    }
+
+    .admin-roster__table td {
+        padding: 6px 16px;
+    }
+
+    .admin-roster__table td[data-label]::before {
+        content: attr(data-label) ": ";
+        color: var(--admin-muted);
+    }
+
+    .admin-roster__row-actions {
+        text-align: left;
+        padding-bottom: 14px;
+    }
+}
+
+/* HOW-155: the sheet only shows up when printing */
+.sign-in-sheet {
+    display: none;
+}
+
+@media print {
+    .admin-sidebar,
+    .skip-link,
+    .admin-roster > *:not(.sign-in-sheet),
+    .admin-confirm {
+        display: none !important;
+    }
+
+    .admin-main {
+        padding: 0;
+    }
+
+    .sign-in-sheet {
+        display: block;
+        color: #000;
+    }
+
+    .sign-in-sheet table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .sign-in-sheet th,
+    .sign-in-sheet td {
+        height: 36px;
+        padding: 6px 10px;
+        border: 1px solid #000;
+        text-align: left;
+    }
+
+    .sign-in-sheet td:last-child {
+        width: 50%;
+    }
+
+    /* HOW-155: keep each name and its signature box on one page */
+    .sign-in-sheet tr {
+        break-inside: avoid;
+    }
+
+    .sign-in-sheet thead {
+        display: table-header-group;
+    }
+}

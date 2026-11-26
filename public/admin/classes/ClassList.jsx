@@ -50,13 +50,23 @@ function ClassRow({ item, isNew }) {
             <span className={`admin-classes__status admin-classes__status--${item.status}`}>
                 {STATUS_LABELS[item.status] ?? item.status}
             </span>
-            <a
-                className="admin-classes__edit"
-                href={`/admin/classes/${item.id}/edit`}
-                aria-label={`Edit ${item.title}`}
-            >
-                Edit
-            </a>
+            {/* HOW-147: Roster shares the last grid cell with Edit so the row keeps its 6 columns */}
+            <span className="admin-classes__actions">
+                <a
+                    className="admin-classes__edit"
+                    href={`/admin/classes/${item.id}/roster`}
+                    aria-label={`Roster for ${item.title}`}
+                >
+                    Roster
+                </a>
+                <a
+                    className="admin-classes__edit"
+                    href={`/admin/classes/${item.id}/edit`}
+                    aria-label={`Edit ${item.title}`}
+                >
+                    Edit
+                </a>
+            </span>
         </li>
     );
 }
@@ -127,6 +137,8 @@ function ClassList() {
     const filtered = filterClasses(load.classes, filters);
     const published = filtered.filter((item) => item.status === "published");
     const pending = filtered.filter((item) => item.status === "pending");
+    // HOW-288: canceled classes keep their own section so they don't vanish from the list
+    const canceled = filtered.filter((item) => item.status === "canceled");
     const filtersActive = JSON.stringify(filters) !== JSON.stringify(NO_FILTERS);
     const createdClass = load.classes.find((item) => item.id === createdId);
 
@@ -170,6 +182,17 @@ function ClassList() {
                         </p>
                         <ul className="admin-classes__list">
                             {pending.map((item) => <ClassRow key={item.id} item={item} isNew={item.id === createdId} />)}
+                        </ul>
+                    </section>
+                )}
+                {canceled.length > 0 && (
+                    <section aria-labelledby="canceled-heading">
+                        <h2 id="canceled-heading">Canceled classes</h2>
+                        <p className="admin-subtitle">
+                            Kept for reference. Visitors see these as canceled and can't register.
+                        </p>
+                        <ul className="admin-classes__list">
+                            {canceled.map((item) => <ClassRow key={item.id} item={item} isNew={item.id === createdId} />)}
                         </ul>
                     </section>
                 )}
@@ -222,6 +245,7 @@ function ClassList() {
                         <option value="all">All statuses</option>
                         <option value="published">{STATUS_LABELS.published}</option>
                         <option value="pending">{STATUS_LABELS.pending}</option>
+                        <option value="canceled">{STATUS_LABELS.canceled}</option>
                     </select>
                 </div>
                 <div className="admin-classes__field">
