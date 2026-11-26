@@ -10,23 +10,6 @@ let selectedClass = null;
 classLink.addEventListener("click", (event) => {
   event.preventDefault();
 
-  const enteredEmail = document
-    .querySelector("#email")
-    .value
-    .trim()
-    .toLowerCase();
-  let latestRegistrationEmail = "";
-  try {
-    const latestRegistration = JSON.parse(
-      localStorage.getItem("latestRegistration") || "null"
-    );
-    if (typeof latestRegistration?.email === "string") {
-      latestRegistrationEmail = latestRegistration.email.trim().toLowerCase();
-    }
-  } catch (error) {
-    console.error("Could not read the latest registration:", error);
-  }
-
   fetch("/api/account", {
     headers: {
       Accept: "application/json"
@@ -50,20 +33,10 @@ classLink.addEventListener("click", (event) => {
     })
     .then((account) => {
       if (!account) {
-        const signInUrl = new URL("SignInPage.html", window.location.href);
-        const email = enteredEmail || latestRegistrationEmail;
-        if (email) {
-          signInUrl.searchParams.set("email", email);
-        }
-        window.location.href = signInUrl.href;
+        window.location.href = new URL("SignInPage.html", window.location.href).href;
         return;
       }
 
-      const activeUserEmail =
-        enteredEmail ||
-        latestRegistrationEmail ||
-        account.email.trim().toLowerCase();
-      localStorage.setItem("healOneWorldActiveUser", activeUserEmail);
       window.location.href = new URL("User's Classes.html", window.location.href).href;
     })
     .catch((error) => {
@@ -86,21 +59,8 @@ function formatDate(dateString) {
   });
 }
 
-function getRegistrations() {
-  return JSON.parse(
-    localStorage.getItem("registrations") || "[]"
-  );
-}
-
 function getAvailableSeats() {
-  const seatCounts = JSON.parse(
-    localStorage.getItem("seatCounts") || "{}"
-  );
-
-  return (
-    seatCounts[classId] ??
-    selectedClass.capacity
-  );
+  return selectedClass.availableSeats;
 }
 
 async function loadClass() {
@@ -200,80 +160,36 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  const registrations = getRegistrations();
-
-  const alreadyRegistered = registrations.some(
-    (registration) => {
-      return (
-        registration.class &&
-        Number(registration.class.id) === Number(classId) &&
-        registration.email &&
-        registration.email.toLowerCase() === email
-      );
-    }
-  );
-
-  if (alreadyRegistered) {
-    showError(
-      "You have already registered for this class."
-    );
-
-    return;
-  }
-
   const submitButton = form.querySelector(
     "button[type='submit']"
   );
   submitButton.disabled = true;
   const availableSeats = getAvailableSeats();
 
-  if (availableSeats <= 0) {
+  if (availableSeats !== null && availableSeats <= 0) {
     showError("This class is currently full.");
     submitButton.disabled = false;
     submitButton.textContent = "Confirm Registration";
     return;
   }
 
-  const registration = {
-    class: selectedClass,
-    accountEmail: email,
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    phone: phoneDigits,
-    accessibility: accessibility,
-    status: "active",
-    registeredAt: new Date().toISOString(),
-    seatReleased: false
-  };
-
   submitButton.textContent = "Registering...";
 
   try {
-    registrations.push(registration);
+    const response = await fetch(`/api/class-registrations/class/${classId}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ phone: phoneDigits, accessibilityNotes: accessibility })
+    });
+    const savedRegistration = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(savedRegistration.error || "Registration could not be saved. Please try again.");
+    }
 
-    localStorage.setItem(
-      "registrations",
-      JSON.stringify(registrations)
-    );
-
-    const seatCounts = JSON.parse(
-      localStorage.getItem("seatCounts") || "{}"
-    );
-
-    seatCounts[classId] = availableSeats - 1;
-
-    localStorage.setItem(
-      "seatCounts",
-      JSON.stringify(seatCounts)
-    );
-
-    localStorage.setItem(
-      "latestRegistration",
-      JSON.stringify(registration)
-    );
-
-    registration.emailNotificationStatus = "pending";
+    let emailNotificationStatus = "pending";
     try {
       await window.sendClassNotification({
         to: email,
@@ -287,28 +203,22 @@ form.addEventListener("submit", async (event) => {
         classLocation:
           selectedClass.location || "Online"
       });
-      registration.emailNotificationStatus = "sent";
+      emailNotificationStatus = "sent";
     } catch (emailError) {
-      registration.emailNotificationStatus = "failed";
+      emailNotificationStatus = "failed";
       console.error(
         "Registration email failed:",
         emailError
       );
     }
 
-    localStorage.setItem(
-      "registrations",
-      JSON.stringify(registrations)
-    );
-    localStorage.setItem(
-      "latestRegistration",
-      JSON.stringify(registration)
-    );
-
-    window.location.href = "/register/RegisteredPage.html";
+    const confirmationUrl = new URL("/register/RegisteredPage.html", window.location.origin);
+    confirmationUrl.searchParams.set("registration", savedRegistration.id);
+    confirmationUrl.searchParams.set("emailStatus", emailNotificationStatus);
+    window.location.href = confirmationUrl.href;
   } catch (error) {
     showError(
-      "Registration could not be saved. Please try again."
+      error.message || "Registration could not be saved. Please try again."
     );
 
     submitButton.disabled = false;

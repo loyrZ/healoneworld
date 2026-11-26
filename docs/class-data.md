@@ -22,7 +22,8 @@ Code: `services/classes.js` (queries, validation, admin/public views) and `route
 | `instructor` | `user_name` | Instructor name, required. |
 | `capacity` | `capacity` | Whole number from 1 to 1000. |
 | `status` | `status` | `pending` (awaiting approval) or `published`. **Admin only.** |
-| `registrationCount` | none | Active registrations, or `null` when unavailable. **Admin only.** |
+| `registrationCount` | `class_registrations` | Active registrations; zero is a known value. **Admin only.** |
+| `availableSeats` | computed | `capacity - active registrations`, or `null` when capacity is unavailable. **Public only.** |
 
 Dates and times are local wall-clock times in the class's `time_zone`, not UTC.
 They are stored as `DATETIME` and returned as plain strings, so the server's own
@@ -41,13 +42,24 @@ their names so existing code keeps working.
 | `POST /api/classes/admin` | Administrators | Creates a published session and returns it with its new `id` (201). |
 | `GET /api/classes/admin/:id` | Administrators | One class, or 404. |
 | `PUT /api/classes/admin/:id` | Administrators | Saves an edit and returns the updated class. |
+| `GET /api/class-registrations/mine` | Signed-in application user | That user's registrations, including cancellations. |
+| `POST /api/class-registrations/class/:classId` | Signed-in application user | Creates one registration if a seat remains (201). |
+| `GET /api/class-registrations/class/:classId/meeting` | Signed-in active registrant | Returns that class's private online meeting link. |
+| `POST /api/class-registrations/:id/cancel` | Owning signed-in application user | Cancels that registration. Repeat requests do not release an additional seat. |
+| `POST /api/class-registrations/:id/restore` | Owning signed-in application user | Restores a canceled registration if a seat remains. |
+| `GET /api/class-registrations/admin/class/:classId` | Administrators | Class roster, including canceled registrations and authorized private details. |
 
 Admin endpoints use `requireRole("administrator")` from `middleware/auth.js` (HOW-532):
 signed out gets 401, signed in without admin permission gets 403. Responses are sent with
 `Cache-Control: no-store`.
 
-Public responses never include `meetingLink`, `status`, or `registrationCount`.
+Public responses never include `meetingLink`, admin class `status`, `registrationCount`, attendee identity, phone, or accessibility notes.
 Pending classes are never returned publicly.
+
+The private meeting endpoint requires a valid signed-in application account and a `registered`
+record for the requested class. Canceled registrations, changed class IDs, in-person classes,
+and unavailable classes do not receive a meeting link. It returns clear `401`, `403`, `404`, or
+`409` errors as applicable and is sent with `Cache-Control: no-store`.
 
 ### Creating a class
 
@@ -80,7 +92,9 @@ its location.
 |---|---|---|
 | `/admin/classes` | `public/admin/classes/ClassList.jsx` | Search and filters. Shows a success message after a class is created. |
 | `/admin/classes/new` | `public/admin/classes/ClassCreate.jsx` | Create form. |
+| `/admin/classes/:id` | `public/admin/classes/ClassRoster.jsx` | Admin class detail and roster. |
 | `/admin/classes/:id/edit` | `public/admin/classes/ClassEdit.jsx` | Edit form. |
+| `/user-classes` | `public/components/Classes/UserClasses.jsx` | Authenticated attendee registrations and cancellation. |
 | `/calendar/Calendar.html` | `Calendar/` | Public calendar. Each class shows on its own date. |
 | `/classes/upcoming.html` | `Upcoming Classes Practice/Header & Section.html` | Public list of upcoming classes. |
 | `/classes/ClassPage.html?id=12` | `Upcoming Classes Practice/ClassPage.html` | Public class details. |
@@ -90,21 +104,27 @@ The public pages load classes with `public/js/class-schedule.js`, which calls `G
 `Calendar/CalendarDatabase.js` and `Upcoming Classes Practice/classes.js` are old sample data
 and are no longer loaded.
 
-## Registration counts
+## Registrations and cancellation
 
-Class registration storage does not exist yet. `services/class-registrations.js` returns no
-counts, so the admin pages show "Registrations unavailable" instead of a made-up number.
-Update `getRegistrationCounts` there when registrations are stored.
+`class_registrations` is the shared source of truth. Every registration belongs to the verified
+application user (`users.id_pk`) and one class. Its unique `(class_id, user_id)` key prevents
+duplicate registrations. Creating a registration locks the class before counting active rows;
+cancelling locks the registration and class row, changes `registered` to `cancelled`, and is
+idempotent. Therefore one successful cancellation frees exactly one seat, while failed or repeated
+requests do not change availability.
 
 ## Database changes
 
 New databases: `npm run builddb` creates the full table.
 
-Existing databases: run `migrations/002_class_schedule_fields.sql` once, after telling the group.
-It only adds columns and keeps existing rows. Existing rows become `pending`, so they are not shown
-publicly until an admin reviews them.
+Existing databases: run `migrations/002_class_schedule_fields.sql`, then
+`migrations/003_class_registrations.sql`, once after telling the group. Do not run either migration
+automatically. The schedule migration keeps existing rows and makes them `pending`; the registration
+migration adds the separate persistent registration table. Until migration 003 is applied, published
+classes can display their configured capacity as available seats, but creating, viewing, or cancelling
+registrations returns `503 registration_storage_unavailable`; no registration is saved.
 
 ## Tests
 
-`npm test` runs `tests/classes.test.js` and `tests/admin-class-filters.test.js`. These use
-in-memory class records and never touch the shared Railway database.
+`npm test` runs the class, registration, authentication, and UI-helper test files. They use
+in-memory database doubles and never touch the shared Railway database.

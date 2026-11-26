@@ -12,34 +12,22 @@ async function sendClassNotification({
   classLocation
 }) {
   console.log("sendClassNotification was called");
-
   const recipient = typeof to === "string" ? to.trim() : "";
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) 
     throw new Error("Invalid recipient email address.");
-  }
-
-  if (!className || !className.trim()) {
+  if (!className || !className.trim()) 
     throw new Error("A class name is required.");
-  }
-
-  if (!window.emailjs) {
+  if (!window.emailjs) 
     throw new Error("EmailJS was not loaded.");
-  }
-
-  window.emailjs.init({
-    publicKey: EMAILJS_PUBLIC_KEY
-  });
-
+  window.emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
   const messages = {
     registered: `Your registration for ${className} was successful.`,
     cancelled: `Your registration for ${className} was canceled.`,
     deleted: `Your registration for ${className} was permanently deleted.`
   };
 
-  if (!messages[action]) {
+  if (!messages[action]) 
     throw new Error(`Unsupported action: ${action}`);
-  }
 
   const templateParams = {
     to_email: recipient,

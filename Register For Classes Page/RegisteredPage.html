@@ -26,33 +26,39 @@
     <button type="button" class="browse-classes">Browse Classes</button>
   </buttons>
   <script>
-    const registration = JSON.parse(localStorage.getItem("latestRegistration") || "null");
-    const registeredClass = registration && registration.class;
     const classSummary = document.querySelector("#registered-class");
     const emailStatus = document.querySelector("#email-notification-status");
+    const params = new URLSearchParams(window.location.search);
+    const registrationId = Number(params.get("registration"));
+    const emailStatusValue = params.get("emailStatus");
 
-    if (registeredClass) {
-      const classDate = new Date(`${registeredClass.date}T00:00:00`);
-      const formattedDate = classDate.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric"
-      });
-      const formattedTime = `${registeredClass.startTime}–${registeredClass.endTime}`;
-      const location = registeredClass.location || "Online";
+    async function loadConfirmation() {
+      try {
+        const response = await fetch("/api/class-registrations/mine", { headers: { Accept: "application/json" } });
+        const registrations = await response.json().catch(() => []);
+        const registration = registrations.find((item) => item.id === registrationId);
+        const registeredClass = registration && registration.class;
+        if (!response.ok || !registeredClass) throw new Error("Registration not found.");
 
-      classSummary.textContent =
-        `${registeredClass.name} • ${formattedDate} • ${formattedTime} ${location} • ${registeredClass.mode}`;
-    } else {
-      classSummary.textContent = "Class information could not be found.";
+        const classDate = new Date(`${registeredClass.date}T00:00:00`);
+        const formattedDate = classDate.toLocaleDateString("en-US", {
+          weekday: "long", month: "long", day: "numeric"
+        });
+        const formattedTime = `${registeredClass.startTime}–${registeredClass.endTime}`;
+        const location = registeredClass.location || "Online";
+        classSummary.textContent = `${registeredClass.title} • ${formattedDate} • ${formattedTime} ${location} • ${registeredClass.format}`;
+      } catch (error) {
+        classSummary.textContent = "Class information could not be found.";
+      }
+
+      if (emailStatusValue === "sent") {
+        emailStatus.textContent = "A confirmation email was sent.";
+      } else if (emailStatusValue === "failed") {
+        emailStatus.textContent = "Your registration was saved, but we couldn't send the confirmation email. Please contact us if you need help.";
+      }
     }
 
-    if (registration && registration.emailNotificationStatus === "sent") {
-      emailStatus.textContent = `A confirmation email was sent to ${registration.email}.`;
-    } else if (registration && registration.emailNotificationStatus === "failed") {
-      emailStatus.textContent =
-        "Your registration was saved, but we couldn't send the confirmation email. Please verify your email address and contact us if you need help.";
-    }
+    loadConfirmation();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="EmailNotification.js"></script>

@@ -50,13 +50,23 @@ function ClassRow({ item, isNew }) {
             <span className={`admin-classes__status admin-classes__status--${item.status}`}>
                 {STATUS_LABELS[item.status] ?? item.status}
             </span>
-            <a
-                className="admin-classes__edit"
-                href={`/admin/classes/${item.id}/edit`}
-                aria-label={`Edit ${item.title}`}
-            >
-                Edit
-            </a>
+            <span className="admin-classes__actions">
+                <a
+                    className="admin-classes__view"
+                    href={`/admin/classes/${item.id}`}
+                    aria-label={`View ${item.title}`}
+                >
+                    View class
+                </a>
+
+                <a
+                    className="admin-classes__edit"
+                    href={`/admin/classes/${item.id}/edit`}
+                    aria-label={`Edit ${item.title}`}
+                >
+                    Edit
+                </a>
+            </span>
         </li>
     );
 }

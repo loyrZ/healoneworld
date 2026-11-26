@@ -57,14 +57,13 @@ function toAdminClass(row, registrationCount) {
     instructor: row.user_name,
     capacity: row.capacity,
     status: row.status,
-    // null means unavailable, never zero.
-    registrationCount: registrationCount ?? null
+    registrationCount: registrationCount ?? 0
   };
 }
 
 // Public view: never includes the meeting link, which is only for
 // registered attendees.
-function toPublicClass(row) {
+function toPublicClass(row, registrationCount = null) {
   return {
     id: row.id_pk,
     title: row.class_name,
@@ -76,7 +75,12 @@ function toPublicClass(row) {
     format: row.attendance_format,
     location: row.location ?? "",
     instructor: row.user_name,
-    capacity: row.capacity
+    capacity: row.capacity,
+    // Published pages may show availability, but never attendee data.
+    availableSeats:
+      row.capacity === null
+        ? null
+        : Math.max(0, row.capacity - (registrationCount ?? 0))
   };
 }
 
@@ -225,7 +229,8 @@ async function listPublicClasses() {
      ${ORDER_BY_START}`
   );
 
-  return rows.map(toPublicClass);
+  const counts = await getRegistrationCounts(rows.map((row) => row.id_pk));
+  return rows.map((row) => toPublicClass(row, counts.get(row.id_pk)));
 }
 
 async function getPublicClass(id) {
@@ -235,7 +240,9 @@ async function getPublicClass(id) {
     [id]
   );
 
-  return rows.length === 1 ? toPublicClass(rows[0]) : null;
+  if (rows.length !== 1) return null;
+  const counts = await getRegistrationCounts([id]);
+  return toPublicClass(rows[0], counts.get(id));
 }
 
 // Column values in the order used by the INSERT and UPDATE statements below.
@@ -303,9 +310,8 @@ async function updateClass(id, values, { confirmCapacityReduction = false } = {}
 
     if (currentCapacity !== null && values.capacity < currentCapacity) {
       const counts = await getRegistrationCounts([id], connection);
-      const registrationCount = counts.has(id) ? counts.get(id) : null;
-      const unsafe =
-        registrationCount === null || values.capacity < registrationCount;
+      const registrationCount = counts.get(id) ?? 0;
+      const unsafe = values.capacity < registrationCount;
 
       if (unsafe && !confirmCapacityReduction) {
         await connection.rollback();

@@ -1,30 +1,12 @@
-import { useEffect } from "react";
-import { useAuth, useClerk, useUser } from "@clerk/react";
+import { useEffect, useState } from "react";
+import { useAuth, useClerk } from "@clerk/react";
 import "./UserClasses.css";
 
-function getRegistrations(email) {
-    const savedRegistrations = localStorage.getItem("registrations");
-    if (!savedRegistrations) return [];
-
-    const registrations = JSON.parse(savedRegistrations);
-    if (!Array.isArray(registrations)) {
-        throw new Error("Saved class registrations are not in a valid format.");
-    }
-
-    return registrations.filter(
-        (registration) =>
-            registration &&
-            String(registration.email || "").trim().toLowerCase() ===
-                email.toLowerCase() &&
-            registration.class
-    );
-}
-
 function formatClassDate(date) {
-    if (!date) return "";
+    if (!date) return "Date unavailable";
 
     const parsedDate = new Date(`${date}T00:00:00`);
-    if (Number.isNaN(parsedDate.getTime())) return date;
+    if (Number.isNaN(parsedDate.getTime())) return "Date unavailable";
 
     return parsedDate.toLocaleDateString("en-US", {
         weekday: "long",
@@ -33,33 +15,77 @@ function formatClassDate(date) {
     });
 }
 
-export default function UserClasses() {
+function UserClasses() {
     const { isLoaded, isSignedIn } = useAuth();
-    const { user } = useUser();
     const { signOut } = useClerk();
+    const [load, setLoad] = useState({ status: "loading", registrations: [], error: "" });
+    const [cancellingId, setCancellingId] = useState(null);
+    const [openingMeetingId, setOpeningMeetingId] = useState(null);
+
+    async function loadRegistrations() {
+        setLoad((current) => ({ ...current, status: "loading", error: "" }));
+        try {
+            const response = await fetch("/api/class-registrations/mine", { headers: { Accept: "application/json" } });
+            const body = await response.json().catch(() => []);
+            if (!response.ok) throw new Error(body.error || "Your registrations could not be loaded.");
+            setLoad({ status: "ready", registrations: body, error: "" });
+        } catch (error) {
+            setLoad({ status: "error", registrations: [], error: error.message || "Your registrations could not be loaded." });
+        }
+    }
 
     useEffect(() => {
         if (isLoaded && !isSignedIn) {
             window.location.replace("/classes/sign-in");
         }
+        if (isLoaded && isSignedIn) loadRegistrations();
     }, [isLoaded, isSignedIn]);
 
-    if (!isLoaded) {
-        return <p role="status">Loading your classes…</p>;
+    async function cancelRegistration(registration) {
+        if (!window.confirm(`Cancel your registration for ${registration.class.title}?`)) return;
+        setCancellingId(registration.id);
+
+        try {
+            const response = await fetch(`/api/class-registrations/${registration.id}/cancel`, {
+                method: "POST",
+                headers: { Accept: "application/json" },
+            });
+            const body = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(body.error || "Your cancellation could not be saved.");
+
+            // Do not alter the UI until the server has persisted the cancellation.
+            setLoad((current) => ({
+                ...current,
+                registrations: current.registrations.map((item) => item.id === registration.id
+                    ? { ...item, status: "cancelled", cancelledAt: new Date().toISOString() }
+                    : item),
+            }));
+        } catch (error) {
+            setLoad((current) => ({ ...current, error: error.message || "Your cancellation could not be saved." }));
+        } finally {
+            setCancellingId(null);
+        }
     }
 
-    if (!isSignedIn || !user) return null;
-
-    const email = user.primaryEmailAddress?.emailAddress || "";
-    let registrations;
-    let registrationError = "";
-
-    try {
-        registrations = getRegistrations(email);
-    } catch (error) {
-        registrationError = error.message || "Unable to load your registrations.";
-        registrations = [];
+    async function openMeeting(registration) {
+        setOpeningMeetingId(registration.id);
+        try {
+            const response = await fetch(`/api/class-registrations/class/${registration.classId}/meeting`, {
+                headers: { Accept: "application/json" },
+            });
+            const body = await response.json().catch(() => ({}));
+            if (!response.ok || !body.meetingLink) {
+                throw new Error(body.error || "The online meeting is unavailable.");
+            }
+            window.location.assign(body.meetingLink);
+        } catch (error) {
+            setLoad((current) => ({ ...current, error: error.message || "The online meeting is unavailable." }));
+        } finally {
+            setOpeningMeetingId(null);
+        }
     }
+
+    if (!isLoaded || !isSignedIn) return <p role="status">Loading your classes…</p>;
 
     return (
         <main className="user-classes">
@@ -80,44 +106,51 @@ export default function UserClasses() {
             <section aria-labelledby="classes-heading">
                 <h1 id="classes-heading">My classes</h1>
                 <p className="user-classes__intro">
-                    View your registrations for {email || "your account"}.
+                    View and manage your saved registrations.
                 </p>
 
-                {registrationError ? (
-                    <p role="alert">{registrationError}</p>
-                ) : registrations.length ? (
+                {load.error && <p className="user-classes__error" role="alert">{load.error}</p>}
+                {load.status === "loading" ? <p role="status">Loading registrations…</p> : load.registrations.length ? (
                     <div className="user-classes__list">
-                        {registrations.map((registration, index) => {
+                        {load.registrations.map((registration) => {
                             const classItem = registration.class;
                             return (
                                 <article
                                     className="user-classes__card"
-                                    key={`${classItem.id || classItem.name}-${index}`}
+                                    key={registration.id}
                                 >
-                                    <h2>{classItem.name || "Class"}</h2>
-                                    <p>
-                                        {formatClassDate(classItem.date)}
-                                        {classItem.startTime &&
-                                            ` · ${classItem.startTime}`}
-                                        {classItem.endTime &&
-                                            `–${classItem.endTime}`}
-                                    </p>
-                                    <p>
-                                        {classItem.mode || ""}
-                                        {classItem.location &&
-                                            ` · ${classItem.location}`}
-                                    </p>
+                                    <div>
+                                        <h2>{classItem.title}</h2>
+                                        <p>{formatClassDate(classItem.date)} · {classItem.startTime}–{classItem.endTime}</p>
+                                        <p>{classItem.location || classItem.format}</p>
+                                        <p className={`user-classes__status user-classes__status--${registration.status}`}>
+                                            {registration.status === "cancelled" ? "Canceled" : "Registered"}
+                                        </p>
+                                    </div>
+                                    {registration.status === "registered" && (
+                                        <div className="user-classes__actions">
+                                            {(["virtual", "hybrid"].includes(classItem.format)) && (
+                                                <button type="button" disabled={openingMeetingId === registration.id} onClick={() => openMeeting(registration)}>
+                                                    {openingMeetingId === registration.id ? "Opening…" : "Join online class"}
+                                                </button>
+                                            )}
+                                            <button type="button" disabled={cancellingId === registration.id} onClick={() => cancelRegistration(registration)}>
+                                                {cancellingId === registration.id ? "Canceling…" : "Cancel registration"}
+                                            </button>
+                                        </div>
+                                    )}
                                 </article>
                             );
                         })}
                     </div>
                 ) : (
                     <p className="user-classes__empty">
-                        No class registrations were found for this email
-                        address.
+                        You do not have any class registrations.
                     </p>
                 )}
             </section>
         </main>
     );
 }
+
+export default UserClasses;

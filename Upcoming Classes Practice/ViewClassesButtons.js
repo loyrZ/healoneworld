@@ -11,11 +11,7 @@ function formatDate(dateString) {
   });
 }
 function getAvailableSeats(classItem) {
-    const seatCounts = JSON.parse(
-        localStorage.getItem("seatCounts") || "{}"
-    );
-
-    return seatCounts[classItem.id] ?? classItem.seatsAvailable;
+    return classItem.availableSeats;
 }
 // Loading and error messages for the class list. Kept separate from the cards
 // so FilterButtons.js can keep its own "no matches" message in the list.
@@ -141,7 +137,10 @@ async function displayClassDetails() {
     instructor.textContent = selectedClass.instructor;
   }
   if (spots) {
-    spots.textContent =`${getAvailableSeats(selectedClass)} spots available`;
+    const availableSeats = getAvailableSeats(selectedClass);
+    spots.textContent = availableSeats === null || availableSeats === undefined
+      ? "Availability unavailable"
+      : `${availableSeats} spots available`;
   }
 }
 if (classList) {

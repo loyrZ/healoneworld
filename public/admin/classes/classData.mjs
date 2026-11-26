@@ -64,10 +64,8 @@ export function formatTime(time) {
 }
 
 export function registrationLabel(item) {
-    if (item.registrationCount === null || item.registrationCount === undefined) {
-        return "Registrations unavailable";
-    }
-    return `${item.registrationCount} registered`;
+    const capacity = item.capacity ?? "—";
+    return `${item.registrationCount ?? 0}/${capacity}`;
 }
 
 // Edit-form values are all strings, matching what the inputs hold.

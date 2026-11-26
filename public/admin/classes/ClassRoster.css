@@ -1,0 +1,55 @@
+.class-roster__back,
+.class-roster__breadcrumb {
+    margin: 0 0 12px;
+}
+
+.class-roster__breadcrumb,
+.class-roster__meta {
+    color: var(--admin-muted);
+}
+
+.class-roster__meta {
+    margin: -8px 0 24px;
+    font-size: 18px;
+}
+
+.class-roster__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 1040px;
+    margin-bottom: 24px;
+}
+
+.class-roster__stats article {
+    display: grid;
+    gap: 6px;
+    padding: 18px;
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    background: var(--color-white);
+}
+
+.class-roster__stats strong { font-size: 28px; color: var(--color-navy); }
+.class-roster__stats span { color: var(--admin-muted); font-size: 14px; }
+
+.class-roster__filters { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 22px; }
+.class-roster__filters label:first-child { font-weight: 600; }
+.class-roster__filters input[type="search"] { min-height: 44px; min-width: 240px; padding: 0 12px; border: 1px solid var(--admin-border); border-radius: 6px; font: inherit; }
+.class-roster__accessibility { display: inline-flex; align-items: center; gap: 8px; }
+.class-roster__table-wrap { overflow-x: auto; max-width: 1040px; border: 1px solid var(--admin-border); border-radius: 10px; }
+.class-roster__table { width: 100%; border-collapse: collapse; background: var(--color-white); }
+.class-roster__table th, .class-roster__table td { padding: 14px; border-bottom: 1px solid var(--admin-border); text-align: left; vertical-align: top; }
+.class-roster__table th { background: var(--admin-surface); color: var(--color-navy); }
+.class-roster__table tbody tr:last-child td { border-bottom: 0; }
+.class-roster__status { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+.class-roster__status--registered { background: #dff1d0; color: #2d5a0e; }
+.class-roster__status--cancelled { background: #fbe1e1; color: #8a1c1c; }
+.class-roster__alert { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 16px; border: 1px solid #f0c4c4; border-radius: 8px; background: #fdf2f2; }
+.class-roster__alert p { width: 100%; margin: 0; }
+
+@media (max-width: 767px) {
+    .class-roster__stats { grid-template-columns: 1fr; }
+    .class-roster__filters { align-items: flex-start; flex-direction: column; }
+    .class-roster__filters input[type="search"] { width: 100%; min-width: 0; }
+}
