@@ -50,7 +50,7 @@
 .class-edit__field textarea {
     width: 100%;
     padding: 0 14px;
-    border: 1px solid var(--admin-border);
+    border: 1px solid #607784;
     border-radius: 6px;
     background: var(--color-white);
     color: var(--color-text);

@@ -41,6 +41,10 @@ their names so existing code keeps working.
 | `POST /api/classes/admin` | Administrators | Creates a published session and returns it with its new `id` (201). |
 | `GET /api/classes/admin/:id` | Administrators | One class, or 404. |
 | `PUT /api/classes/admin/:id` | Administrators | Saves an edit and returns the updated class. |
+| `GET /api/classes/submissions` | Instructors | The caller's own submissions, including pending records. |
+| `POST /api/classes/submissions` | Instructors | Creates a pending submission owned by the verified application user (201). |
+| `GET /api/classes/instructor/dashboard` | Instructors | The caller's pending submissions, upcoming sessions, past sessions, and calculated totals. |
+| `GET /api/classes/instructor/:id` | Instructors | One creator-owned class, or 404. |
 
 Admin endpoints use `requireRole("administrator")` from `middleware/auth.js` (HOW-532):
 signed out gets 401, signed in without admin permission gets 403. Responses are sent with
@@ -48,6 +52,7 @@ signed out gets 401, signed in without admin permission gets 403. Responses are 
 
 Public responses never include `meetingLink`, `status`, or `registrationCount`.
 Pending classes are never returned publicly.
+Cancelled classes are visible to their instructor and administrators but are never returned publicly.
 
 ### Creating a class
 
@@ -58,6 +63,10 @@ saved registrations.
 
 Instructors are stored as a name. Creating a session does not create instructor accounts or grant
 permissions.
+
+Instructor submissions require the MySQL `instructor` permission. The server assigns both the
+instructor display name and `creator_user_id` from the verified application user. The browser
+cannot choose a different owner or set the submission status.
 
 ### Saving an edit
 
@@ -81,6 +90,9 @@ its location.
 | `/admin/classes` | `public/admin/classes/ClassList.jsx` | Search and filters. Shows a success message after a class is created. |
 | `/admin/classes/new` | `public/admin/classes/ClassCreate.jsx` | Create form. |
 | `/admin/classes/:id/edit` | `public/admin/classes/ClassEdit.jsx` | Edit form. |
+| `/volunteer/classes/upcoming` | `public/components/Volunteer/VolunteerClassList.jsx` | The instructor's upcoming published or cancelled sessions. |
+| `/volunteer/classes/previous` | `public/components/Volunteer/VolunteerClassList.jsx` | The instructor's past published or cancelled sessions. |
+| `/volunteer/classes/:id` | `public/components/Volunteer/VolunteerClassDetail.jsx` | Creator-owned class detail, including private meeting link. |
 | `/calendar/Calendar.html` | `Calendar/` | Public calendar. Each class shows on its own date. |
 | `/classes/upcoming.html` | `Upcoming Classes Practice/Header & Section.html` | Public list of upcoming classes. |
 | `/classes/ClassPage.html?id=12` | `Upcoming Classes Practice/ClassPage.html` | Public class details. |
@@ -100,9 +112,11 @@ Update `getRegistrationCounts` there when registrations are stored.
 
 New databases: `npm run builddb` creates the full table.
 
-Existing databases: run `migrations/002_class_schedule_fields.sql` once, after telling the group.
-It only adds columns and keeps existing rows. Existing rows become `pending`, so they are not shown
-publicly until an admin reviews them.
+Existing databases: run `migrations/002_class_schedule_fields.sql` and then
+`migrations/003_class_submission_creator.sql`, then `migrations/004_class_cancelled_status.sql`, once and after telling the group. The schedule
+migration keeps existing rows and makes them `pending`, so they are not shown publicly until an
+admin reviews them. The creator migration leaves existing classes unowned and adds ownership only
+for new instructor submissions.
 
 ## Tests
 

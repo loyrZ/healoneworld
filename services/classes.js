@@ -62,6 +62,35 @@ function toAdminClass(row, registrationCount) {
   };
 }
 
+function sessionStartsAt(row) {
+  if (!row.date || !row.start_time || !row.time_zone) return null;
+
+  const [year, month, day] = row.date.split("-").map(Number);
+  const [hour, minute] = row.start_time.split(":").map(Number);
+  const target = Date.UTC(year, month - 1, day, hour, minute);
+  let instant = target;
+
+  // Convert the stored wall-clock session time in its own IANA zone to an
+  // instant. This keeps a viewer's browser zone from changing the grouping.
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: row.time_zone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date(instant));
+    const values = Object.fromEntries(parts
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, Number(part.value)]));
+    instant += target - Date.UTC(values.year, values.month - 1, values.day, values.hour, values.minute);
+  }
+
+  return instant;
+}
+
 // Public view: never includes the meeting link, which is only for
 // registered attendees.
 function toPublicClass(row) {
@@ -218,6 +247,55 @@ async function getAdminClass(id) {
   return toAdminClass(rows[0], counts.get(id));
 }
 
+// The creator can review only submissions linked to their verified
+// application-user ID. This response includes meeting links because it is
+// never exposed through a public endpoint.
+async function listInstructorSubmissions(creatorUserId) {
+  const [rows] = await db.execute(
+    `${SELECT_CLASSES}
+     WHERE creator_user_id = ?
+     ${ORDER_BY_START}`,
+    [creatorUserId]
+  );
+
+  return rows.map((row) => toAdminClass(row, null));
+}
+
+async function getInstructorClass(id, creatorUserId) {
+  const [rows] = await db.execute(
+    `${SELECT_CLASSES}
+     WHERE id_pk = ? AND creator_user_id = ?`,
+    [id, creatorUserId]
+  );
+
+  return rows.length === 1 ? toAdminClass(rows[0], null) : null;
+}
+
+async function getInstructorDashboard(creatorUserId, now = Date.now()) {
+  const [rows] = await db.execute(
+    `${SELECT_CLASSES}
+     WHERE creator_user_id = ?
+     ${ORDER_BY_START}`,
+    [creatorUserId]
+  );
+  const records = rows.map((row) => ({ item: toAdminClass(row, null), startsAt: sessionStartsAt(row) }));
+  const pending = records.filter(({ item }) => item.status === "pending").map(({ item }) => item);
+  const scheduled = records.filter(({ item }) => item.status === "published" || item.status === "cancelled");
+  const upcoming = scheduled.filter(({ startsAt }) => startsAt !== null && startsAt >= now).map(({ item }) => item);
+  const past = scheduled.filter(({ startsAt }) => startsAt !== null && startsAt < now).map(({ item }) => item);
+
+  return {
+    upcoming,
+    past,
+    pending,
+    totals: {
+      upcoming: upcoming.filter((item) => item.status === "published").length,
+      pending: pending.length,
+      hosted: past.filter((item) => item.status === "published").length,
+    },
+  };
+}
+
 async function listPublicClasses() {
   const [rows] = await db.execute(
     `${SELECT_CLASSES}
@@ -270,6 +348,21 @@ async function createClass(values) {
         status)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published')`,
     columnValues(values)
+  );
+
+  return getAdminClass(result.insertId);
+}
+
+// The route supplies both the verified creator ID and verified display name.
+// The browser has no path to choose an owner or publish a submission.
+async function createInstructorSubmission(values, creatorUserId) {
+  const [result] = await db.execute(
+    `INSERT INTO classes
+       (class_name, description, starts_at, ends_at, time_zone,
+        attendance_format, location, meeting_link, user_name, capacity,
+        creator_user_id, status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`,
+    [...columnValues(values), creatorUserId]
   );
 
   return getAdminClass(result.insertId);
@@ -352,8 +445,12 @@ module.exports = {
   validateClassInput,
   listAdminClasses,
   getAdminClass,
+  listInstructorSubmissions,
+  getInstructorClass,
+  getInstructorDashboard,
   listPublicClasses,
   getPublicClass,
   createClass,
+  createInstructorSubmission,
   updateClass
 };

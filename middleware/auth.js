@@ -68,6 +68,7 @@ async function requireApplicationUser(req, res, next) {
 
 const rolePermissions = new Map([
   ["administrator", "administrator"],
+  ["instructor", "instructor"],
   ["approved-volunteer", "approvedVolunteer"]
 ]);
 

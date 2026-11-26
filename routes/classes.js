@@ -18,7 +18,7 @@ function parseId(value) {
 
 // Shared by create and edit. Returns { values, options } when the body is
 // valid; otherwise sends a 400 response and returns null.
-function readClassBody(req, res) {
+function readClassBody(req, res, allowedFields = classes.EDITABLE_FIELDS, injectedFields = {}) {
     const body = req.body;
 
     if (!body || typeof body !== "object" || Array.isArray(body)) {
@@ -28,7 +28,7 @@ function readClassBody(req, res) {
 
     const { confirmCapacityReduction, ...fields } = body;
     const rejected = Object.keys(fields).filter(
-        (key) => !classes.EDITABLE_FIELDS.includes(key)
+        (key) => !allowedFields.includes(key)
     );
 
     if (rejected.length) {
@@ -39,7 +39,7 @@ function readClassBody(req, res) {
         return null;
     }
 
-    const { values, errors } = classes.validateClassInput(fields);
+    const { values, errors } = classes.validateClassInput({ ...fields, ...injectedFields });
 
     if (Object.keys(errors).length) {
         res.status(400).json({
@@ -126,6 +126,71 @@ router.put("/admin/:id", async (req, res, next) => {
         }
 
         res.json(result.class);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// --- Instructor submissions ---
+
+// The visible instructor name and database owner always come from the
+// verified application user. Do not accept either from the browser.
+const SUBMISSION_FIELDS = classes.EDITABLE_FIELDS.filter(
+    (field) => field !== "instructor"
+);
+
+router.use("/submissions", requireRole("instructor"), (req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+});
+
+router.get("/submissions", async (req, res, next) => {
+    try {
+        res.json(await classes.listInstructorSubmissions(req.applicationUser.id));
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post("/submissions", async (req, res, next) => {
+    try {
+        const input = readClassBody(req, res, SUBMISSION_FIELDS, {
+            instructor: req.applicationUser.name,
+        });
+        if (!input) return;
+
+        const created = await classes.createInstructorSubmission(
+            input.values,
+            req.applicationUser.id
+        );
+        res.status(201).json(created);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Instructor teaching activity uses only the verified creator ID. These
+// private responses may include the meeting link, so they are never cached.
+router.use("/instructor", requireRole("instructor"), (req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+});
+
+router.get("/instructor/dashboard", async (req, res, next) => {
+    try {
+        res.json(await classes.getInstructorDashboard(req.applicationUser.id));
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.get("/instructor/:id", async (req, res, next) => {
+    try {
+        const id = parseId(req.params.id);
+        const record = id && await classes.getInstructorClass(id, req.applicationUser.id);
+
+        if (!record) return res.status(404).json({ error: "Class not found." });
+        res.json(record);
     } catch (err) {
         next(err);
     }

@@ -16,3 +16,5 @@
     cursor: pointer;
 }
 .vol-button:disabled { opacity: 0.55; cursor: not-allowed; }
+.vol-button { display: inline-block; text-decoration: none; }
+.vol-button:hover { color: var(--color-white); text-decoration: underline; }

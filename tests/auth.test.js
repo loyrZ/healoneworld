@@ -181,6 +181,37 @@ test("instructor permission alone does not grant volunteer access", async () => 
   assert.equal(result.nextCalled, false);
 });
 
+test("instructors can submit classes without approved-volunteer permission", async () => {
+  const auth = setup({
+    permissions: {
+      instructor: 1,
+      volunteer: 0,
+      staff: 0,
+      admin: 0
+    }
+  });
+  const result = await run(auth.requireRole("instructor"));
+
+  assert.equal(result.nextCalled, true);
+  assert.equal(result.error, null);
+  assert.equal(result.req.applicationUser.id, 7);
+});
+
+test("approved volunteers without instructor permission cannot submit classes", async () => {
+  const auth = setup({
+    permissions: {
+      instructor: 0,
+      volunteer: 1,
+      staff: 0,
+      admin: 0
+    }
+  });
+  const result = await run(auth.requireRole("instructor"));
+
+  assert.equal(result.status, 403);
+  assert.equal(result.nextCalled, false);
+});
+
 test("unknown roles are rejected", async () => {
   const auth = setup();
   const result = await run(auth.requireRole("unknown"));
