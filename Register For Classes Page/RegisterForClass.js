@@ -92,17 +92,6 @@ function getRegistrations() {
   );
 }
 
-function getAvailableSeats() {
-  const seatCounts = JSON.parse(
-    localStorage.getItem("seatCounts") || "{}"
-  );
-
-  return (
-    seatCounts[classId] ??
-    selectedClass.capacity
-  );
-}
-
 async function loadClass() {
   if (!/^[1-9]\d{0,9}$/.test(classId || "")) {
     showError("Class information could not be found.");
@@ -202,33 +191,55 @@ form.addEventListener("submit", async (event) => {
 
   const registrations = getRegistrations();
 
-  const alreadyRegistered = registrations.some(
-    (registration) => {
-      return (
-        registration.class &&
-        Number(registration.class.id) === Number(classId) &&
-        registration.email &&
-        registration.email.toLowerCase() === email
-      );
-    }
-  );
-
-  if (alreadyRegistered) {
-    showError(
-      "You have already registered for this class."
-    );
-
-    return;
-  }
-
   const submitButton = form.querySelector(
     "button[type='submit']"
   );
   submitButton.disabled = true;
-  const availableSeats = getAvailableSeats();
+  submitButton.textContent = "Registering...";
 
-  if (availableSeats <= 0) {
-    showError("This class is currently full.");
+  //class registration never hit database, resolved it -gates
+  // The server decides whether there's room, whether you're already
+  // registered, and whether the class is still open. Nothing below runs
+  // (no email, no confirmation page) unless it saved the registration.
+  let saved;
+  try {
+    const response = await fetch("/api/my-registrations", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        classId: Number(classId),
+        phone: phoneDigits,
+        accessibility: accessibility
+      })
+    });
+
+    if (response.status === 401) {
+      const signInUrl = new URL("SignInPage.html", window.location.href);
+      signInUrl.searchParams.set("email", email);
+      window.location.href = signInUrl.href;
+      return;
+    }
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      showError(
+        response.status >= 500 || !result.error
+          ? "Registration could not be saved. Please try again."
+          : result.error
+      );
+      submitButton.disabled = false;
+      submitButton.textContent = "Confirm Registration";
+      return;
+    }
+
+    saved = result;
+  } catch (error) {
+    console.error("Registration request failed:", error);
+    showError("Could not reach the server. Please check your connection and try again.");
     submitButton.disabled = false;
     submitButton.textContent = "Confirm Registration";
     return;
@@ -243,13 +254,13 @@ form.addEventListener("submit", async (event) => {
     phone: phoneDigits,
     accessibility: accessibility,
     status: "active",
+    registrationId: saved.registration.id,
     registeredAt: new Date().toISOString(),
     seatReleased: false
   };
 
-  submitButton.textContent = "Registering...";
-
   try {
+    // My Classes and the confirmation page still read this browser copy.
     registrations.push(registration);
 
     localStorage.setItem(
@@ -257,16 +268,19 @@ form.addEventListener("submit", async (event) => {
       JSON.stringify(registrations)
     );
 
-    const seatCounts = JSON.parse(
-      localStorage.getItem("seatCounts") || "{}"
-    );
+    // Seats left as counted by the server, for the class page.
+    if (saved.seatsLeft !== null && saved.seatsLeft !== undefined) {
+      const seatCounts = JSON.parse(
+        localStorage.getItem("seatCounts") || "{}"
+      );
 
-    seatCounts[classId] = availableSeats - 1;
+      seatCounts[classId] = saved.seatsLeft;
 
-    localStorage.setItem(
-      "seatCounts",
-      JSON.stringify(seatCounts)
-    );
+      localStorage.setItem(
+        "seatCounts",
+        JSON.stringify(seatCounts)
+      );
+    }
 
     localStorage.setItem(
       "latestRegistration",
@@ -307,14 +321,10 @@ form.addEventListener("submit", async (event) => {
 
     window.location.href = "/register/RegisteredPage.html";
   } catch (error) {
-    showError(
-      "Registration could not be saved. Please try again."
-    );
-
-    submitButton.disabled = false;
-    submitButton.textContent = "Confirm Registration";
-
-    console.error("Registration error:", error);
+    // The registration is already saved on the server; only the browser
+    // copy failed, so don't tell them to try again.
+    console.error("Saving the browser copy of the registration failed:", error);
+    window.location.href = "/register/RegisteredPage.html";
   }
 });
 

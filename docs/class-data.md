@@ -47,6 +47,7 @@ their names so existing code keeps working.
 | `POST /api/classes/admin/:id/cancel` | Administrators | Cancels the class and returns it. Repeating it returns the same canceled class (HOW-287). |
 | `POST /api/classes/admin/:id/registrations/:registrationId/remove` | Administrators | Marks one active registration `removed` and returns `{ registration, registrationCount }`. 409 if it's no longer active (HOW-567). |
 | `GET /api/my-registrations` | Signed-in users | The caller's own `[{ classId, status, classCanceled }]`, so My Classes can show removals and canceled classes (HOW-568, HOW-288). Route file: `routes/my-registrations.js`. |
+| `POST /api/my-registrations` | Signed-in users | `{ classId, phone, accessibility }`. Saves a registration for the caller in `class_registrations` and returns `{ registration, seatsLeft }` (201). 409 for canceled, started, or full classes and repeat sign-ups. 403 if an admin removed them. (HOW-228 / HOW-379) |
 
 Admin endpoints use `requireRole("administrator")` from `middleware/auth.js` (HOW-532):
 signed out gets 401, signed in without admin permission gets 403. Responses are sent with
