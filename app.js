@@ -33,6 +33,7 @@ app.use(
     require("./routes/volunteer-applications")
 );
 app.use("/api/classes", require("./routes/classes"));
+app.use("/api/my-registrations", require("./routes/my-registrations"));
 // Add new route files here, e.g. app.use("/classes", require("./routes/classes"));
 
 // Load the shared React account menu on static public pages.

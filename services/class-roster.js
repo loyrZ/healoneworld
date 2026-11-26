@@ -101,6 +101,28 @@ async function countActive(classId, connection = db) {
   return Number(rows[0].count);
 }
 
+// HOW-568 / HOW-288: the signed-in person's own registrations, so My Classes can
+// say when an admin removed them or the class was canceled. Only their rows,
+// and only status fields; no other attendees.
+async function listUserRegistrationStatuses(userId) {
+  const [rows] = await db.execute(
+    `SELECT r.${R.id} AS id, r.${R.classId} AS class_id, r.${R.status} AS status,
+            c.status AS class_status
+     FROM ${R.table} r
+     JOIN classes c ON c.id_pk = r.${R.classId}
+     WHERE r.${R.user} = ?`,
+    [userId]
+  );
+  const cancelledIds = rows.filter((row) => row.status === DB_CANCELLED).map((row) => row.id);
+  const removals = await findAdminRemovals(cancelledIds);
+
+  return rows.map((row) => ({
+    classId: row.class_id,
+    status: attendeeStatus(row.status, removals.has(row.id)),
+    classCanceled: row.class_status === "canceled"
+  }));
+}
+
 // HOW-567: returns { removed, registration, registrationCount }, { notFound },
 // or { alreadyInactive, registration }.
 async function removeAttendee(classId, registrationId, adminUserId) {
@@ -170,5 +192,6 @@ module.exports = {
   listRoster,
   listActiveAttendees,
   countActive,
-  removeAttendee
+  removeAttendee,
+  listUserRegistrationStatuses
 };

@@ -125,6 +125,13 @@ function createFakeDb() {
 
   async function execute(sql, params = []) {
     // --- registrations (services/class-roster.js) ---
+    if (/JOIN classes c ON c\.id_pk = r\.class_id/.test(sql)) {
+      const [userId] = params;
+      return [[...registrations.values()].flat()
+        .filter((row) => row.user_id === userId)
+        .map((row) => ({ id: row.id, class_id: row.class_id, status: row.status, class_status: store.get(row.class_id).status }))];
+    }
+
     if (/FROM class_registrations r\s+JOIN users/.test(sql)) {
       const [classId, status] = params;
       return [(registrations.get(classId) ?? [])
@@ -239,6 +246,14 @@ stub("services/class-registrations", {
 // The x-test-user header picks signed-out, a standard member, or an admin, and
 // an authorized admin gets an applicationUser so the route can record who canceled.
 stub("middleware/auth", {
+  // Signed-in member for /api/my-registrations: "member" is user 100 (Ana).
+  requireApplicationUser(req, res, next) {
+    if (!req.get("x-test-user")) {
+      return res.status(401).json({ error: "Please sign in." });
+    }
+    req.applicationUser = { id: req.get("x-test-user") === "member" ? 100 : 42 };
+    next();
+  },
   requireRole(role) {
     return (req, res, next) => {
       const user = req.get("x-test-user");
@@ -270,6 +285,7 @@ test.before(async () => {
   const app = express();
   app.use(express.json());
   app.use("/api/classes", require("../routes/classes"));
+  app.use("/api/my-registrations", require("../routes/my-registrations"));
   app.use((err, req, res, next) => {
     res.status(500).json({ error: err.message });
   });
@@ -565,4 +581,29 @@ test("roster tells self-cancelled and admin-removed apart", async () => {
   assert.equal(statusOf(10), "active");
   assert.equal(statusOf(12), "canceled");
   assert.equal(statusOf(13), "removed");
+});
+
+// --- HOW-568 / HOW-288: My Classes ---
+
+test("my registrations is 401 signed out", async () => {
+  assert.equal((await request("GET", "/api/my-registrations")).status, 401);
+});
+
+test("my registrations shows only my own rows, with removals and canceled classes", async () => {
+  const before = await request("GET", "/api/my-registrations", { user: "member" });
+
+  assert.equal(before.status, 200);
+  // Ana (user 100) is registered for classes 1 and 2; nobody else's rows come back.
+  assert.deepEqual(before.body.map((row) => row.classId).sort(), [1, 2]);
+  assert.deepEqual(Object.keys(before.body[0]).sort(), ["classCanceled", "classId", "status"]);
+  assert.ok(before.body.every((row) => row.status === "active" && row.classCanceled === false));
+
+  await request("POST", removeUrl(1, 10), { user: "admin" });
+  await request("POST", "/api/classes/admin/1/cancel", { user: "admin" });
+
+  const after = await request("GET", "/api/my-registrations", { user: "member" });
+  const classOne = after.body.find((row) => row.classId === 1);
+  assert.equal(classOne.status, "removed");
+  assert.equal(classOne.classCanceled, true);
+  assert.equal(after.body.find((row) => row.classId === 2).status, "active");
 });

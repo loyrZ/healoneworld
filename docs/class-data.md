@@ -46,6 +46,7 @@ their names so existing code keeps working.
 | `GET /api/classes/admin/:id/roster.csv` | Administrators | CSV download of active attendees only: Name, Email, Status (HOW-156). |
 | `POST /api/classes/admin/:id/cancel` | Administrators | Cancels the class and returns it. Repeating it returns the same canceled class (HOW-287). |
 | `POST /api/classes/admin/:id/registrations/:registrationId/remove` | Administrators | Marks one active registration `removed` and returns `{ registration, registrationCount }`. 409 if it's no longer active (HOW-567). |
+| `GET /api/my-registrations` | Signed-in users | The caller's own `[{ classId, status, classCanceled }]`, so My Classes can show removals and canceled classes (HOW-568, HOW-288). Route file: `routes/my-registrations.js`. |
 
 Admin endpoints use `requireRole("administrator")` from `middleware/auth.js` (HOW-532):
 signed out gets 401, signed in without admin permission gets 403. Responses are sent with
@@ -54,6 +55,9 @@ signed out gets 401, signed in without admin permission gets 403. Responses are 
 Public responses never include `meetingLink`, `status`, `registrationCount`, or attendee data.
 Pending classes are never returned publicly. Canceled classes are, with `canceled: true`, so
 existing class links still open and can show that the session was canceled.
+`public/js/class-schedule.js` turns that into `status: "Cancelled"`, which the calendar already
+hides. The upcoming list leaves canceled classes out, and `ClassPage.html` shows a canceled notice
+with "See other classes" in place of Register.
 
 ### Canceling a class
 
