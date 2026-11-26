@@ -21,7 +21,8 @@ Code: `services/classes.js` (queries, validation, admin/public views) and `route
 | `meetingLink` | `meeting_link` | `https://` link, required for `virtual` and `hybrid`. **Admin only.** |
 | `instructor` | `user_name` | Instructor name, required. |
 | `capacity` | `capacity` | Whole number from 1 to 1000. |
-| `status` | `status` | `pending` (awaiting approval) or `published`. **Admin only.** |
+| `status` | `status` | `pending` (awaiting approval), `published`, or `canceled` (HOW-287). **Admin only.** |
+| `canceled` | `status` | Public only: `true` when the class was canceled. Replaces `status` so `pending` never leaks (HOW-288). |
 | `registrationCount` | none | Active registrations, or `null` when unavailable. **Admin only.** |
 
 Dates and times are local wall-clock times in the class's `time_zone`, not UTC.
@@ -41,13 +42,37 @@ their names so existing code keeps working.
 | `POST /api/classes/admin` | Administrators | Creates a published session and returns it with its new `id` (201). |
 | `GET /api/classes/admin/:id` | Administrators | One class, or 404. |
 | `PUT /api/classes/admin/:id` | Administrators | Saves an edit and returns the updated class. |
+| `GET /api/classes/admin/:id/roster` | Administrators | `{ class, attendees: [{ id, name, email, status, registeredAt }] }`, every registration for the class (HOW-148). |
+| `GET /api/classes/admin/:id/roster.csv` | Administrators | CSV download of active attendees only: Name, Email, Status (HOW-156). |
+| `POST /api/classes/admin/:id/cancel` | Administrators | Cancels the class and returns it. Repeating it returns the same canceled class (HOW-287). |
+| `POST /api/classes/admin/:id/registrations/:registrationId/remove` | Administrators | Marks one active registration `removed` and returns `{ registration, registrationCount }`. 409 if it's no longer active (HOW-567). |
 
 Admin endpoints use `requireRole("administrator")` from `middleware/auth.js` (HOW-532):
 signed out gets 401, signed in without admin permission gets 403. Responses are sent with
 `Cache-Control: no-store`.
 
-Public responses never include `meetingLink`, `status`, or `registrationCount`.
-Pending classes are never returned publicly.
+Public responses never include `meetingLink`, `status`, `registrationCount`, or attendee data.
+Pending classes are never returned publicly. Canceled classes are, with `canceled: true`, so
+existing class links still open and can show that the session was canceled.
+
+### Canceling a class
+
+`POST /api/classes/admin/:id/cancel` locks the class row, sets `status` to `canceled`, and saves
+`canceled_at` and `canceled_by_fk`. The class and its registrations are never deleted, and no
+emails are sent (that's HOW-235). Registration code should call
+`isClassOpenForRegistration(id, connection)` from `services/classes.js` inside its own transaction,
+before saving a registration. It takes the same row lock, so nobody can register after a cancel commits.
+
+### Roster and removing attendees
+
+`services/class-roster.js` reads HOW-228's `class_registrations` table (`id_pk`, `class_id`,
+`user_id`, `status`, `registered_at`, `cancelled_at`). The names are kept in one `REGISTRATIONS`
+block at the top of that file.
+
+That table's `status` is only `registered` or `cancelled`. An admin removal sets it to `cancelled`
+and writes a `class_registration_history` row with the admin and the time. The roster shows
+`registered` as `active`, a `cancelled` row with a history row as `removed`, and any other
+`cancelled` row as `canceled` (the person cancelled it themselves).
 
 ### Creating a class
 
@@ -81,6 +106,7 @@ its location.
 | `/admin/classes` | `public/admin/classes/ClassList.jsx` | Search and filters. Shows a success message after a class is created. |
 | `/admin/classes/new` | `public/admin/classes/ClassCreate.jsx` | Create form. |
 | `/admin/classes/:id/edit` | `public/admin/classes/ClassEdit.jsx` | Edit form. |
+| `/admin/classes/:id/roster` | `public/admin/classes/ClassRoster.jsx` | Roster, search, cancel class, remove attendee, print sign-in sheet, CSV export. Figma "Admin / Class Roster". |
 | `/calendar/Calendar.html` | `Calendar/` | Public calendar. Each class shows on its own date. |
 | `/classes/upcoming.html` | `Upcoming Classes Practice/Header & Section.html` | Public list of upcoming classes. |
 | `/classes/ClassPage.html?id=12` | `Upcoming Classes Practice/ClassPage.html` | Public class details. |
@@ -104,7 +130,12 @@ Existing databases: run `migrations/002_class_schedule_fields.sql` once, after t
 It only adds columns and keeps existing rows. Existing rows become `pending`, so they are not shown
 publicly until an admin reviews them.
 
+`migrations/003_class_cancel_and_removal_history.sql` adds the `canceled` status, `canceled_at`,
+`canceled_by_fk`, and the `class_registration_history` table. Run it only after HOW-228's
+registrations table exists. Its rollback steps are at the top of the file.
+
 ## Tests
 
-`npm test` runs `tests/classes.test.js` and `tests/admin-class-filters.test.js`. These use
-in-memory class records and never touch the shared Railway database.
+`npm test` runs `tests/classes.test.js`, `tests/admin-class-filters.test.js`, and
+`tests/class-roster.test.js` (roster, CSV export, cancel, remove). These use in-memory records and
+never touch the shared Railway database.
