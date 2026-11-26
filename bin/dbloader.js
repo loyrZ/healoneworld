@@ -56,7 +56,11 @@ async function makeClassesTable(connection) {
             location VARCHAR(255) NULL,
             meeting_link VARCHAR(2048) NULL,
             capacity INT UNSIGNED NULL,
-            status ENUM('pending', 'published') NOT NULL DEFAULT 'pending',
+            status ENUM('pending', 'published', 'canceled') NOT NULL DEFAULT 'pending',
+            -- HOW-287: who canceled and when. No foreign key here because the
+            -- users table is created after this one; migration 003 adds it.
+            canceled_at TIMESTAMP NULL DEFAULT NULL,
+            canceled_by_fk INT UNSIGNED NULL DEFAULT NULL,
             created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 ON UPDATE CURRENT_TIMESTAMP,
