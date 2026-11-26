@@ -25,7 +25,6 @@
         return `${hours % 12 || 12}:${String(minutes).padStart(2, "0")} ${suffix}`;
     }
 
-    // Converts an API class to the shape the calendar and class pages were written for.
     function toScheduleItem(item) {
         return {
             id: item.id,
@@ -41,6 +40,8 @@
             location: item.location,
             description: item.description,
             capacity: item.capacity,
+            // The API computes seats from persistent active registrations.
+            availableSeats: item.availableSeats,
             status: "Scheduled",
             classUrl: `/classes/ClassPage.html?id=${item.id}`
         };

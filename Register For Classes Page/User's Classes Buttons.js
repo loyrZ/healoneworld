@@ -1,255 +1,102 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const ACTIVE_USER_KEY = "healOneWorldActiveUser";
-  const REGISTRATIONS_KEY = "registrations";
-  const MAX_CLASSES = 30;
   const filterButtons = document.querySelectorAll(".class-filters button");
   const classListContainer = document.querySelector(".registered-classes-list");
-  const activeUserEmail = (localStorage.getItem(ACTIVE_USER_KEY) || "").trim().toLowerCase();
-  function getRegistrations() {
-    try {
-      return JSON.parse(localStorage.getItem(REGISTRATIONS_KEY) || "[]");
-    } catch (error) {
-      return [];
-    }
-  }
-  function saveRegistrations(registrations) {
-    localStorage.setItem(REGISTRATIONS_KEY, JSON.stringify(registrations));
-  }
-  function getSeatCounts() {
-    try {
-      return JSON.parse(localStorage.getItem("seatCounts") || "{}");
-    } catch (error) {
-      return {};
-    }
-  }
-  function saveSeatCounts(seatCounts) {
-    localStorage.setItem("seatCounts", JSON.stringify(seatCounts));
-  }
-  function isDeleted(registration) {
-    return (registration.status === "deleted" || registration.status === "cancelled");
-  }
-  function getUserRegistrations() {
-    return getRegistrations().filter((registration) => {
-      return (registration.email && registration.email.trim().toLowerCase() === activeUserEmail);
-    });
-  }
-  function returnSeatToClass(registration) {
-    const classItem = registration.class;
-    const classId = classItem.id;
-    const capacity = Number(classItem.capacity ?? classItem.seatsAvailable);
-    if (registration.seatReleased === true) 
-      return;
-    const seatCounts = getSeatCounts();
-    const currentSeats = seatCounts[classId] ?? capacity;
-    seatCounts[classId] = Math.min(capacity, Number(currentSeats) + 1);
-    registration.seatReleased = true;
-    saveSeatCounts(seatCounts);
-  }
-  function takeSeatFromClass(registration) {
-    const classItem = registration.class;
-    const classId = classItem.id;
-    /*
-      This protects older canceled registrations that were
-      created before seatReleased was added.
-    */
-    if (registration.seatReleased !== true) {
-      return true;
-    }
-    const capacity = Number(classItem.capacity ?? classItem.seatsAvailable);
-    const seatCounts = getSeatCounts();
-    const currentSeats = seatCounts[classId] ?? capacity;
-    if (Number(currentSeats) <= 0) {
-      return false;
-    }
-    seatCounts[classId] = Number(currentSeats) - 1;
-    registration.seatReleased = false;
-    saveSeatCounts(seatCounts);
-    return true;
-  }
+
   function getCurrentView() {
-    const activeButton = document.querySelector(".class-filters button.active");
-    if (!activeButton) {
-      return "recent";
-    }
-    const text = activeButton.textContent.trim().toLowerCase();
-    if (text.includes("past")) {
-      return "past";
-    }
-    if (text.includes("upcoming")) {
-      return "upcoming";
-    }
-    if (text.includes("deleted")) {
-      return "deleted";
-    }
+    const text = document.querySelector(".class-filters button.active")?.textContent.trim().toLowerCase() || "recent";
+    if (text.includes("past")) return "past";
+    if (text.includes("upcoming")) return "upcoming";
+    if (text.includes("deleted")) return "deleted";
     return "recent";
   }
+
   function refreshClasses(view) {
-    if (typeof window.displayClasses === "function") {
-      window.displayClasses(view);
-    }
+    if (typeof window.displayClasses === "function") window.displayClasses(view);
   }
+
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      filterButtons.forEach((otherButton) => {
-        otherButton.classList.remove("active");
-      });
+      filterButtons.forEach((otherButton) => otherButton.classList.remove("active"));
       button.classList.add("active");
-      const text = button.textContent.trim().toLowerCase();
-      if (text.includes("past")) {
-        refreshClasses("past");
-      } else if (text.includes("upcoming")) {
-        refreshClasses("upcoming");
-      } else if (text.includes("deleted")) {
-        refreshClasses("deleted");
-      } else {
-        refreshClasses("recent");
-      }
+      refreshClasses(getCurrentView());
     });
   });
 
-  if (filterButtons.length > 0 && !document.querySelector(".class-filters button.active")) {
-    filterButtons[0].classList.add("active");
-  }
+  if (filterButtons.length && !document.querySelector(".class-filters button.active")) filterButtons[0].classList.add("active");
+
   classListContainer?.addEventListener("click", async (event) => {
     const clickedButton = event.target.closest("button");
-    if (!clickedButton) 
-      return;
+    if (!clickedButton) return;
     const action = clickedButton.dataset.action;
-    const classId = Number(clickedButton.dataset.classId);
-    if (!action || !classId) 
-      return;
     if (action === "view-details") {
+      const classId = Number(clickedButton.dataset.classId);
+      if (!classId) return;
       const classPageUrl = new URL("/classes/ClassPage.html", window.location.origin);
       classPageUrl.searchParams.set("id", classId);
       window.location.href = classPageUrl.href;
       return;
     }
-    let registrations = getRegistrations();
-    const registrationIndex = registrations.findIndex((registration) => {
-      return (registration.email && registration.email.trim().toLowerCase() === activeUserEmail && registration.class && Number(registration.class.id) === classId);
-    });
 
-    if (registrationIndex === -1) {
+    if (action === "join-meeting") {
+      const classId = Number(clickedButton.dataset.classId);
+      if (!classId) return;
+      clickedButton.disabled = true;
+      clickedButton.textContent = "Opening...";
+      try {
+        const response = await fetch(`/api/class-registrations/class/${classId}/meeting`, { headers: { Accept: "application/json" } });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.meetingLink) {
+          throw new Error(result.error || "The online meeting is unavailable.");
+        }
+        window.location.assign(result.meetingLink);
+      } catch (error) {
+        alert(error.message || "The online meeting is unavailable.");
+        clickedButton.disabled = false;
+        clickedButton.textContent = "Join online class";
+      }
       return;
     }
-    const registration = registrations[registrationIndex];
+
+    const registrationId = Number(clickedButton.dataset.registrationId);
+    if (!registrationId) return;
     if (action === "cancel") {
-      const confirmed = confirm(`Cancel your registration for ${registration.class.name}?`);
-      if (!confirmed) {
-        return;
-      }
+      const confirmed = confirm(`Cancel your registration for ${clickedButton.dataset.className || "this class"}?`);
+      if (!confirmed) return;
       clickedButton.disabled = true;
       clickedButton.textContent = "Canceling...";
-      registrations[registrationIndex].status = "deleted";
-      registrations[registrationIndex].cancelledAt = new Date().toISOString();
-      returnSeatToClass(registrations[registrationIndex]);
-      saveRegistrations(registrations);
-
       try {
-        await window.sendClassNotification({
-          to: registration.email,
-          firstName: registration.firstName,
-          className: registration.class.name,
-          action: "cancelled",
-          classDate: registration.class.date
-            ? new Date(`${registration.class.date}T00:00:00`).toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric"
-                }
-              )
-            : "",
-          classTime:
-            `${registration.class.startTime || ""}–` +
-            `${registration.class.endTime || ""}`,
-          classLocation:
-            registration.class.location || "Online"
-        });
-        registrations[registrationIndex].cancellationEmailNotificationStatus = "sent";
-      } catch (emailError) {
-        registrations[registrationIndex].cancellationEmailNotificationStatus = "failed";
-        console.error("Cancellation email failed:", emailError);
+        const response = await fetch(`/api/class-registrations/${registrationId}/cancel`, { method: "POST", headers: { Accept: "application/json" } });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || "Your cancellation could not be saved.");
+        refreshClasses(getCurrentView());
+      } catch (error) {
+        alert(error.message || "Your cancellation could not be saved.");
+        clickedButton.disabled = false;
+        clickedButton.textContent = "Cancel registration";
       }
-      saveRegistrations(registrations);
-
-      refreshClasses(getCurrentView());
       return;
     }
 
     if (action === "restore") {
-      const activeClasses = getUserRegistrations().filter((item) => !isDeleted(item));
-      if (activeClasses.length >= MAX_CLASSES) {
-        alert(`You can only have ${MAX_CLASSES} active classes.`);
-        return;
-      }
-      const seatAvailable = takeSeatFromClass(registration);
-      if (!seatAvailable) {
-        alert("This class is currently full.");
-        return;
-      }
-
-      registrations[registrationIndex].status = "active";
-      registrations[registrationIndex].restoredAt = new Date().toISOString();
-      delete registrations[registrationIndex].cancelledAt;
-      saveRegistrations(registrations);
-      filterButtons.forEach((button) => {
-        button.classList.remove("active");
-      });
-      const recentButton = [...filterButtons].find((button) =>
-        button.textContent.trim().toLowerCase().includes("recent")
-      );
-      recentButton?.classList.add("active");
-      refreshClasses("recent");
-      return;
-    }
-    if (action === "delete-forever") {
-      const confirmed = confirm("Delete this registration permanently?");
-      if (!confirmed) {
-        return;
-      }
       clickedButton.disabled = true;
-      clickedButton.textContent = "Deleting...";
-      registrations.splice(registrationIndex, 1);
-      saveRegistrations(registrations);
-
+      clickedButton.textContent = "Restoring...";
       try {
-        await window.sendClassNotification({
-          to: registration.email,
-          firstName: registration.firstName,
-          className: registration.class.name,
-          action: "deleted",
-          classDate: registration.class.date
-            ? new Date(`${registration.class.date}T00:00:00`).toLocaleDateString(
-                "en-US",
-                {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric"
-                }
-              )
-            : "",
-          classTime:
-            `${registration.class.startTime || ""}–` +
-            `${registration.class.endTime || ""}`,
-          classLocation:
-            registration.class.location || "Online"
-        });
-      } catch (emailError) {
-        console.error("Deletion email failed:", emailError);
-        alert("The registration was deleted, but the notification email could not be sent.");
+        const response = await fetch(`/api/class-registrations/${registrationId}/restore`, { method: "POST", headers: { Accept: "application/json" } });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || "Your registration could not be restored.");
+        filterButtons.forEach((button) => button.classList.remove("active"));
+        filterButtons[0]?.classList.add("active");
+        refreshClasses("recent");
+      } catch (error) {
+        alert(error.message || "Your registration could not be restored.");
+        clickedButton.disabled = false;
+        clickedButton.textContent = "Restore";
       }
-
-      refreshClasses("deleted");
     }
   });
-  const signOutButton = [...document.querySelectorAll("button")].find(
-    (button) =>
-      button.textContent.trim().toLowerCase() === "sign out"
-  );
+
+  const signOutButton = [...document.querySelectorAll("button")].find((button) => button.textContent.trim().toLowerCase() === "sign out");
   signOutButton?.addEventListener("click", () => {
-    localStorage.removeItem(ACTIVE_USER_KEY);
     window.location.href = "/sign-in";
   });
 });

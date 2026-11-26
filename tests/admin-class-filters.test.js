@@ -70,12 +70,12 @@ test("filtering keeps each class's stable ID", async () => {
   assert.equal(match, CLASSES[2]);
 });
 
-test("unknown registration counts are labeled as unavailable", async () => {
+test("registration counts are labeled as a registration-to-capacity fraction", async () => {
   const { registrationLabel } = await load();
 
-  assert.equal(registrationLabel({ registrationCount: null }), "Registrations unavailable");
-  assert.equal(registrationLabel({ registrationCount: 0 }), "0 registered");
-  assert.equal(registrationLabel({ registrationCount: 18 }), "18 registered");
+  assert.equal(registrationLabel({ registrationCount: null, capacity: 24 }), "0/24");
+  assert.equal(registrationLabel({ registrationCount: 0, capacity: 24 }), "0/24");
+  assert.equal(registrationLabel({ registrationCount: 18, capacity: 24 }), "18/24");
 });
 
 test("times are shown in 12-hour format", async () => {

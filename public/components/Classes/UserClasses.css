@@ -53,6 +53,13 @@
     border-radius: 13px;
 }
 
+.user-classes__card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
 .user-classes__card h2 {
     color: #073650;
     font-family: Georgia, "Times New Roman", serif;
@@ -64,9 +71,28 @@
     margin-top: 4px;
 }
 
+.user-classes__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 .user-classes__empty {
     margin-top: 30px;
 }
+
+.user-classes__status {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.user-classes__status--registered { color: #2d5a0e; background: #dff1d0; }
+.user-classes__status--cancelled { color: #8a1c1c; background: #fbe1e1; }
+.user-classes__error { margin-top: 20px; color: #8a1c1c; }
 
 @media (max-width: 600px) {
     .user-classes {
@@ -75,5 +101,9 @@
 
     .user-classes__header {
         margin-bottom: 40px;
+    }
+
+    .user-classes__card {
+        flex-direction: column;
     }
 }

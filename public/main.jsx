@@ -22,6 +22,7 @@ import Announcements from "./admin/announcements/admin-announcements.jsx";
 import ClassList from "./admin/classes/ClassList.jsx";
 import ClassEdit from "./admin/classes/ClassEdit.jsx";
 import ClassCreate from "./admin/classes/ClassCreate.jsx";
+import ClassRoster from "./admin/classes/ClassRoster.jsx";
 import VolunteerApplication from "./components/Volunteer/VolunteerApplication.jsx";
 import VolunteerApplicationList from "./admin/volunteers/VolunteerApplicationList.jsx";
 import VolunteerApplicationReview from "./admin/volunteers/VolunteerApplicationReview.jsx";
@@ -67,10 +68,15 @@ const path = window.location.pathname.replace(/\/+$/, "") || "/";
 
 // This route includes the class ID, for example /admin/classes/12/edit.
 const classEditMatch = path.match(/^\/admin\/classes\/(\d+)\/edit$/);
+const classRosterMatch = path.match(/^\/admin\/classes\/(\d+)$/);
 const volunteerApplicationMatch = path.match(/^\/admin\/volunteers\/(\d+)$/);
 
 function ClassEditPage() {
     return <ClassEdit classId={classEditMatch[1]} />;
+}
+
+function ClassRosterPage() {
+    return <ClassRoster classId={classRosterMatch[1]} />;
 }
 
 function VolunteerApplicationReviewPage() {
@@ -80,6 +86,7 @@ function VolunteerApplicationReviewPage() {
 const Page =
     pages[path] ||
     (classEditMatch ? ClassEditPage :
+     classRosterMatch ? ClassRosterPage :
      volunteerApplicationMatch ? VolunteerApplicationReviewPage :
      path.startsWith("/sign-in/") ? Login :
      path.startsWith("/sign-up/") ? Signup :

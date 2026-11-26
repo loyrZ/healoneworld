@@ -120,6 +120,21 @@
     margin-bottom: 16px;
 }
 
+.admin-classes__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    white-space: nowrap;
+    transform: translateX(-20px);
+}
+
+.admin-classes__view,
+.admin-classes__edit {
+    padding: 8px 4px;
+    color: var(--color-navy);
+    font-weight: 500;
+}
+
 .admin-classes__title {
     color: var(--color-navy);
     font-weight: 500;

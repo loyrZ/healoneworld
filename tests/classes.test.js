@@ -347,12 +347,12 @@ test("the admin list includes published and pending classes with stable IDs", as
   assert.equal(body[1].meetingLink, "https://zoom.example/j/private-123");
 });
 
-test("unknown registration counts are reported as unavailable, not zero", async () => {
+test("registration counts use zero for classes that have no registrations", async () => {
   registrationCounts = new Map([[1, 18]]);
   const { body } = await request("GET", "/api/classes/admin", { user: "admin" });
 
   assert.equal(body[0].registrationCount, 18);
-  assert.equal(body[1].registrationCount, null);
+  assert.equal(body[1].registrationCount, 0);
 });
 
 test("missing or invalid class IDs return 404", async () => {
@@ -458,7 +458,7 @@ test("creating a class returns its new ID and it appears in the admin list", asy
   assert.equal(created.body.id, 4);
   assert.equal(created.body.title, "Sound Healing Workshop");
   assert.equal(created.body.status, "published");
-  assert.equal(created.body.registrationCount, null);
+  assert.equal(created.body.registrationCount, 0);
 
   const list = await request("GET", "/api/classes/admin", { user: "admin" });
   assert.ok(list.body.some((item) => item.id === 4 && item.startTime === "17:30"));
@@ -548,15 +548,14 @@ test("lowering capacity below registrations needs confirmation", async () => {
   assert.equal(fakeDb.store.get(1).capacity, 12);
 });
 
-test("lowering capacity with an unknown registration count needs confirmation", async () => {
-  const warned = await request("PUT", "/api/classes/admin/1", {
+test("lowering capacity with zero registrations saves directly", async () => {
+  const saved = await request("PUT", "/api/classes/admin/1", {
     user: "admin",
     body: editOf({ capacity: "20" })
   });
 
-  assert.equal(warned.status, 409);
-  assert.equal(warned.body.registrationCount, null);
-  assert.equal(fakeDb.store.get(1).capacity, 24);
+  assert.equal(saved.status, 200);
+  assert.equal(fakeDb.store.get(1).capacity, 20);
 });
 
 test("lowering capacity that still fits every registration saves directly", async () => {
@@ -601,6 +600,7 @@ test("public responses exclude pending classes and meeting links", async () => {
   for (const item of list.body) {
     assert.equal("meetingLink" in item, false);
     assert.equal("status" in item, false);
+    assert.equal(item.availableSeats, item.capacity);
   }
 
   assert.equal(JSON.stringify(list.body).includes("private-"), false);
@@ -610,6 +610,14 @@ test("public responses exclude pending classes and meeting links", async () => {
   assert.equal("meetingLink" in detail.body, false);
 
   assert.equal((await request("GET", "/api/classes/3")).status, 404);
+});
+
+test("public availability subtracts active registrations when the count is available", async () => {
+  registrationCounts = new Map([[1, 18]]);
+
+  const detail = await request("GET", "/api/classes/1");
+  assert.equal(detail.status, 200);
+  assert.equal(detail.body.availableSeats, 6);
 });
 
 test("saved edits appear in the public class data", async () => {
