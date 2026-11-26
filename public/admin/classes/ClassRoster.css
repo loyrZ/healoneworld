@@ -287,4 +287,13 @@
     .sign-in-sheet td:last-child {
         width: 50%;
     }
+
+    /* HOW-155: keep each name and its signature box on one page */
+    .sign-in-sheet tr {
+        break-inside: avoid;
+    }
+
+    .sign-in-sheet thead {
+        display: table-header-group;
+    }
 }

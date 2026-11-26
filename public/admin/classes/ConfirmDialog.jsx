@@ -17,9 +17,14 @@ function ConfirmDialog({ title, message, confirmLabel, cancelLabel, busy, error,
         // Start on the safe choice so Enter doesn't cancel a class by accident.
         keepRef.current?.focus();
 
-        // Focus goes back to the button that opened the dialog.
+        // Focus goes back to the button that opened the dialog. A removed attendee's
+        // Remove button is gone by then, so fall back to the page's main content (HOW-566).
         return () => {
-            if (opener instanceof HTMLElement) opener.focus();
+            if (opener instanceof HTMLElement && opener.isConnected) {
+                opener.focus();
+            } else {
+                document.getElementById("main-content")?.focus();
+            }
         };
     }, []);
 

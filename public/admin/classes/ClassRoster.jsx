@@ -388,7 +388,7 @@ function ClassRoster({ classId }) {
             {confirm?.kind === "cancel-class" && (
                 <ConfirmDialog
                     title="Cancel this class?"
-                    message={`"${classRecord?.title}" will show as canceled and no one new can register. Current registrations are kept.`}
+                    message={`"${classRecord?.title}" (${rosterMeta(classRecord)}) will show as canceled and no one new can register. Current registrations are kept.`}
                     confirmLabel="Cancel class"
                     cancelLabel="Keep class"
                     busy={saving}
