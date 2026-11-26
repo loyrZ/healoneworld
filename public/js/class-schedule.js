@@ -41,7 +41,9 @@
             location: item.location,
             description: item.description,
             capacity: item.capacity,
-            status: "Scheduled",
+            // HOW-288: "Cancelled" is the value Calendar/calendar.js already filters out.
+            canceled: item.canceled === true,
+            status: item.canceled === true ? "Cancelled" : "Scheduled",
             classUrl: `/classes/ClassPage.html?id=${item.id}`
         };
     }
@@ -53,7 +55,8 @@
         return response.json();
     }
 
-    // All published classes. Throws if they could not be loaded.
+    // All published and canceled classes (canceled ones have canceled: true).
+    // Throws if they could not be loaded.
     async function loadSchedule() {
         const items = await getJson("/api/classes");
         return (items || []).map(toScheduleItem);
